@@ -12,13 +12,13 @@ make
 
 ## Compiles step by step
 
-### Clone minilibx-linux
+### Clone minilibx-linux from git repository
 
 ```
-make clone
+make minilibx-linux
 ```
 
-### Compiles minilibx-linux
+### Compiles minilibx-linux library
 
 ```
 make minirt/libmlx.a
@@ -27,6 +27,6 @@ make minirt/libmlx.a
 ### Compiles myrt
 
 ```
-make myrt
+make minirt/myrt
 ```
 
