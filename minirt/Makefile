@@ -10,7 +10,7 @@ CC		= gcc
 RM		= rm -f
 
 
-$(NAME): $(OBJS)
+$(NAME):
 	$(CC) $(CCFLAGS_I) $(SRCS) $(CCFLAGS_L) $(LIBNAME) -o $(NAME)
 
 all: $(NAME)

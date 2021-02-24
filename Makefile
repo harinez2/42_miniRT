@@ -4,21 +4,21 @@ GIT_URL		= https://github.com/42Paris/minilibx-linux
 LIBNAME		= libmlx.a
 
 
-all	: myrt
+all: myrt
 
-clone	:
+clone:
 	if [ ! -d "$(CLONE_DIR)" ]; then git clone $(GIT_URL); fi
 
-$(MYRT_DIR)/$(LIBNAME)	: clone
+$(MYRT_DIR)/$(LIBNAME): clone
 	cd "$(PWD)/$(CLONE_DIR)" && make
 	cp "$(PWD)/$(CLONE_DIR)/$(LIBNAME)" "$(PWD)/$(MYRT_DIR)"
 
-myrt	: $(MYRT_DIR)/$(LIBNAME)
+myrt: $(MYRT_DIR)/$(LIBNAME)
 	cd "$(PWD)/$(MYRT_DIR)" && make
 
-clean	:
+clean:
 
-fclean	: clean
+fclean: clean
 	rm -rf $(CLONE_DIR)
 	rm -f $(PWD)/$(MYRT_DIR)/$(LIBNAME)
 	cd "$(PWD)/$(MYRT_DIR)" && make fclean
