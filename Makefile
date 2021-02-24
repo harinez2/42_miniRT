@@ -21,3 +21,4 @@ clean	:
 fclean	: clean
 	rm -rf $(CLONE_DIR)
 	rm -f $(PWD)/$(MYRT_DIR)/$(LIBNAME)
+	cd "$(PWD)/$(MYRT_DIR)" && make fclean
