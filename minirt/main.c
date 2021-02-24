@@ -250,7 +250,14 @@ int	main()
 	mlx_loop(mlx);
 }
 
-int	color_map_0(void *win,int w,int h)
+int	ft_map(int x, int froma, int fromb, int toa, int tob)
+{
+	float pos = (x - froma) / (fromb - froma);
+	float ret = pos * (tob - toa) + tob;
+	return (ret);
+}
+
+int	color_map_0(void *win, int w, int h)
 {
 	int	x;
 	int	y;
@@ -263,7 +270,10 @@ int	color_map_0(void *win,int w,int h)
 		while (y < h)
 		{
 			color = (x*255)/w+((((w-x)*255)/w)<<16)+(((y*255)/h)<<8);
-			mlx_pixel_put(mlx,win,x,y,color);
+			float xw = ft_map(x, 0, w-1, -1, 1);
+			float yw = ft_map(y, 0, h-1, 1, -1);
+			//float zw = 0;
+			mlx_pixel_put(mlx, win, xw, yw, color);
 			y++;
 		}
 		x++;
