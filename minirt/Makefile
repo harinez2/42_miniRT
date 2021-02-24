@@ -1,26 +1,24 @@
 NAME		= myrt
 LIBNAME		= libmlx.a
-CLONE_DIR	= minilibx-linux
+CLONE_DIR	= ../minilibx-linux
 INCLIB		= /usr/lib
 SRCS		= main.c
-OBJS		= ${SRCS:.c=.o}
-CCFLAGS		= -Wall -Werror -Wextra -L../$(CLONE_DIR) -L$(INCLIB) -I../$(CLONE_DIR) -lmlx -lXext -lX11 -lm -lbsd
-CC			= gcc
+CCFLAGS_I	= -Wall -Werror -Wextra -I/usr/include -I$(CLONE_DIR)
+CCFLAGS_L	= -L$(CLONE_DIR) -L$(INCLIB) -lmlx -lXext -lX11 -lm -lbsd
+CC		= gcc
 RM		= rm -f
 
 
-${OBJS}:
-	${CC} ${CCFLAGS} ${SRCS} ${LIBNAME} -o ${NAME}
+$(NAME): $(OBJS)
+	$(CC) $(CCFLAGS_I) $(SRCS) $(CCFLAGS_L) $(LIBNAME) -o $(NAME)
 
-${NAME}: ${OBJS}
-
-all	: ${NAME}
+all: $(NAME)
 
 clean:
-	${RM} ${OBJS}
+
 
 fclean: clean
-	${RM} ${NAME}
+	$(RM) $(NAME)
 
 re: fclean all
 
