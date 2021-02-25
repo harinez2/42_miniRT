@@ -1,5 +1,6 @@
 
 #include	<unistd.h>
+#include	<math.h>
 #include	"mlx.h"
 #include	"mlx_int.h"
 
@@ -39,7 +40,6 @@ int	xpm1_y;
 
 int	local_endian;
 
-int	color_map_0(void *win,int w,int h);
 int	color_map_1(void *win,int w,int h);
 int	color_map_2(unsigned char *data,int bpp,int sl,int w,int h,int endian, int type);
 
@@ -114,7 +114,173 @@ int	mouse_win3(int x,int y, void *p)
 	return (0);
 }
 
+/*
+** Vector funcs
+**/
+typedef struct		s_vec
+{
+	double		x;
+	double		y;
+	double		z;
+}			t_vec;
 
+void	ft_vecset(t_vec *v, double x, double y, double z)
+{
+	v->x = x;
+	v->y = y;
+	v->z = z;
+}
+
+t_vec	ft_vecadd(t_vec v, t_vec w)
+{
+	t_vec ret;
+
+	ret.x = v.x + w.x;
+	ret.y = v.y + w.y;
+	ret.z = v.z + w.z;
+	return (ret);
+}
+
+t_vec	ft_vecsub(t_vec v, t_vec w)
+{
+	t_vec ret;
+
+	ret.x = v.x - w.x;
+	ret.y = v.y - w.y;
+	ret.z = v.z - w.z;
+	return (ret);
+}
+
+/* Multiply of scalar
+*/
+t_vec	ft_vecmult(t_vec v, int k)
+{
+	t_vec ret;
+
+	ret.x = v.x * k;
+	ret.y = v.y * k;
+	ret.z = v.z * k;
+	return (ret);
+}
+
+/* Inner product
+*/
+double	ft_vecinnerprod(t_vec v, t_vec w)
+{
+	double	ret;
+
+	ret = v.x + w.x;
+	ret += v.y + w.y;
+	ret += v.z + w.z;
+	return (ret);
+}
+
+/* Norm (length of the vec)
+*/
+double	ft_vecnorm(t_vec v)
+{
+	double	ret;
+
+	ret = v.x + v.x;
+	ret += v.y + v.y;
+	ret += v.z + v.z;
+	return (sqrt(ret));
+}
+
+/* Norm square (norm is the length of the vec)
+*/
+double	ft_vecnormsq(t_vec v)
+{
+	double	ret;
+
+	ret = v.x + v.x;
+	ret += v.y + v.y;
+	ret += v.z + v.z;
+	return (ret);
+}
+
+void	ft_vecprint(t_vec *v)
+{
+	printf("[vector] (%f, %f, %f)\n", v->x, v->y, v->z);
+}
+
+/*
+** Resizing scale
+**/
+int	ft_map(int x, int froma, int fromb, int toa, int tob)
+{
+	float pos = (x - froma) / (fromb - froma);
+	float ret = pos * (tob - toa) + tob;
+	return (ret);
+}
+
+/* color
+* specify color value between 0-255 for each params
+*/
+int	ft_color(int red, int green, int blue)
+{
+	int	c;
+
+	c = (red << 16) + (green << 8) + blue;
+	return (c);
+}
+
+/*
+** Sphere
+**/
+int	draw_sphere(void *win, int w, int h)
+{
+	int	x;
+	int	y;
+	int	color;
+	t_vec	v;
+	t_vec	v_eye;
+	t_vec	v_sphere;
+	double	sphereR;
+
+	ft_vecset(&v_eye, 0, 0, -5);
+	ft_vecset(&v_sphere, 0, 0, 5);
+	sphereR = 1.0;
+
+	v.z = 0;
+	x = 0;
+	while (x < w)
+	{
+		v.x = x;
+		y = 0;
+		while (y < h)
+		{
+			v.y = y;
+
+			//eye
+			//tmp
+
+			double A = ft_vecnormsq(v);
+			double B = 2 * ft_vecinnerprod(v_eye, v);
+			double C = ft_vecnormsq(v_eye) - sphereR * sphereR;
+			double D = B * B - 4 * A * C;
+
+			if (D >= 0)
+				color = ft_color(255, 0, 0);
+			else
+				color = ft_color(10, 10, 10);
+
+			//double xw = ft_map(x, 0, w-1, -1, 1);
+			//double yw = ft_map(y, 0, h-1, 1, -1);
+			//double zw = 0;
+			mlx_pixel_put(mlx, win, x, y, color);
+		//color = (x*255)/w+((((w-x)*255)/w)<<16)+(((y*255)/h)<<8);
+		//mlx_pixel_put(mlx,win,x,y,color);
+			y++;
+		}
+		x++;
+	}
+	return (0);
+}
+
+/*
+** main func
+**/
 int	main()
 {
 	int		a;
@@ -124,16 +290,16 @@ int	main()
 		local_endian = 1;
 	else
 		local_endian = 0;
-	printf(" => Local Endian : %d\n",local_endian);
+	printf("Local Endian : %d.\n",local_endian);
 
 	if (!(mlx = mlx_init()))
 	{
 		write(1, "Error\nInitialization failed.\n", 29);
 		exit(1);
 	}
-	printf("OK (use_xshm %d pshm_format %d)\n",((t_xvar *)mlx)->use_xshm,((t_xvar *)mlx)->pshm_format);
+	printf("Mlx init OK (use_xshm:%d, pshm_format:%d).\n",((t_xvar *)mlx)->use_xshm,((t_xvar *)mlx)->pshm_format);
 
-	printf(" => Window1 %dx%d \"Title 1\" ...",WIN1_SX,WIN1_SY);
+	printf("Window1 creation: %dx%d \"Title 1\" ...",WIN1_SX,WIN1_SY);
 	if (!(win1 = mlx_new_window(mlx,WIN1_SX,WIN1_SY,"Title1")))
 	{
 		printf(" !! KO !!\n");
@@ -141,13 +307,21 @@ int	main()
 	}
 	printf("OK\n");
 
-	printf(" => Colormap sans event ...");
-	color_map_0(win1,WIN1_SX,WIN1_SY);
+	printf("Drawing sphere ...");
+	draw_sphere(win1,WIN1_SX,WIN1_SY);
 	printf("OK\n");
-
-	mlx_key_hook(win1,key_win1,0);
-	mlx_loop(mlx);
+	//mlx_key_hook(win1,key_win1,0);
+	//mlx_loop(mlx);
+	sleep(2);
+  mlx_clear_window(mlx,win1);
+  color_map_1(win1,WIN1_SX,WIN1_SY);
+  printf("OK\n");
+  sleep(2);
+  mlx_clear_window(mlx,win1);
+  printf("OK\n");
+  sleep(2);
 	exit(0);
+
 
 
 	sleep(2);
@@ -250,38 +424,6 @@ int	main()
 	mlx_loop(mlx);
 }
 
-int	ft_map(int x, int froma, int fromb, int toa, int tob)
-{
-	float pos = (x - froma) / (fromb - froma);
-	float ret = pos * (tob - toa) + tob;
-	return (ret);
-}
-
-int	color_map_0(void *win, int w, int h)
-{
-	int	x;
-	int	y;
-	int	color;
-
-	x = 0;
-	while (x < w)
-	{
-		y = 0;
-		while (y < h)
-		{
-			color = (x*255)/w+((((w-x)*255)/w)<<16)+(((y*255)/h)<<8);
-			float xw = ft_map(x, 0, w-1, -1, 1);
-			float yw = ft_map(y, 0, h-1, 1, -1);
-			//float zw = 0;
-			mlx_pixel_put(mlx, win, xw, yw, color);
-			y++;
-		}
-		x++;
-	}
-	return (0);
-}
-
-
 int	color_map_1(void *win,int w,int h)
 {
 	int	x;
@@ -302,7 +444,6 @@ int	color_map_1(void *win,int w,int h)
 	}
 	return (0);
 }
-
 
 int	color_map_2(unsigned char *data,int bpp,int sl,int w,int h,int endian, int type)
 {
