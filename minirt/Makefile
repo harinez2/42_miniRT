@@ -1,4 +1,4 @@
-NAME		= myrt
+NAME		= miniRT
 LIBNAME		= libmlx.a
 CLONE_DIR	= ../minilibx-linux
 INCLIB		= /usr/lib

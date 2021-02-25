@@ -1,4 +1,4 @@
-NAME		= myrt
+NAME		= miniRT
 CLONE_DIR	= minilibx-linux
 MYRT_DIR	= minirt
 GIT_URL		= https://github.com/42Paris/minilibx-linux
