@@ -169,9 +169,9 @@ double	ft_vecinnerprod(t_vec v, t_vec w)
 {
 	double	ret;
 
-	ret = v.x + w.x;
-	ret += v.y + w.y;
-	ret += v.z + w.z;
+	ret = v.x * w.x;
+	ret += v.y * w.y;
+	ret += v.z * w.z;
 	return (ret);
 }
 
@@ -181,9 +181,9 @@ double	ft_vecnorm(t_vec v)
 {
 	double	ret;
 
-	ret = v.x + v.x;
-	ret += v.y + v.y;
-	ret += v.z + v.z;
+	ret = v.x * v.x;
+	ret += v.y * v.y;
+	ret += v.z * v.z;
 	return (sqrt(ret));
 }
 
@@ -193,9 +193,9 @@ double	ft_vecnormsq(t_vec v)
 {
 	double	ret;
 
-	ret = v.x + v.x;
-	ret += v.y + v.y;
-	ret += v.z + v.z;
+	ret = v.x * v.x;
+	ret += v.y * v.y;
+	ret += v.z * v.z;
 	return (ret);
 }
 
@@ -207,10 +207,10 @@ void	ft_vecprint(t_vec *v)
 /*
 ** Resizing scale
 **/
-int	ft_map(int x, int froma, int fromb, int toa, int tob)
+double	ft_map(int x, int froma, int fromb, int toa, int tob)
 {
-	float pos = (x - froma) / (fromb - froma);
-	float ret = pos * (tob - toa) + tob;
+	double pos = (double)(x - froma) / (double)(fromb - froma);
+	double ret = pos * (tob - toa) - tob;
 	return (ret);
 }
 
@@ -233,47 +233,44 @@ int	draw_sphere(void *win, int w, int h)
 	int	x;
 	int	y;
 	int	color;
-	t_vec	v;
+	t_vec	v_tmp;
 	t_vec	v_eye;
 	t_vec	v_sphere;
+	t_vec	v_w;
+	t_vec	v_de;
 	double	sphereR;
 
 	ft_vecset(&v_eye, 0, 0, -5);
 	ft_vecset(&v_sphere, 0, 0, 5);
 	sphereR = 1.0;
 
-	v.z = 0;
-	x = 0;
-	while (x < w)
+	v_w.z = 0;
+	y = 0;
+	while (y < h)
 	{
-		v.x = x;
-		y = 0;
-		while (y < h)
+		v_w.y = ft_map(y, 0, h-1, 1, -1);
+		x = 0;
+		while (x < w)
 		{
-			v.y = y;
+			v_w.x = ft_map(x, 0, w-1, -1, 1);
 
-			//eye
-			//tmp
+			v_de = ft_vecsub(v_w, v_eye);
+			v_tmp = ft_vecsub(v_eye, v_sphere);
 
-			double A = ft_vecnormsq(v);
-			double B = 2 * ft_vecinnerprod(v_eye, v);
-			double C = ft_vecnormsq(v_eye) - sphereR * sphereR;
+			double A = ft_vecnormsq(v_de);
+			double B = 2 * ft_vecinnerprod(v_de, v_tmp);
+			double C = ft_vecnormsq(v_tmp) - sphereR * sphereR;
 			double D = B * B - 4 * A * C;
 
 			if (D >= 0)
 				color = ft_color(255, 0, 0);
 			else
-				color = ft_color(10, 10, 10);
+				color = ft_color(255, 255, 255);
 
-			//double xw = ft_map(x, 0, w-1, -1, 1);
-			//double yw = ft_map(y, 0, h-1, 1, -1);
-			//double zw = 0;
 			mlx_pixel_put(mlx, win, x, y, color);
-		//color = (x*255)/w+((((w-x)*255)/w)<<16)+(((y*255)/h)<<8);
-		//mlx_pixel_put(mlx,win,x,y,color);
-			y++;
+			x++;
 		}
-		x++;
+		y++;
 	}
 	return (0);
 }
@@ -310,16 +307,9 @@ int	main()
 	printf("Drawing sphere ...");
 	draw_sphere(win1,WIN1_SX,WIN1_SY);
 	printf("OK\n");
-	//mlx_key_hook(win1,key_win1,0);
-	//mlx_loop(mlx);
-	sleep(2);
-  mlx_clear_window(mlx,win1);
-  color_map_1(win1,WIN1_SX,WIN1_SY);
-  printf("OK\n");
-  sleep(2);
-  mlx_clear_window(mlx,win1);
-  printf("OK\n");
-  sleep(2);
+	mlx_key_hook(win1,key_win1,0);
+	mlx_loop(mlx);
+	//sleep(2);
 	exit(0);
 
 
