@@ -225,6 +225,26 @@ int	ft_color(int red, int green, int blue)
 	return (c);
 }
 
+int	decide_color(t_vec v_w, t_vec v_eye, t_vec v_sphere, double sphereR)
+{
+	t_vec	v_de;
+	t_vec	v_tmp;
+	int	color;
+
+	v_de = ft_vecsub(v_w, v_eye);
+	v_tmp = ft_vecsub(v_eye, v_sphere);
+	double A = ft_vecnormsq(v_de);
+	double B = 2 * ft_vecinnerprod(v_de, v_tmp);
+	double C = ft_vecnormsq(v_tmp) - sphereR * sphereR;
+	double D = B * B - 4 * A * C;
+
+	if (D >= 0)
+		color = ft_color(255, 0, 0);
+	else
+		color = ft_color(255, 255, 255);
+	return (color);
+}
+
 /*
 ** Sphere
 **/
@@ -232,18 +252,17 @@ int	draw_sphere(void *win, int w, int h)
 {
 	int	x;
 	int	y;
-	int	color;
-	t_vec	v_tmp;
 	t_vec	v_eye;
 	t_vec	v_sphere;
+	t_vec	v_light;
 	t_vec	v_w;
-	t_vec	v_de;
 	double	sphereR;
+	int	color;
 
 	ft_vecset(&v_eye, 0, 0, -5);
 	ft_vecset(&v_sphere, 0, 0, 5);
+	ft_vecset(&v_light, -1, 1, 5);
 	sphereR = 1.0;
-
 	v_w.z = 0;
 	y = 0;
 	while (y < h)
@@ -253,20 +272,7 @@ int	draw_sphere(void *win, int w, int h)
 		while (x < w)
 		{
 			v_w.x = ft_map(x, 0, w-1, -1, 1);
-
-			v_de = ft_vecsub(v_w, v_eye);
-			v_tmp = ft_vecsub(v_eye, v_sphere);
-
-			double A = ft_vecnormsq(v_de);
-			double B = 2 * ft_vecinnerprod(v_de, v_tmp);
-			double C = ft_vecnormsq(v_tmp) - sphereR * sphereR;
-			double D = B * B - 4 * A * C;
-
-			if (D >= 0)
-				color = ft_color(255, 0, 0);
-			else
-				color = ft_color(255, 255, 255);
-
+			color = decide_color(v_w, v_eye, v_sphere, sphereR);
 			mlx_pixel_put(mlx, win, x, y, color);
 			x++;
 		}
@@ -275,10 +281,7 @@ int	draw_sphere(void *win, int w, int h)
 	return (0);
 }
 
-/*
-** main func
-**/
-int	main()
+void	decide_endian(void)
 {
 	int		a;
 
@@ -288,6 +291,14 @@ int	main()
 	else
 		local_endian = 0;
 	printf("Local Endian : %d.\n",local_endian);
+}
+
+/*
+** main func
+**/
+int	main()
+{
+	decide_endian();
 
 	if (!(mlx = mlx_init()))
 	{
