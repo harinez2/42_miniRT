@@ -163,6 +163,18 @@ t_vec	ft_vecmult(t_vec v, int k)
 	return (ret);
 }
 
+/* Divided by scalar
+*/
+t_vec	ft_vecdiv(t_vec v, double k)
+{
+	t_vec ret;
+
+	ret.x = v.x / k;
+	ret.y = v.y / k;
+	ret.z = v.z / k;
+	return (ret);
+}
+
 /* Inner product
 */
 double	ft_vecinnerprod(t_vec v, t_vec w)
@@ -207,10 +219,10 @@ void	ft_vecprint(t_vec *v)
 /*
 ** Resizing scale
 **/
-double	ft_map(int x, int froma, int fromb, int toa, int tob)
+double	ft_map(double x, int froma, int fromb, int toa, int tob)
 {
-	double pos = (double)(x - froma) / (double)(fromb - froma);
-	double ret = pos * (tob - toa) - tob;
+	double pos = (x - (double)froma) / ((double)fromb - (double)froma);
+	double ret = pos * ((double)tob - (double)toa) + (double)toa;
 	return (ret);
 }
 
@@ -225,11 +237,16 @@ int	ft_color(int red, int green, int blue)
 	return (c);
 }
 
-int	decide_color(t_vec v_w, t_vec v_eye, t_vec v_sphere, double sphereR)
+int	decide_color(t_vec v_w, t_vec v_eye, t_vec v_sphere, double sphereR, t_vec v_light, double lightIntensity, double ambientIntensity)
 {
 	t_vec	v_de;
 	t_vec	v_tmp;
 	int	color;
+	
+	double kAmb = 0.01;
+	double kDif = 0.69;
+	double kSpe = 0.3;
+	double shininess = 8;
 
 	v_de = ft_vecsub(v_w, v_eye);
 	v_tmp = ft_vecsub(v_eye, v_sphere);
@@ -237,11 +254,52 @@ int	decide_color(t_vec v_w, t_vec v_eye, t_vec v_sphere, double sphereR)
 	double B = 2 * ft_vecinnerprod(v_de, v_tmp);
 	double C = ft_vecnormsq(v_tmp) - sphereR * sphereR;
 	double D = B * B - 4 * A * C;
+	double t = -1;
 
-	if (D >= 0)
-		color = ft_color(255, 0, 0);
-	else
-		color = ft_color(255, 255, 255);
+	if (D == 0)
+		t = -B / (2 * A);
+	else if (D > 0)
+	{
+		double t1 = (-B - sqrt(D)) / (2 * A);
+		double t2 = (-B + sqrt(D)) / (2 * A);
+		t = t1 > 0 && t2 > 0 ? fmin(t1, t2) : fmax(t1, t2);
+	}
+
+	color = ft_color(255, 255, 255);
+	if (t >= 0)
+	{
+		double radianceAmb = kAmb * ambientIntensity;
+
+		t_vec v_tpos = ft_vecadd(v_eye, ft_vecmult(v_de, t));
+
+		t_vec v_lightDir = ft_vecsub(v_light, v_tpos);
+		v_lightDir = ft_vecdiv(v_lightDir, ft_vecnorm(v_lightDir));
+		
+		t_vec v_sphereN = ft_vecsub(v_tpos, v_sphere);
+		v_sphereN = ft_vecdiv(v_sphereN, ft_vecnorm(v_sphereN));
+
+		double naiseki = ft_vecinnerprod(v_sphereN, v_lightDir);
+//printf("%.2f ", naiseki);
+		double nlDot = 0;
+		if (naiseki > 0)
+			nlDot = ft_map(naiseki, 0, 1, 0, 255);
+		else
+			nlDot = ft_map(0, 0, 1, 0, 255);
+//printf("%.2f ", nlDot);
+		double radianceDif = kDif * lightIntensity * naiseki;
+		double radianceSpe = 0.0f;
+		if (nlDot > 0)
+		{
+			t_vec refDir = ft_vecsub(ft_vecmult(v_sphereN, 2 * naiseki), v_lightDir); 
+			t_vec invEyeDir = ft_vecmult(v_de, -1);
+			double vrDot = ft_vecinnerprod(invEyeDir, refDir);
+			radianceSpe = kSpe * lightIntensity * pow(vrDot, shininess);
+		}
+
+		double rSum = radianceAmb + radianceDif + radianceSpe;
+		color = ft_color(rSum, 0, 0);
+		//color = ft_color(nlDot, 0, 0);
+	}
 	return (color);
 }
 
@@ -261,8 +319,11 @@ int	draw_sphere(void *win, int w, int h)
 
 	ft_vecset(&v_eye, 0, 0, -5);
 	ft_vecset(&v_sphere, 0, 0, 5);
-	ft_vecset(&v_light, -1, 1, 5);
+	ft_vecset(&v_light, -5, 5, -5);
 	sphereR = 1.0;
+	double lightIntensity = 1.0;
+	double ambientIntensity = 0.1;
+
 	v_w.z = 0;
 	y = 0;
 	while (y < h)
@@ -272,7 +333,7 @@ int	draw_sphere(void *win, int w, int h)
 		while (x < w)
 		{
 			v_w.x = ft_map(x, 0, w-1, -1, 1);
-			color = decide_color(v_w, v_eye, v_sphere, sphereR);
+			color = decide_color(v_w, v_eye, v_sphere, sphereR, v_light, lightIntensity, ambientIntensity);
 			mlx_pixel_put(mlx, win, x, y, color);
 			x++;
 		}
