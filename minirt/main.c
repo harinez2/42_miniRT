@@ -3,6 +3,7 @@
 #include	<math.h>
 #include	"mlx.h"
 #include	"mlx_int.h"
+#include	"../gnl/get_next_line.h"
 
 #define	WIN1_SX		242
 #define	WIN1_SY		242
@@ -124,6 +125,21 @@ typedef struct		s_vec
 	double		z;
 }			t_vec;
 
+typedef struct		s_map
+{
+	t_vec	v_eye;
+	t_vec	v_light;
+	t_vec	v_sphere;
+	double	sphereR;
+
+	double kAmb; //ka 環境光反射係数
+	double kDif; //kd 拡散反射係数
+	double kSpe; //ks 鏡面反射係数
+	double shininess; //alpha 光沢度
+	double lightIntensity; //Ii 光源の光の強度
+	double ambientIntensity; //Ialpha 環境光の強度
+}			t_map;
+
 void	ft_vecset(t_vec *v, double x, double y, double z)
 {
 	v->x = x;
@@ -153,7 +169,7 @@ t_vec	ft_vecsub(t_vec v, t_vec w)
 
 /* Multiply of scalar
 */
-t_vec	ft_vecmult(t_vec v, int k)
+t_vec	ft_vecmult(t_vec v, double k)
 {
 	t_vec ret;
 
@@ -237,22 +253,31 @@ int	ft_color(int red, int green, int blue)
 	return (c);
 }
 
-int	decide_color(t_vec v_w, t_vec v_eye, t_vec v_sphere, double sphereR, t_vec v_light, double lightIntensity, double ambientIntensity)
+/* Diffuse: 拡散反射
+*/
+double	calcDiffuse()
+{
+	return (0);
+}
+
+/* Specular: 鏡面反射
+*/
+double	calcSpecular()
+{
+	return (0);
+}
+
+int	decide_color(t_vec v_w, t_map m)
 {
 	t_vec	v_de;
 	t_vec	v_tmp;
 	int	color;
 	
-	double kAmb = 0.01;
-	double kDif = 0.69;
-	double kSpe = 0.3;
-	double shininess = 8;
-
-	v_de = ft_vecsub(v_w, v_eye);
-	v_tmp = ft_vecsub(v_eye, v_sphere);
+	v_de = ft_vecsub(v_w, m.v_eye);
+	v_tmp = ft_vecsub(m.v_eye, m.v_sphere);
 	double A = ft_vecnormsq(v_de);
 	double B = 2 * ft_vecinnerprod(v_de, v_tmp);
-	double C = ft_vecnormsq(v_tmp) - sphereR * sphereR;
+	double C = ft_vecnormsq(v_tmp) - m.sphereR * m.sphereR;
 	double D = B * B - 4 * A * C;
 	double t = -1;
 
@@ -265,64 +290,78 @@ int	decide_color(t_vec v_w, t_vec v_eye, t_vec v_sphere, double sphereR, t_vec v
 		t = t1 > 0 && t2 > 0 ? fmin(t1, t2) : fmax(t1, t2);
 	}
 
-	color = ft_color(255, 255, 255);
+	//color = ft_color(255, 255, 255);
+	color = ft_color(0, 0, 0);
 	if (t >= 0)
 	{
-		double radianceAmb = kAmb * ambientIntensity;
+		//(1) ambient light 環境光
+		double radianceAmb = m.kAmb * m.lightIntensity;
 
-		t_vec v_tpos = ft_vecadd(v_eye, ft_vecmult(v_de, t));
+		//(2) diffuse reflection 拡散反射光
+		t_vec v_tpos = ft_vecadd(m.v_eye, ft_vecmult(v_de, t));
 
-		t_vec v_lightDir = ft_vecsub(v_light, v_tpos);
+		t_vec v_lightDir = ft_vecsub(m.v_light, v_tpos);
 		v_lightDir = ft_vecdiv(v_lightDir, ft_vecnorm(v_lightDir));
 		
-		t_vec v_sphereN = ft_vecsub(v_tpos, v_sphere);
+		t_vec v_sphereN = ft_vecsub(v_tpos, m.v_sphere);
 		v_sphereN = ft_vecdiv(v_sphereN, ft_vecnorm(v_sphereN));
 
 		double naiseki = ft_vecinnerprod(v_sphereN, v_lightDir);
-//printf("%.2f ", naiseki);
-		double nlDot = 0;
-		if (naiseki > 0)
-			nlDot = ft_map(naiseki, 0, 1, 0, 255);
-		else
-			nlDot = ft_map(0, 0, 1, 0, 255);
-//printf("%.2f ", nlDot);
-		double radianceDif = kDif * lightIntensity * naiseki;
+		if (naiseki < 0)
+			naiseki = 0;
+		double nlDot = ft_map(naiseki, 0, 1, 0, 255);
+		//printf("%.2f:%.2f ", naiseki, nlDot);
+		double radianceDif = m.kDif * m.lightIntensity * nlDot;
+		
+		//(3) specular reflection 鏡面反射光
 		double radianceSpe = 0.0f;
-		if (nlDot > 0)
+		if (naiseki > 0)
 		{
 			t_vec refDir = ft_vecsub(ft_vecmult(v_sphereN, 2 * naiseki), v_lightDir); 
 			t_vec invEyeDir = ft_vecmult(v_de, -1);
 			double vrDot = ft_vecinnerprod(invEyeDir, refDir);
-			radianceSpe = kSpe * lightIntensity * pow(vrDot, shininess);
+			if (vrDot < 0)
+				vrDot = 0;
+			radianceSpe = m.kSpe * m.lightIntensity * pow(vrDot, m.shininess);
 		}
 
+		//(1)-(3)合計
 		double rSum = radianceAmb + radianceDif + radianceSpe;
+		//rSum = radianceAmb + radianceDif;
+		rSum = radianceAmb + radianceSpe;
+		if (rSum > 255)
+			rSum = 255;
 		color = ft_color(rSum, 0, 0);
+		//color = ft_color(rSum, rSum, rSum);
 		//color = ft_color(nlDot, 0, 0);
 	}
 	return (color);
 }
 
+void	init_m(t_map *m)
+{
+	ft_vecset(&m->v_eye, 0, 0, -5);
+	ft_vecset(&m->v_sphere, 0, 0, 5);
+	m->sphereR = 1.0;
+	ft_vecset(&m->v_light, -5, 5, -5);
+
+	m->kAmb = 0.01;
+	m->kDif = 0.69;
+	m->kSpe = 0.3;
+	m->shininess = 4;//8;
+	m->lightIntensity = 1.0;
+	m->ambientIntensity = 0.1;
+}
+
 /*
 ** Sphere
 **/
-int	draw_sphere(void *win, int w, int h)
+int	draw_sphere(void *win, int w, int h, t_map *m)
 {
 	int	x;
 	int	y;
-	t_vec	v_eye;
-	t_vec	v_sphere;
-	t_vec	v_light;
 	t_vec	v_w;
-	double	sphereR;
 	int	color;
-
-	ft_vecset(&v_eye, 0, 0, -5);
-	ft_vecset(&v_sphere, 0, 0, 5);
-	ft_vecset(&v_light, -5, 5, -5);
-	sphereR = 1.0;
-	double lightIntensity = 1.0;
-	double ambientIntensity = 0.1;
 
 	v_w.z = 0;
 	y = 0;
@@ -333,7 +372,7 @@ int	draw_sphere(void *win, int w, int h)
 		while (x < w)
 		{
 			v_w.x = ft_map(x, 0, w-1, -1, 1);
-			color = decide_color(v_w, v_eye, v_sphere, sphereR, v_light, lightIntensity, ambientIntensity);
+			color = decide_color(v_w, *m);
 			mlx_pixel_put(mlx, win, x, y, color);
 			x++;
 		}
@@ -355,10 +394,86 @@ void	decide_endian(void)
 }
 
 /*
+void	readFromFile2(char *filename, t_map *m)
+{
+	int fd;
+	char buf[20] = {};
+	int i;
+
+	init_m(m);
+
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+	{
+		write(1, "Failed to open file.\n", 21);
+		exit(-1);
+	}
+	while (1)	
+	{
+		i = read(fd, &buf, 1);
+		if (i <= 0)
+			break;
+		if (buf[0] == ' ' || buf[0] == '\n')
+			continue;
+		else if (buf[0] == 'R')
+		{
+			;
+		}
+		printf("%s", buf);
+	}
+	//read(fd, buf, 199);
+	//printf("readed:%s\n", buf);
+	close(fd);
+}
+*/
+
+void	readFromFile(char *filename, t_map *m)
+{
+	int	fd;
+	char	*line;
+	int	i;
+	int	j;
+
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+	{
+		write(1, "Failed to open file.\n", 21);
+		exit(-1);
+	}
+	while (1)	
+	{
+		i = get_next_line(fd, &line);
+		if (i <= 0)
+			break;
+		j = 0;
+		while (line[j] == ' ')
+			j++;
+		if (line[j] == '#')
+		{
+			free(line);
+			continue;
+		}
+		else if (line[j] == 'R')
+			printf("%s\n", line);
+		else
+			printf("%s\n", line);
+		free(line);
+	}
+	close(fd);
+	(void)m;
+}
+
+/*
 ** main func
 **/
-int	main()
+int	main(int argc, char **argv)
 {
+	t_map	m;
+
+	init_m(&m);
+	if (argc >= 2)
+		readFromFile(argv[1], &m);
+
 	decide_endian();
 
 	if (!(mlx = mlx_init()))
@@ -377,7 +492,7 @@ int	main()
 	printf("OK\n");
 
 	printf("Drawing sphere ...");
-	draw_sphere(win1,WIN1_SX,WIN1_SY);
+	draw_sphere(win1, WIN1_SX, WIN1_SY, &m);
 	printf("OK\n");
 	mlx_key_hook(win1,key_win1,0);
 	mlx_loop(mlx);
