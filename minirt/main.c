@@ -267,11 +267,11 @@ double	calcSpecular()
 	return (0);
 }
 
-int	decide_color(t_vec v_w, t_map m)
+double	get_nearest_shape(t_vec v_w, t_map m)
 {
 	t_vec	v_de;
 	t_vec	v_tmp;
-	int	color;
+	double	t;
 	
 	v_de = ft_vecsub(v_w, m.v_eye);
 	v_tmp = ft_vecsub(m.v_eye, m.v_sphere);
@@ -279,8 +279,8 @@ int	decide_color(t_vec v_w, t_map m)
 	double B = 2 * ft_vecinnerprod(v_de, v_tmp);
 	double C = ft_vecnormsq(v_tmp) - m.sphereR * m.sphereR;
 	double D = B * B - 4 * A * C;
-	double t = -1;
 
+	t = -1;
 	if (D == 0)
 		t = -B / (2 * A);
 	else if (D > 0)
@@ -289,7 +289,15 @@ int	decide_color(t_vec v_w, t_map m)
 		double t2 = (-B + sqrt(D)) / (2 * A);
 		t = t1 > 0 && t2 > 0 ? fmin(t1, t2) : fmax(t1, t2);
 	}
+	return (t);
+}
 
+int	decide_color(t_vec v_w, t_map m)
+{
+	double	t;
+	int	color;
+	
+	t = get_nearest_shape(v_w, m);
 	//color = ft_color(255, 255, 255);
 	color = ft_color(0, 0, 0);
 	if (t >= 0)
@@ -298,6 +306,7 @@ int	decide_color(t_vec v_w, t_map m)
 		double radianceAmb = m.kAmb * m.lightIntensity;
 
 		//(2) diffuse reflection 拡散反射光
+		t_vec v_de = ft_vecsub(v_w, m.v_eye);
 		t_vec v_tpos = ft_vecadd(m.v_eye, ft_vecmult(v_de, t));
 
 		t_vec v_lightDir = ft_vecsub(m.v_light, v_tpos);
