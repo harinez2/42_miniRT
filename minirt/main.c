@@ -227,6 +227,11 @@ double	ft_vecnormsq(t_vec v)
 	return (ret);
 }
 
+t_vec	ft_vecnormalize(t_vec v)
+{
+	return (ft_vecdiv(v, ft_vecnorm(v)));
+}
+
 void	ft_vecprint(t_vec *v)
 {
 	printf("[vector] (%f, %f, %f)\n", v->x, v->y, v->z);
@@ -292,6 +297,46 @@ double	get_nearest_shape(t_vec v_w, t_map m)
 	return (t);
 }
 
+int ray_trace(t_vec v_w, t_map m, double t)
+{
+	//(1) ambient light 環境光
+	double radianceAmb = m.kAmb * m.lightIntensity;
+
+	//(2) diffuse reflection 拡散反射光
+	t_vec v_de = ft_vecsub(v_w, m.v_eye);
+	t_vec v_tpos = ft_vecadd(m.v_eye, ft_vecmult(v_de, t));
+	t_vec v_lightDir = ft_vecnormalize(ft_vecsub(m.v_light, v_tpos));
+	t_vec v_sphereN = ft_vecnormalize(ft_vecsub(v_tpos, m.v_sphere));
+	double naiseki = ft_vecinnerprod(v_sphereN, v_lightDir);
+	if (naiseki < 0)
+		naiseki = 0;
+	double nlDot = ft_map(naiseki, 0, 1, 0, 255);
+	double radianceDif = m.kDif * m.lightIntensity * nlDot;
+	
+	//(3) specular reflection 鏡面反射光
+	double radianceSpe = 0.0f;
+	if (naiseki > 0)
+	{
+		t_vec refDir = ft_vecsub(ft_vecmult(v_sphereN, 2 * naiseki), v_lightDir); 
+		t_vec invEyeDir = ft_vecnormalize(ft_vecmult(v_de, -1));
+		double vrDot = ft_vecinnerprod(invEyeDir, refDir);
+		if (vrDot < 0)
+			vrDot = 0;
+		vrDot = ft_map(pow(vrDot, m.shininess), 0, 1, 0, 255);
+		radianceSpe = m.kSpe * m.lightIntensity * vrDot;
+		//radianceSpe = m.kSpe * m.lightIntensity * pow(vrDot, m.shininess);
+	}
+
+	//(1)-(3)合計
+	double rSum = radianceAmb + radianceDif + radianceSpe;
+	//rSum = radianceAmb + radianceDif;
+	//rSum = radianceAmb + radianceSpe;
+	if (rSum > 255)
+		rSum = 255;
+	//return (ft_color(rSum, 0, 0));
+	return (ft_color(rSum, rSum, rSum));
+}
+
 int	decide_color(t_vec v_w, t_map m)
 {
 	double	t;
@@ -301,52 +346,7 @@ int	decide_color(t_vec v_w, t_map m)
 	//color = ft_color(255, 255, 255);
 	color = ft_color(0, 0, 0);
 	if (t >= 0)
-	{
-		//(1) ambient light 環境光
-		double radianceAmb = m.kAmb * m.lightIntensity;
-
-		//(2) diffuse reflection 拡散反射光
-		t_vec v_de = ft_vecsub(v_w, m.v_eye);
-		t_vec v_tpos = ft_vecadd(m.v_eye, ft_vecmult(v_de, t));
-
-		t_vec v_lightDir = ft_vecsub(m.v_light, v_tpos);
-		v_lightDir = ft_vecdiv(v_lightDir, ft_vecnorm(v_lightDir));
-		
-		t_vec v_sphereN = ft_vecsub(v_tpos, m.v_sphere);
-		v_sphereN = ft_vecdiv(v_sphereN, ft_vecnorm(v_sphereN));
-
-		double naiseki = ft_vecinnerprod(v_sphereN, v_lightDir);
-		if (naiseki < 0)
-			naiseki = 0;
-		double nlDot = ft_map(naiseki, 0, 1, 0, 255);
-		//printf("%.2f:%.2f ", naiseki, nlDot);
-		double radianceDif = m.kDif * m.lightIntensity * nlDot;
-		
-		//(3) specular reflection 鏡面反射光
-		double radianceSpe = 0.0f;
-		if (naiseki > 0)
-		{
-			t_vec refDir = ft_vecsub(ft_vecmult(v_sphereN, 2 * naiseki), v_lightDir); 
-			t_vec invEyeDir = ft_vecmult(v_de, -1);
-			invEyeDir = ft_vecdiv(invEyeDir, ft_vecnorm(invEyeDir));
-			double vrDot = ft_vecinnerprod(invEyeDir, refDir);
-			if (vrDot < 0)
-				vrDot = 0;
-			vrDot = ft_map(pow(vrDot, m.shininess), 0, 1, 0, 255);
-			radianceSpe = m.kSpe * m.lightIntensity * vrDot;
-			//printf("%.2f ", radianceSpe);
-			//radianceSpe = m.kSpe * m.lightIntensity * pow(vrDot, m.shininess);
-		}
-
-		//(1)-(3)合計
-		double rSum = radianceAmb + radianceDif + radianceSpe;
-		//rSum = radianceAmb + radianceDif;
-		//rSum = radianceAmb + radianceSpe;
-		if (rSum > 255)
-			rSum = 255;
-		//color = ft_color(rSum, 0, 0);
-		color = ft_color(rSum, rSum, rSum);
-	}
+		color = ray_trace(v_w, m, t);
 	return (color);
 }
 
