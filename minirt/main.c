@@ -319,21 +319,24 @@ int	decide_color(t_vec v_w, t_map m)
 		{
 			t_vec refDir = ft_vecsub(ft_vecmult(v_sphereN, 2 * naiseki), v_lightDir); 
 			t_vec invEyeDir = ft_vecmult(v_de, -1);
+			invEyeDir = ft_vecdiv(invEyeDir, ft_vecnorm(invEyeDir));
 			double vrDot = ft_vecinnerprod(invEyeDir, refDir);
 			if (vrDot < 0)
 				vrDot = 0;
-			radianceSpe = m.kSpe * m.lightIntensity * pow(vrDot, m.shininess);
+			vrDot = ft_map(pow(vrDot, m.shininess), 0, 1, 0, 255);
+			radianceSpe = m.kSpe * m.lightIntensity * vrDot;
+			//printf("%.2f ", radianceSpe);
+			//radianceSpe = m.kSpe * m.lightIntensity * pow(vrDot, m.shininess);
 		}
 
 		//(1)-(3)合計
 		double rSum = radianceAmb + radianceDif + radianceSpe;
 		//rSum = radianceAmb + radianceDif;
-		rSum = radianceAmb + radianceSpe;
+		//rSum = radianceAmb + radianceSpe;
 		if (rSum > 255)
 			rSum = 255;
-		color = ft_color(rSum, 0, 0);
-		//color = ft_color(rSum, rSum, rSum);
-		//color = ft_color(nlDot, 0, 0);
+		//color = ft_color(rSum, 0, 0);
+		color = ft_color(rSum, rSum, rSum);
 	}
 	return (color);
 }
@@ -348,7 +351,7 @@ void	init_m(t_map *m)
 	m->kAmb = 0.01;
 	m->kDif = 0.69;
 	m->kSpe = 0.3;
-	m->shininess = 4;//8;
+	m->shininess = 8;
 	m->lightIntensity = 1.0;
 	m->ambientIntensity = 0.1;
 }
