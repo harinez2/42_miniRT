@@ -298,7 +298,7 @@ double	get_nearest_shape(t_vec v_w, t_vec v_sphere, double sphereR, t_map m)
 	return (t);
 }
 
-int ray_trace(t_vec v_w, t_map m, double t)
+int ray_trace(t_vec v_w, t_map m, t_vec v_sphere, double t)
 {
 	//(1) ambient light 環境光
 	double radianceAmb = m.kAmb * m.lightIntensity;
@@ -307,7 +307,7 @@ int ray_trace(t_vec v_w, t_map m, double t)
 	t_vec v_de = ft_vecsub(v_w, m.v_eye);
 	t_vec v_tpos = ft_vecadd(m.v_eye, ft_vecmult(v_de, t));
 	t_vec v_lightDir = ft_vecnormalize(ft_vecsub(m.v_light, v_tpos));
-	t_vec v_sphereN = ft_vecnormalize(ft_vecsub(v_tpos, m.v_sphere));
+	t_vec v_sphereN = ft_vecnormalize(ft_vecsub(v_tpos, v_sphere));
 	double naiseki = ft_vecinnerprod(v_sphereN, v_lightDir);
 	if (naiseki < 0)
 		naiseki = 0;
@@ -347,15 +347,17 @@ int	decide_color(t_vec v_w, t_map m)
 	double t2 = get_nearest_shape(v_w, m.v_sphere2, m.sphereR, m);
 	//color = ft_color(255, 255, 255);
 	color = ft_color(0, 0, 0);
-	if (t >= 0 || t2 >= 0)
+	if (t >= 0 && t2 >= 0)
 	{
-		if (t2 >= 0 && t < 0)
-			t = t2;
-		if (t2 >= 0 && t >= 0 &&  t2 < t)
-			t = t2;
-		//color = ft_color(150,150,150);
-		color = ray_trace(v_w, m, t);
+		if (t2 < t)
+			color = ray_trace(v_w, m, m.v_sphere2, t2);
+		else
+			color = ray_trace(v_w, m, m.v_sphere, t);
 	}
+	else if (t2 >= 0)
+		color = ray_trace(v_w, m, m.v_sphere2, t2);
+	else if (t >= 0)
+		color = ray_trace(v_w, m, m.v_sphere, t);
 	return (color);
 }
 
