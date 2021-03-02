@@ -130,6 +130,7 @@ typedef struct		s_map
 	t_vec	v_eye;
 	t_vec	v_light;
 	t_vec	v_sphere;
+	t_vec	v_sphere2;
 	double	sphereR;
 
 	double kAmb; //ka 環境光反射係数
@@ -272,17 +273,17 @@ double	calcSpecular()
 	return (0);
 }
 
-double	get_nearest_shape(t_vec v_w, t_map m)
+double	get_nearest_shape(t_vec v_w, t_vec v_sphere, double sphereR, t_map m)
 {
 	t_vec	v_de;
 	t_vec	v_tmp;
 	double	t;
 	
 	v_de = ft_vecsub(v_w, m.v_eye);
-	v_tmp = ft_vecsub(m.v_eye, m.v_sphere);
+	v_tmp = ft_vecsub(m.v_eye, v_sphere);
 	double A = ft_vecnormsq(v_de);
 	double B = 2 * ft_vecinnerprod(v_de, v_tmp);
-	double C = ft_vecnormsq(v_tmp) - m.sphereR * m.sphereR;
+	double C = ft_vecnormsq(v_tmp) - sphereR * sphereR;
 	double D = B * B - 4 * A * C;
 
 	t = -1;
@@ -342,11 +343,19 @@ int	decide_color(t_vec v_w, t_map m)
 	double	t;
 	int	color;
 	
-	t = get_nearest_shape(v_w, m);
+	t = get_nearest_shape(v_w, m.v_sphere, m.sphereR, m);
+	double t2 = get_nearest_shape(v_w, m.v_sphere2, m.sphereR, m);
 	//color = ft_color(255, 255, 255);
 	color = ft_color(0, 0, 0);
-	if (t >= 0)
+	if (t >= 0 || t2 >= 0)
+	{
+		if (t2 >= 0 && t < 0)
+			t = t2;
+		if (t2 >= 0 && t >= 0 &&  t2 < t)
+			t = t2;
+		//color = ft_color(150,150,150);
 		color = ray_trace(v_w, m, t);
+	}
 	return (color);
 }
 
@@ -354,6 +363,7 @@ void	init_m(t_map *m)
 {
 	ft_vecset(&m->v_eye, 0, 0, -5);
 	ft_vecset(&m->v_sphere, 0, 0, 5);
+	ft_vecset(&m->v_sphere2, 1, 1, 2);
 	m->sphereR = 1.0;
 	ft_vecset(&m->v_light, -5, 5, -5);
 
