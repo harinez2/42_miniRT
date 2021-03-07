@@ -1,65 +1,12 @@
 
-#include	<unistd.h>
-#include	<math.h>
-#include	"mlx.h"
-#include	"mlx_int.h"
-#include	"../gnl/get_next_line.h"
+#include	"main.h"
 
 #define	WIN1_SX		242
 #define	WIN1_SY		242
-#define	IM1_SX		42
-#define	IM1_SY		42
-#define	IM3_SX		242
-#define	IM3_SY		242
 
 void	*mlx;
 void	*win1;
-void    *win2;
-void    *win3;
-void    *im1;
-void	*im2;
-void	*im3;
-void	*im4;
-int	bpp1;
-int	bpp2;
-int	bpp3;
-int	bpp4;
-int	sl1;
-int	sl2;
-int	sl3;
-int	sl4;
-int	endian1;
-int	endian2;
-int	endian3;
-int	endian4;
-char	*data1;
-char	*data2;
-char	*data3;
-char	*data4;
-int	xpm1_x;
-int	xpm1_y;
-
-int	local_endian;
-
-int	color_map_1(void *win,int w,int h);
-int	color_map_2(unsigned char *data,int bpp,int sl,int w,int h,int endian, int type);
-
-int	expose_win1(void *p)
-{
-	(void) p;
-
-	mlx_put_image_to_window(mlx,win1,im3,0,0);
-	return (0);
-}
-
-int	expose_win2(void *p)
-{
-	(void) p;
-
-	mlx_put_image_to_window(mlx,win2,im4,0,0);
-	mlx_put_image_to_window(mlx,win2,im2,0,0);
-	return (0);
-}
+int		local_endian;
 
 int	key_win1(int key,void *p)
 {
@@ -69,173 +16,6 @@ int	key_win1(int key,void *p)
 	if (key==0xFF1B)
 		exit(0);
 	return (0);
-}
-
-int	key_win2(int key,void *p)
-{
-	(void) p;
-
-	printf("Key in Win2 : %d\n",key);
-	if (key==0xFF1B)
-		exit(0);
-	return (0);
-}
-
-int	key_win3(int key,void *p)
-{
-	(void) p;
-
-	printf("Key in Win3 : %d\n",key);
-	if (key==0xFF1B)
-		mlx_destroy_window(mlx,win3);
-	return (0);
-}
-
-int	mouse_win1(int button,int x,int y, void *p)
-{
-	(void) p;
-
-	printf("Mouse in Win1, button %d at %dx%d.\n",button,x,y);
-	return (0);
-}
-
-int	mouse_win2(int button,int x,int y, void *p)
-{
-	(void) p;
-
-	printf("Mouse in Win2, button %d at %dx%d.\n",button,x,y);
-	return (0);
-}
-
-int	mouse_win3(int x,int y, void *p)
-{
-	(void) p;
-
-	printf("Mouse moving in Win3, at %dx%d.\n",x,y);
-	return (0);
-}
-
-/*
-** Vector funcs
-**/
-typedef struct		s_vec
-{
-	double		x;
-	double		y;
-	double		z;
-}			t_vec;
-
-typedef struct		s_map
-{
-	t_vec	v_eye;
-	t_vec	v_light;
-	t_vec	v_sphere;
-	t_vec	v_sphere2;
-	double	sphereR;
-
-	double kAmb; //ka 環境光反射係数
-	double kDif; //kd 拡散反射係数
-	double kSpe; //ks 鏡面反射係数
-	double shininess; //alpha 光沢度
-	double lightIntensity; //Ii 光源の光の強度
-	double ambientIntensity; //Ialpha 環境光の強度
-}			t_map;
-
-void	ft_vecset(t_vec *v, double x, double y, double z)
-{
-	v->x = x;
-	v->y = y;
-	v->z = z;
-}
-
-t_vec	ft_vecadd(t_vec v, t_vec w)
-{
-	t_vec ret;
-
-	ret.x = v.x + w.x;
-	ret.y = v.y + w.y;
-	ret.z = v.z + w.z;
-	return (ret);
-}
-
-t_vec	ft_vecsub(t_vec v, t_vec w)
-{
-	t_vec ret;
-
-	ret.x = v.x - w.x;
-	ret.y = v.y - w.y;
-	ret.z = v.z - w.z;
-	return (ret);
-}
-
-/* Multiply of scalar
-*/
-t_vec	ft_vecmult(t_vec v, double k)
-{
-	t_vec ret;
-
-	ret.x = v.x * k;
-	ret.y = v.y * k;
-	ret.z = v.z * k;
-	return (ret);
-}
-
-/* Divided by scalar
-*/
-t_vec	ft_vecdiv(t_vec v, double k)
-{
-	t_vec ret;
-
-	ret.x = v.x / k;
-	ret.y = v.y / k;
-	ret.z = v.z / k;
-	return (ret);
-}
-
-/* Inner product
-*/
-double	ft_vecinnerprod(t_vec v, t_vec w)
-{
-	double	ret;
-
-	ret = v.x * w.x;
-	ret += v.y * w.y;
-	ret += v.z * w.z;
-	return (ret);
-}
-
-/* Norm (length of the vec)
-*/
-double	ft_vecnorm(t_vec v)
-{
-	double	ret;
-
-	ret = v.x * v.x;
-	ret += v.y * v.y;
-	ret += v.z * v.z;
-	return (sqrt(ret));
-}
-
-/* Norm square (norm is the length of the vec)
-*/
-double	ft_vecnormsq(t_vec v)
-{
-	double	ret;
-
-	ret = v.x * v.x;
-	ret += v.y * v.y;
-	ret += v.z * v.z;
-	return (ret);
-}
-
-t_vec	ft_vecnormalize(t_vec v)
-{
-	return (ft_vecdiv(v, ft_vecnorm(v)));
-}
-
-void	ft_vecprint(t_vec *v)
-{
-	printf("[vector] (%f, %f, %f)\n", v->x, v->y, v->z);
 }
 
 /*
@@ -338,6 +118,34 @@ int ray_trace(t_vec v_w, t_map m, t_vec v_sphere, double t)
 	return (ft_color(rSum, rSum, rSum));
 }
 
+int	draw_plane(t_vec v_w, t_map m)
+{
+	(void)m;
+
+	t_plane  p;
+	ft_vecset(&p.normal, 0.0, 1.0, 0.0);
+	ft_vecset(&p.position, 0.0, -1.0, 0.0);
+	double	dn_dot = ft_vecinnerprod(v_w, p.normal);
+	
+	if (dn_dot != 0)
+	{
+		t_vec	v_sp;
+		double t;
+		v_sp.x = v_w.x - p.position.x;
+		v_sp.y = v_w.y - p.position.x;
+		v_sp.z = v_w.z - p.position.x;
+		t = - ft_vecinnerprod(v_sp, p.normal) / dn_dot;
+		if (t > 0)
+		{
+			return (t);
+		}
+		else
+			return (0);
+	}
+	else
+		return (-1);
+}
+
 int	decide_color(t_vec v_w, t_map m)
 {
 	double	t;
@@ -346,7 +154,8 @@ int	decide_color(t_vec v_w, t_map m)
 	t = get_nearest_shape(v_w, m.v_sphere, m.sphereR, m);
 	double t2 = get_nearest_shape(v_w, m.v_sphere2, m.sphereR, m);
 	//color = ft_color(255, 255, 255);
-	color = ft_color(0, 0, 0);
+	//color = ft_color(0, 0, 0);
+	color = draw_plane(v_w, m);
 	if (t >= 0 && t2 >= 0)
 	{
 		if (t2 < t)
@@ -418,76 +227,6 @@ void	decide_endian(void)
 }
 
 /*
-void	readFromFile2(char *filename, t_map *m)
-{
-	int fd;
-	char buf[20] = {};
-	int i;
-
-	init_m(m);
-
-	fd = open(filename, O_RDONLY);
-	if (fd < 0)
-	{
-		write(1, "Failed to open file.\n", 21);
-		exit(-1);
-	}
-	while (1)	
-	{
-		i = read(fd, &buf, 1);
-		if (i <= 0)
-			break;
-		if (buf[0] == ' ' || buf[0] == '\n')
-			continue;
-		else if (buf[0] == 'R')
-		{
-			;
-		}
-		printf("%s", buf);
-	}
-	//read(fd, buf, 199);
-	//printf("readed:%s\n", buf);
-	close(fd);
-}
-*/
-
-void	readFromFile(char *filename, t_map *m)
-{
-	int	fd;
-	char	*line;
-	int	i;
-	int	j;
-
-	fd = open(filename, O_RDONLY);
-	if (fd < 0)
-	{
-		write(1, "Failed to open file.\n", 21);
-		exit(-1);
-	}
-	while (1)	
-	{
-		i = get_next_line(fd, &line);
-		if (i <= 0)
-			break;
-		j = 0;
-		while (line[j] == ' ')
-			j++;
-		if (line[j] == '#')
-		{
-			free(line);
-			continue;
-		}
-		else if (line[j] == 'R')
-			printf("%s\n", line);
-		else
-			printf("%s\n", line);
-		free(line);
-	}
-	close(fd);
-	(void)m;
-}
-
-/*
 ** main func
 **/
 int	main(int argc, char **argv)
@@ -507,8 +246,8 @@ int	main(int argc, char **argv)
 	}
 	printf("Mlx init OK (use_xshm:%d, pshm_format:%d).\n",((t_xvar *)mlx)->use_xshm,((t_xvar *)mlx)->pshm_format);
 
-	printf("Window1 creation: %dx%d \"Title 1\" ...",WIN1_SX,WIN1_SY);
-	if (!(win1 = mlx_new_window(mlx,WIN1_SX,WIN1_SY,"Title1")))
+	printf("Window1 creation: %dx%d \"Title 1\" ...", WIN1_SX, WIN1_SY);
+	if (!(win1 = mlx_new_window(mlx, WIN1_SX, WIN1_SY, "Title1")))
 	{
 		printf(" !! KO !!\n");
 		exit(1);
@@ -522,173 +261,4 @@ int	main(int argc, char **argv)
 	mlx_loop(mlx);
 	//sleep(2);
 	exit(0);
-
-
-
-	sleep(2);
-
-	printf(" => Clear Window ...");
-	mlx_clear_window(mlx,win1);
-	printf("OK\n");
-	sleep(2);
-
-	printf(" => Image1 ZPixmap %dx%d ...",IM1_SX,IM1_SY);
-	if (!(im1 = mlx_new_image(mlx,IM1_SX,IM1_SY)))
-	{
-		printf(" !! KO !!\n");
-		exit(1);
-	}
-	data1 = mlx_get_data_addr(im1,&bpp1,&sl1,&endian1);
-	printf("OK (bpp1: %d, sizeline1: %d endian: %d type: %d)\n",bpp1,sl1,endian1,
-		((t_img *)im1)->type);
-
-	printf(" => Fill Image1 ...");
-	color_map_2((unsigned char *)data1,bpp1,sl1,IM1_SX,IM1_SY,endian1, 1);
-	printf("OK (pixmap : %d)\n",(int)((t_img *)im1)->pix);
-
-	printf(" => Put Image1 ...");
-	mlx_put_image_to_window(mlx,win1,im1,20,20);
-	printf("OK\n");
-	sleep(2);
-
-	printf(" => Destroy Image1 ... ");
-	mlx_destroy_image(mlx, im1);
-	printf("OK\n");
-	sleep(2);
-
-	printf(" => Image3 ZPixmap %dx%d ...",IM3_SX,IM3_SY);
-	if (!(im3 = mlx_new_image(mlx,IM3_SX,IM3_SY)))
-	{
-		printf(" !! KO !!\n");
-		exit(1);
-	}
-	data3 = mlx_get_data_addr(im3,&bpp3,&sl3,&endian3);
-	printf("OK (bpp3 %d, sizeline3 %d endian3 %d type %d)\n",bpp3,sl3,endian3,
-		((t_img *)im3)->type);
-
-	printf(" => Fill Image3 ...");
-	color_map_2((unsigned char *)data3,bpp3,sl3,IM3_SX,IM3_SY,endian3, 1);
-	printf("OK (pixmap : %d)\n",(int)((t_img *)im3)->pix);
-
-	printf(" => Put Image3 ...");
-	mlx_put_image_to_window(mlx,win1,im3,20,20);
-	printf("OK\n");
-	sleep(2);
-
-	printf(" => String ...");
-	mlx_string_put(mlx,win1,5,WIN1_SY/2,0xFF99FF,"String output");
-	mlx_string_put(mlx,win1,15,WIN1_SY/2+20,0x00FFFF,"MinilibX test");
-	printf("OK\n");
-	sleep(2);
-
-	printf(" => Xpm from file ...");
-	if (!(im2 = mlx_xpm_file_to_image(mlx,"open.xpm",&xpm1_x,&xpm1_y)))
-	{
-		printf(" !! KO !!\n");
-		exit(1);
-	}
-	data2 = mlx_get_data_addr(im2,&bpp2,&sl2,&endian2);
-	printf("OK (xpm %dx%d)(img bpp2: %d, sizeline2: %d endian: %d type: %d)\n",
-		xpm1_x,xpm1_y,bpp2,sl2,endian2,((t_img *)im2)->type);
-	sleep(2);
-
-	printf(" => Put xpm ...");
-	mlx_put_image_to_window(mlx,win1,im2,0,0);
-	mlx_put_image_to_window(mlx,win1,im2,100,100);
-	printf("OK\n");
-	sleep(2);
-
-	printf(" => 2nd window,");
-	win2 = mlx_new_window(mlx,WIN1_SX,WIN1_SY,"Title2");
-	if (!(im4 = mlx_new_image(mlx,IM3_SX, IM3_SY)))
-	{
-		printf(" !! KO !!\n");
-		exit(1);
-	}
-	data4 = mlx_get_data_addr(im4,&bpp4,&sl4,&endian4);
-	color_map_2((unsigned char *)data4,bpp4,sl4,IM3_SX,IM3_SY,endian4, 2);
-
-	printf(" 3rd window, Installing hooks ...");
-	win3 = mlx_new_window(mlx,WIN1_SX,WIN1_SY,"Title3");
-	mlx_expose_hook(win1,expose_win1,0);
-	mlx_mouse_hook(win1,mouse_win1,0);
-	mlx_key_hook(win1,key_win1,0);
-	mlx_expose_hook(win2,expose_win2,0);
-	mlx_mouse_hook(win2,mouse_win2,0);
-	mlx_key_hook(win2,key_win2,0);
-	mlx_key_hook(win3,key_win3,0);
-
-	mlx_hook(win3, MotionNotify, PointerMotionMask, mouse_win3, 0);
-
-	printf("OK\nNow in Loop. Just play. Esc in 3 to destroy, 1&2 to quit.\n");
-
-	mlx_loop(mlx);
-}
-
-int	color_map_1(void *win,int w,int h)
-{
-	int	x;
-	int	y;
-	int	color;
-
-	x = 0;
-	while (x < w)
-	{
-		y = 0;
-		while (y < h)
-		{
-			color = (x*255)/w+((((w-x)*255)/w)<<16)+(((y*255)/h)<<8);
-			mlx_pixel_put(mlx,win,x,y,color);
-			y++;
-		}
-		x++;
-	}
-	return (0);
-}
-
-int	color_map_2(unsigned char *data,int bpp,int sl,int w,int h,int endian, int type)
-{
-	int	x;
-	int	y;
-	int	opp;
-	int	dec;
-	int	color;
-	int	color2;
-	unsigned char *ptr;
-
-	opp = bpp/8;
-	printf("(opp : %d) ",opp);
-	y = h;
-	while (y--)
-	{
-		ptr = data+y*sl;
-		x = w;
-		while (x--)
-		{
-			if (type==2)
-				color = (y*255)/w+((((w-x)*255)/w)<<16)+(((y*255)/h)<<8);
-			else
-				color = (x*255)/w+((((w-x)*255)/w)<<16)+(((y*255)/h)<<8);
-			color2 = mlx_get_color_value(mlx,color);
-			dec = opp;
-			while (dec--)
-			{
-				if (endian==local_endian)
-				{
-					if (endian)
-						*(ptr+x*opp+dec) = ((unsigned char *)(&color2))[4-opp+dec];
-					else
-						*(ptr+x*opp+dec) = ((unsigned char *)(&color2))[dec];
-				}
-				else
-				{
-					if (endian)
-						*(ptr+x*opp+dec) = ((unsigned char *)(&color2))[opp-1-dec];
-					else
-						*(ptr+x*opp+dec) = ((unsigned char *)(&color2))[3-dec];
-				}
-			}
-		}
-	}
-	return (0);
 }
