@@ -1,6 +1,6 @@
 #include	"main.h"
 
-int	readCmd1(int *i, char *line)
+int	readCmd1(int *i, char *line, t_map *m)
 {
 	int	cmd;
 	int ret;
@@ -11,11 +11,8 @@ int	readCmd1(int *i, char *line)
 	{
 		cmd = CMD_RESOLUTION;
 		(*i)++;
-printf("cmd:R ");
-		ret = readInt(i, line);
-printf("int:%d ", ret);
-		ret = readInt(i, line);
-printf("int:%d ", ret);
+		m->window_x = readInt(i, line);
+		m->window_y = readInt(i, line);
 	}
 	else if (line[*i] == 'A')
 	{
@@ -59,7 +56,7 @@ printf("dbl:%.2f ", retd);
 	return (cmd);
 }
 
-int	readCmd2(int *i, char *line)
+int	readCmd2(int *i, char *line, t_map *m)
 {
 	int	cmd;
 	double retd;
@@ -108,10 +105,11 @@ printf("cmd:tr ");
 		readXyz(i, line, NULL);
 		readRgb(i, line, NULL);
 	}
+	(void)m;
 	return (cmd);
 }
 
-void	readLine(char *line)
+void	readLine(char *line, t_map *m)
 {
 	int	i;
 	int	ret;
@@ -120,9 +118,9 @@ void	readLine(char *line)
 	skipSep(&i, line);
 	if (line[i] == '#' || line[i] == '\0')
 		return;
-	ret = readCmd1(&i, line);
+	ret = readCmd1(&i, line, m);
 	if (ret == -1)
-		ret = readCmd2(&i, line);
+		ret = readCmd2(&i, line, m);
 printf(" // ");
 	if (line[i] == 'R')
 		printf("%s\n", line);
@@ -148,7 +146,7 @@ void	readFromFile(char *filename, t_map *m)
 		i = get_next_line(fd, &line);
 		if (i < 0)
 			break;
-		readLine(line);
+		readLine(line, m);
 		free(line);
 		if (i == 0)
 			break;

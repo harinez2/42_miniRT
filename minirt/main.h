@@ -25,6 +25,9 @@ typedef struct		s_vec
 
 typedef struct		s_map
 {
+	int	window_x;
+	int	window_y;
+
 	t_vec	v_eye;
 	t_vec	v_light;
 	t_vec	v_sphere;
@@ -46,9 +49,9 @@ typedef struct		s_plane
 }			t_plane;
 
 
-int	readCmd1(int *i, char *line);
-int	readCmd2(int *i, char *line);
-void	readLine(char *line);
+int	readCmd1(int *i, char *line, t_map *m);
+int	readCmd2(int *i, char *line, t_map *m);
+void	readLine(char *line, t_map *m);
 void	readFromFile(char *filename, t_map *m);
 
 int		readInt(int *i, char *line);

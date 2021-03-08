@@ -1,9 +1,6 @@
 
 #include	"main.h"
 
-#define	WIN1_SX		242
-#define	WIN1_SY		242
-
 void	*mlx;
 void	*win1;
 int		local_endian;
@@ -172,6 +169,8 @@ int	decide_color(t_vec v_w, t_map m)
 
 void	init_m(t_map *m)
 {
+	m->window_x = 242;
+	m->window_y = 242;
 	ft_vecset(&m->v_eye, 0, 0, -5);
 	ft_vecset(&m->v_sphere, 0, 0, 5);
 	ft_vecset(&m->v_sphere2, 1, 1, 2);
@@ -246,8 +245,8 @@ int	main(int argc, char **argv)
 	}
 	printf("Mlx init OK (use_xshm:%d, pshm_format:%d).\n",((t_xvar *)mlx)->use_xshm,((t_xvar *)mlx)->pshm_format);
 
-	printf("Window1 creation: %dx%d \"Title 1\" ...", WIN1_SX, WIN1_SY);
-	if (!(win1 = mlx_new_window(mlx, WIN1_SX, WIN1_SY, "Title1")))
+	printf("Window1 creation: %dx%d \"Title 1\" ...", m.window_x, m.window_y);
+	if (!(win1 = mlx_new_window(mlx, m.window_x, m.window_y, "Title1")))
 	{
 		printf(" !! KO !!\n");
 		exit(1);
@@ -255,9 +254,9 @@ int	main(int argc, char **argv)
 	printf("OK\n");
 
 	printf("Drawing sphere ...");
-	draw_sphere(win1, WIN1_SX, WIN1_SY, &m);
+	draw_sphere(win1, m.window_x, m.window_y, &m);
 	printf("OK\n");
-	mlx_key_hook(win1,key_win1,0);
+	mlx_key_hook(win1, key_win1, 0);
 	mlx_loop(mlx);
 	//sleep(2);
 	exit(0);
