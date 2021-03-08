@@ -1,33 +1,134 @@
 #include	"main.h"
 
-int	readCmd(int *i, char *line)
+int	readCmd1(int *i, char *line)
 {
 	int	cmd;
+	int ret;
+	double retd;
 	
 	cmd = -1;
 	if (line[*i] == 'R')
+	{
 		cmd = CMD_RESOLUTION;
+		(*i)++;
+printf("cmd:R ");
+		ret = readInt(i, line);
+printf("int:%d ", ret);
+		ret = readInt(i, line);
+printf("int:%d ", ret);
+	}
 	else if (line[*i] == 'A')
+	{
 		cmd = CMD_AMBIENT;
-	else if (line[*i] == 'c')
+		(*i)++;
+printf("cmd:A ");
+		retd = readDouble(i, line);
+printf("dbl:%.2f ", retd);
+		readRgb(i, line, NULL);
+	}
+	else if (line[*i] == 'c' && line[*i + 1] != 'y')
+	{
 		cmd = CMD_CAMERA;
+		(*i)++;
+printf("cmd:c ");
+		readXyz(i, line, NULL);
+		readXyz(i, line, NULL);
+		ret = readInt(i, line);
+printf("int:%d ", ret);
+	}
 	else if (line[*i] == 'l')
+	{
 		cmd = CMD_LIGHT;
+		(*i)++;
+printf("cmd:l ");
+		readXyz(i, line, NULL);
+		retd = readDouble(i, line);
+printf("dbl:%.2f ", retd);
+		readRgb(i, line, NULL);
+	}
 	else if (line[*i] == 's' && line[*i + 1] == 'p')
+	{
 		cmd = CMD_SPHERE;
-	else if (line[*i] == 'p' && line[*i + 1] == 'l')
-		cmd = CMD_PLANE;
-	else if (line[*i] == 's' && line[*i + 1] == 'q')
-		cmd = CMD_SQUARE;
-	else if (line[*i] == 'c' && line[*i + 1] == 'y')
-		cmd = CMD_CYLINDER;
-	else if (line[*i] == 't' && line[*i + 1] == 'r')
-		cmd = CMD_TRIANGLE;
-	if (0 <= cmd && cmd < 10)
-		i++;
-	else
-		i += 2;
+		(*i) += 2;
+printf("cmd:sp ");
+		readXyz(i, line, NULL);
+		retd = readDouble(i, line);
+printf("dbl:%.2f ", retd);
+		readRgb(i, line, NULL);
+	}
 	return (cmd);
+}
+
+int	readCmd2(int *i, char *line)
+{
+	int	cmd;
+	double retd;
+	
+	cmd = -1;
+	if (line[*i] == 'p' && line[*i + 1] == 'l')
+	{
+		cmd = CMD_PLANE;
+		(*i) += 2;
+printf("cmd:pl ");
+		readXyz(i, line, NULL);
+		readXyz(i, line, NULL);
+		readRgb(i, line, NULL);
+	}
+	else if (line[*i] == 's' && line[*i + 1] == 'q')
+	{
+		cmd = CMD_SQUARE;
+		(*i) += 2;
+printf("cmd:sq ");
+		readXyz(i, line, NULL);
+		readXyz(i, line, NULL);
+		retd = readDouble(i, line);
+printf("dbl:%.2f ", retd);
+		readRgb(i, line, NULL);
+	}
+	else if (line[*i] == 'c' && line[*i + 1] == 'y')
+	{
+		cmd = CMD_CYLINDER;
+		(*i) += 2;
+printf("cmd:cy ");
+		readXyz(i, line, NULL);
+		readXyz(i, line, NULL);
+		retd = readDouble(i, line);
+printf("dbl:%.2f ", retd);
+		retd = readDouble(i, line);
+printf("dbl:%.2f ", retd);
+		readRgb(i, line, NULL);
+	}
+	else if (line[*i] == 't' && line[*i + 1] == 'r')
+	{
+		cmd = CMD_TRIANGLE;
+		(*i) += 2;
+printf("cmd:tr ");
+		readXyz(i, line, NULL);
+		readXyz(i, line, NULL);
+		readXyz(i, line, NULL);
+		readRgb(i, line, NULL);
+	}
+	return (cmd);
+}
+
+void	readLine(char *line)
+{
+	int	i;
+	int	ret;
+
+	i = 0;
+	skipSep(&i, line);
+	if (line[i] == '#' || line[i] == '\0')
+		return;
+	ret = readCmd1(&i, line);
+	if (ret == -1)
+		ret = readCmd2(&i, line);
+printf(" // ");
+	if (line[i] == 'R')
+		printf("%s\n", line);
+	else
+		printf("%s\n", line);
+
 }
 
 void	readFromFile(char *filename, t_map *m)
@@ -35,7 +136,6 @@ void	readFromFile(char *filename, t_map *m)
 	int	fd;
 	char	*line;
 	int	i;
-	int	j;
 
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
@@ -46,22 +146,12 @@ void	readFromFile(char *filename, t_map *m)
 	while (1)	
 	{
 		i = get_next_line(fd, &line);
-		if (i <= 0)
+		if (i < 0)
 			break;
-		j = 0;
-		while (line[j] == ' ')
-			j++;
-		if (line[j] == '#')
-		{
-			free(line);
-			continue;
-		}
-		readCmd(&i, line);
-		if (line[j] == 'R')
-			printf("%s\n", line);
-		else
-			printf("%s\n", line);
+		readLine(line);
 		free(line);
+		if (i == 0)
+			break;
 	}
 	close(fd);
 	(void)m;

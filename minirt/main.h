@@ -46,13 +46,16 @@ typedef struct		s_plane
 }			t_plane;
 
 
-int		readCmd(int *i, char *line);
+int	readCmd1(int *i, char *line);
+int	readCmd2(int *i, char *line);
+void	readLine(char *line);
 void	readFromFile(char *filename, t_map *m);
 
 int		readInt(int *i, char *line);
 double	readDouble(int *i, char *s);
 int		readXyz(int *i, char *s, t_map *m);
 int		readRgb(int *i, char *s, t_map *m);
+void	skipSep(int *i, char *s);
 
 void	ft_vecset(t_vec *v, double x, double y, double z);
 t_vec	ft_vecadd(t_vec v, t_vec w);
