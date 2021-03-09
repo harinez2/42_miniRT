@@ -28,8 +28,8 @@ typedef struct		s_map
 	int	window_x;
 	int	window_y;
 
-	t_vec	v_eye;
-	t_vec	v_light;
+	t_vec	v_eye[5];
+	t_vec	v_light[5];
 	t_vec	v_sphere;
 	t_vec	v_sphere2;
 	double	sphereR;
@@ -40,14 +40,50 @@ typedef struct		s_map
 	double shininess; //alpha 光沢度
 	double lightIntensity; //Ii 光源の光の強度
 	double ambientIntensity; //Ialpha 環境光の強度
+	
+	char	objtype[200];
+	void	*obj[200];
 }			t_map;
+
+/*objects*/
+typedef struct		s_sphere
+{
+	t_vec		center;
+	double		diameter;
+	int			rgb;
+}			t_sphere;
 
 typedef struct		s_plane
 {
 	t_vec		normal;		//法線ベクトル
 	t_vec		position;	//面が通る点の位置ベクトル
+	int			rgb;
 }			t_plane;
 
+typedef struct		s_square
+{
+	t_vec		center;
+	t_vec		orientation;
+	double		sidesize;
+	int		rgb;
+}			t_square;
+
+typedef struct		s_cylinder
+{
+	t_vec		center;
+	t_vec		orientation;
+	double		diameter;
+	double		height;
+	int		rgb;
+}			t_cylinder;
+
+typedef struct		s_triangle
+{
+	t_vec		first;
+	t_vec		second;
+	t_vec		third;
+	int		rgb;
+}			t_triangle;
 
 int	readCmd1(int *i, char *line, t_map *m);
 int	readCmd2(int *i, char *line, t_map *m);

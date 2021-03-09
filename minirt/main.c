@@ -56,8 +56,8 @@ double	get_nearest_shape(t_vec v_w, t_vec v_sphere, double sphereR, t_map m)
 	t_vec	v_tmp;
 	double	t;
 	
-	v_de = ft_vecsub(v_w, m.v_eye);
-	v_tmp = ft_vecsub(m.v_eye, v_sphere);
+	v_de = ft_vecsub(v_w, m.v_eye[0]);
+	v_tmp = ft_vecsub(m.v_eye[0], v_sphere);
 	double A = ft_vecnormsq(v_de);
 	double B = 2 * ft_vecinnerprod(v_de, v_tmp);
 	double C = ft_vecnormsq(v_tmp) - sphereR * sphereR;
@@ -81,9 +81,9 @@ int ray_trace(t_vec v_w, t_map m, t_vec v_sphere, double t)
 	double radianceAmb = m.kAmb * m.lightIntensity;
 
 	//(2) diffuse reflection 拡散反射光
-	t_vec v_de = ft_vecsub(v_w, m.v_eye);
-	t_vec v_tpos = ft_vecadd(m.v_eye, ft_vecmult(v_de, t));
-	t_vec v_lightDir = ft_vecnormalize(ft_vecsub(m.v_light, v_tpos));
+	t_vec v_de = ft_vecsub(v_w, m.v_eye[0]);
+	t_vec v_tpos = ft_vecadd(m.v_eye[0], ft_vecmult(v_de, t));
+	t_vec v_lightDir = ft_vecnormalize(ft_vecsub(m.v_light[0], v_tpos));
 	t_vec v_sphereN = ft_vecnormalize(ft_vecsub(v_tpos, v_sphere));
 	double naiseki = ft_vecinnerprod(v_sphereN, v_lightDir);
 	if (naiseki < 0)
@@ -171,11 +171,11 @@ void	init_m(t_map *m)
 {
 	m->window_x = 242;
 	m->window_y = 242;
-	ft_vecset(&m->v_eye, 0, 0, -5);
+	ft_vecset(&m->v_eye[0], 0, 0, -5);
 	ft_vecset(&m->v_sphere, 0, 0, 5);
 	ft_vecset(&m->v_sphere2, 1, 1, 2);
 	m->sphereR = 1.0;
-	ft_vecset(&m->v_light, -5, 5, -5);
+	ft_vecset(&m->v_light[0], -5, 5, -5);
 
 	m->kAmb = 0.01;
 	m->kDif = 0.69;
@@ -252,6 +252,18 @@ int	main(int argc, char **argv)
 		exit(1);
 	}
 	printf("OK\n");
+
+
+	m.objtype[0] = 'Q';
+	m.obj[0] = malloc(sizeof(t_square));
+	if (m.objtype[0] == 'Q')
+	{
+		//t_square *sq = (t_square *)m.obj[0];
+	//	sq->center_x = 10;
+		((t_square *)m.obj[0])->center.x = 10;
+		printf("sq:%f\n", ((t_square *)m.obj[0])->center.x);
+	}
+
 
 	printf("Drawing sphere ...");
 	draw_sphere(win1, m.window_x, m.window_y, &m);
