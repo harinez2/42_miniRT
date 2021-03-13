@@ -33,6 +33,6 @@ make minirt/libmlx.a
 ### Compiles myrt
 
 ```
-make minirt/myrt
+make minirt/miniRT
 ```
 
