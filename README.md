@@ -2,6 +2,12 @@
 
 
 
+## Prerequisite
+
+```
+sudo apt install libx11-dev x11proto-core-dev libxt-dev libbsd-dev gcc
+```
+
 ## Compiles for myrt
 
 ```
