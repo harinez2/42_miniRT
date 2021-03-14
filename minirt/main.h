@@ -37,17 +37,16 @@ typedef struct		s_map
 
 	t_vec	v_eye[5];
 	t_vec	v_light[5];
-	t_vec	v_sphere;
-	t_vec	v_sphere2;
-	double	sphereR;
+	t_vec	v_sphere[5];
+	double	sphereR[5];
 
 	t_color	kAmb; //ka 環境光反射係数
 	t_color	kDif; //kd 拡散反射係数
 	t_color	kSpe; //ks 鏡面反射係数
 
 	double shininess; //alpha 光沢度
-	t_color lightIntensity; //Ii 光源の光の強度
-	t_color ambientIntensity; //Ialpha 環境光の強度
+	double ambientIntensity; //Ialpha 環境光の強度
+	double lightIntensity; //Ii 光源の光の強度
 	
 	char	objtype[200];
 	void	*obj[200];
@@ -93,6 +92,8 @@ typedef struct		s_triangle
 	int		rgb;
 }			t_triangle;
 
+double	ft_map(double x, int froma, int fromb, int toa, int tob);
+
 int	readCmd1(int *i, char *line, t_map *m);
 int	readCmd2(int *i, char *line, t_map *m);
 void	readLine(char *line, t_map *m);
@@ -100,8 +101,8 @@ void	readFromFile(char *filename, t_map *m);
 
 int		readInt(int *i, char *line);
 double	readDouble(int *i, char *s);
-int		readXyz(int *i, char *s, t_map *m);
-int		readRgb(int *i, char *s, t_map *m);
+int		readXyz(int *i, char *s, t_vec *v);
+int		readRgb(int *i, char *s, t_color *c);
 void	skipSep(int *i, char *s);
 
 void	ft_vecset(t_vec *v, double x, double y, double z);

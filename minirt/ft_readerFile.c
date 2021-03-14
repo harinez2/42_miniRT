@@ -4,7 +4,6 @@ int	readCmd1(int *i, char *line, t_map *m)
 {
 	int	cmd;
 	int ret;
-	double retd;
 	
 	cmd = -1;
 	if (line[*i] == 'R')
@@ -18,39 +17,32 @@ int	readCmd1(int *i, char *line, t_map *m)
 	{
 		cmd = CMD_AMBIENT;
 		(*i)++;
-printf("cmd:A ");
-		retd = readDouble(i, line);
-printf("dbl:%.2f ", retd);
-		readRgb(i, line, NULL);
+		m->ambientIntensity = readDouble(i, line);
+		readRgb(i, line, &(m->kAmb));
 	}
 	else if (line[*i] == 'c' && line[*i + 1] != 'y')
 	{
 		cmd = CMD_CAMERA;
 		(*i)++;
-printf("cmd:c ");
-		readXyz(i, line, NULL);
+		readXyz(i, line, &(m->v_eye[0]));
 		readXyz(i, line, NULL);
 		ret = readInt(i, line);
-printf("int:%d ", ret);
+printf("cmd:c int:%d ", ret);
 	}
 	else if (line[*i] == 'l')
 	{
 		cmd = CMD_LIGHT;
 		(*i)++;
-printf("cmd:l ");
-		readXyz(i, line, NULL);
-		retd = readDouble(i, line);
-printf("dbl:%.2f ", retd);
+		readXyz(i, line, &(m->v_light[0]));
+		m->lightIntensity = readDouble(i, line);
 		readRgb(i, line, NULL);
 	}
 	else if (line[*i] == 's' && line[*i + 1] == 'p')
 	{
 		cmd = CMD_SPHERE;
 		(*i) += 2;
-printf("cmd:sp ");
-		readXyz(i, line, NULL);
-		retd = readDouble(i, line);
-printf("dbl:%.2f ", retd);
+		readXyz(i, line, &(m->v_sphere[0]));
+		m->sphereR[0] = readDouble(i, line);
 		readRgb(i, line, NULL);
 	}
 	return (cmd);
@@ -66,31 +58,29 @@ int	readCmd2(int *i, char *line, t_map *m)
 	{
 		cmd = CMD_PLANE;
 		(*i) += 2;
-printf("cmd:pl ");
 		readXyz(i, line, NULL);
 		readXyz(i, line, NULL);
 		readRgb(i, line, NULL);
+printf("cmd:pl ");
 	}
 	else if (line[*i] == 's' && line[*i + 1] == 'q')
 	{
 		cmd = CMD_SQUARE;
 		(*i) += 2;
-printf("cmd:sq ");
 		readXyz(i, line, NULL);
 		readXyz(i, line, NULL);
 		retd = readDouble(i, line);
-printf("dbl:%.2f ", retd);
+printf("cmd:sq dbl:%.2f ", retd);
 		readRgb(i, line, NULL);
 	}
 	else if (line[*i] == 'c' && line[*i + 1] == 'y')
 	{
 		cmd = CMD_CYLINDER;
 		(*i) += 2;
-printf("cmd:cy ");
 		readXyz(i, line, NULL);
 		readXyz(i, line, NULL);
 		retd = readDouble(i, line);
-printf("dbl:%.2f ", retd);
+printf("cmd:cy dbl:%.2f ", retd);
 		retd = readDouble(i, line);
 printf("dbl:%.2f ", retd);
 		readRgb(i, line, NULL);
@@ -99,11 +89,11 @@ printf("dbl:%.2f ", retd);
 	{
 		cmd = CMD_TRIANGLE;
 		(*i) += 2;
-printf("cmd:tr ");
 		readXyz(i, line, NULL);
 		readXyz(i, line, NULL);
 		readXyz(i, line, NULL);
 		readRgb(i, line, NULL);
+printf("cmd:tr ");
 	}
 	(void)m;
 	return (cmd);

@@ -79,9 +79,9 @@ int ray_trace(t_vec v_w, t_map m, t_vec v_sphere, double t)
 {
 	//(1) ambient light 環境光
 	t_color radianceAmb;
-	radianceAmb.r = m.kAmb.r * m.ambientIntensity.r;
-	radianceAmb.g = m.kAmb.g * m.ambientIntensity.g;
-	radianceAmb.b = m.kAmb.b * m.ambientIntensity.b;
+	radianceAmb.r = m.kAmb.r * m.ambientIntensity;
+	radianceAmb.g = m.kAmb.g * m.ambientIntensity;
+	radianceAmb.b = m.kAmb.b * m.ambientIntensity;
 
 	//(2) diffuse reflection 拡散反射光
 	t_vec v_de = ft_vecsub(v_w, m.v_eye[0]);
@@ -93,9 +93,9 @@ int ray_trace(t_vec v_w, t_map m, t_vec v_sphere, double t)
 		naiseki = 0;
 	double nlDot = ft_map(naiseki, 0, 1, 0, 255);
 	t_color radianceDif;
-	radianceDif.r = m.kDif.r * m.lightIntensity.r * nlDot;
-	radianceDif.g = m.kDif.g * m.lightIntensity.g * nlDot;
-	radianceDif.b = m.kDif.b * m.lightIntensity.b * nlDot;
+	radianceDif.r = m.kDif.r * m.lightIntensity * nlDot;
+	radianceDif.g = m.kDif.g * m.lightIntensity * nlDot;
+	radianceDif.b = m.kDif.b * m.lightIntensity * nlDot;
 	
 	//(3) specular reflection 鏡面反射光
 	t_color radianceSpe;// = 0.0f;
@@ -107,9 +107,9 @@ int ray_trace(t_vec v_w, t_map m, t_vec v_sphere, double t)
 		if (vrDot < 0)
 			vrDot = 0;
 		vrDot = ft_map(pow(vrDot, m.shininess), 0, 1, 0, 255);
-		radianceSpe.r = m.kSpe.r * m.lightIntensity.r * vrDot;
-		radianceSpe.g = m.kSpe.g * m.lightIntensity.g * vrDot;
-		radianceSpe.b = m.kSpe.b * m.lightIntensity.b * vrDot;
+		radianceSpe.r = m.kSpe.r * m.lightIntensity * vrDot;
+		radianceSpe.g = m.kSpe.g * m.lightIntensity * vrDot;
+		radianceSpe.b = m.kSpe.b * m.lightIntensity * vrDot;
 		//radianceSpe = m.kSpe * m.lightIntensity * pow(vrDot, m.shininess);
 	}
 
@@ -163,8 +163,8 @@ int	decide_color(t_vec v_w, t_map m)
 	int	color;
 	
 	double chkt;
-	t_vec	chkobj[2] = {m.v_sphere, m.v_sphere2};
-	double	chkobjr[2] = {m.sphereR, m.sphereR};
+	t_vec	chkobj[2] = {m.v_sphere[0], m.v_sphere[1]};
+	double	chkobjr[2] = {m.sphereR[0], m.sphereR[1]};
 
 	t = -1;
 	color = draw_plane(v_w, m);
@@ -185,9 +185,10 @@ void	init_m(t_map *m)
 	m->window_x = 242;
 	m->window_y = 242;
 	ft_vecset(&m->v_eye[0], 0, 0, -5);
-	ft_vecset(&m->v_sphere, 0, 0, 5);
-	ft_vecset(&m->v_sphere2, 1, 1, 2);
-	m->sphereR = 1.0;
+	ft_vecset(&m->v_sphere[0], 0, 0, 5);
+	ft_vecset(&m->v_sphere[1], 1, 1, 2);
+	m->sphereR[0] = 1.0;
+	m->sphereR[1] = 1.0;
 	ft_vecset(&m->v_light[0], -5, 5, -5);
 
 	m->kAmb.r = 0.01;
@@ -204,13 +205,28 @@ void	init_m(t_map *m)
 
 	m->shininess = 8;
 
-	m->lightIntensity.r = 1.0;
-	m->lightIntensity.g = 1.0;
-	m->lightIntensity.b = 1.0;
+	m->lightIntensity = 1.0;
+	m->ambientIntensity = 0.1;
+}
 
-	m->ambientIntensity.r = 0.1;
-	m->ambientIntensity.g = 0.1;
-	m->ambientIntensity.b = 0.1;
+void	print_m(t_map *m)
+{
+	printf("===== current config begin =====\n");
+	printf("R        : %d x %d\n", m->window_x, m->window_y);
+	printf("Eye[0]   : %.2f, %.2f, %.2f\n", m->v_eye[0].x, m->v_eye[0].y, m->v_eye[0].z);
+	printf("Sphere[0]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[0].x, m->v_sphere[0].y, m->v_sphere[0].z, m->sphereR[0]);
+	printf("Sphere[1]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[1].x, m->v_sphere[1].y, m->v_sphere[1].z, m->sphereR[1]);
+	printf("Light[0] : %.2f, %.2f, %.2f\n", m->v_light[0].x, m->v_light[0].y, m->v_light[0].z);
+
+	printf("kAmb     : %.2f, %.2f, %.2f\n", m->kAmb.r, m->kAmb.g, m->kAmb.b);
+	printf("kDif     : %.2f, %.2f, %.2f\n", m->kDif.r, m->kDif.g, m->kDif.b);
+	printf("kSpe     : %.2f, %.2f, %.2f\n", m->kSpe.r, m->kSpe.g, m->kSpe.b);
+	
+	printf("shininess       : %.2f\n", m->shininess);
+
+	printf("lightIntensity  : %.2f\n", m->lightIntensity);
+	printf("ambientIntensity: %.2f\n", m->ambientIntensity);
+	printf("===== current config end =====\n\n");
 }
 
 /*
@@ -263,6 +279,7 @@ int	main(int argc, char **argv)
 	init_m(&m);
 	if (argc >= 2)
 		readFromFile(argv[1], &m);
+	print_m(&m);
 
 	decide_endian();
 

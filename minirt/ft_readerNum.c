@@ -52,44 +52,49 @@ double	readDouble(int *i, char *line)
 	return (minus * ret);
 }
 
-int	readXyz(int *i, char *s, t_map *m)
+int	readXyz(int *i, char *s, t_vec *v)
 {
-	double	d;
+	double	x;
+	double	y;
+	double	z;
 
-	d = readDouble(i, s);
-printf("<xyz:%.2f,", d);
+	x = readDouble(i, s);
 	if (s[(*i)++] != ',')
 		return (-1);
-	d = readDouble(i, s);
-printf("%.2f,", d);
+	y = readDouble(i, s);
 	if (s[(*i)++] != ',')
 		return (-1);
-	d = readDouble(i, s);
-printf("%.2f> ", d);
+	z = readDouble(i, s);
 	if (0)
 		return (-1);
-	(void)d;
-	(void)*m;
+	if (v != NULL)
+		ft_vecset(v, x, y, z);
+printf("<xyz:%.2f, %.2f, %.2f>", x,y,z);
 	return (0);
 }
 
-int	readRgb(int *i, char *s, t_map *m)
+int	readRgb(int *i, char *s, t_color *c)
 {
-	int	j;
+	int	r;
+	int	g;
+	int	b;
 
-	j = readInt(i, s);
-printf("<rgb:%d,", j);
-	if (j < 0 || j > 255 || s[(*i)++] != ',')
+	r = readInt(i, s);
+	if (r < 0 || r > 255 || s[(*i)++] != ',')
 		return (-1);
-	j = readInt(i, s);
-printf("%d,", j);
-	if (j < 0 || j > 255 || s[(*i)++] != ',')
+	g = readInt(i, s);
+	if (g < 0 || g > 255 || s[(*i)++] != ',')
 		return (-1);
-	j = readInt(i, s);
-printf("%d> ", j);
-	if (j < 0 || j > 255)
+	b = readInt(i, s);
+	if (b < 0 || b > 255)
 		return (-1);
-	(void)*m;
+	if (c != NULL)
+	{
+		c->r = ft_map(r, 0, 255, 0, 1);
+		c->g = ft_map(g, 0, 255, 0, 1);
+		c->b = ft_map(b, 0, 255, 0, 1);
+	}
+printf("<rgb:%d,%d,%d>", r, g, b);
 	return (0);
 }
 
