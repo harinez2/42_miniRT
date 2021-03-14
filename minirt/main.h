@@ -23,6 +23,13 @@ typedef struct		s_vec
 	double		z;
 }			t_vec;
 
+typedef struct		s_color
+{
+	double	r;
+	double	g;
+	double	b;
+}			t_color;
+
 typedef struct		s_map
 {
 	int	window_x;
@@ -34,9 +41,12 @@ typedef struct		s_map
 	t_vec	v_sphere2;
 	double	sphereR;
 
-	double kAmb; //ka 環境光反射係数
-	double kDif; //kd 拡散反射係数
-	double kSpe; //ks 鏡面反射係数
+	//t_color	kAmb; //ka 環境光反射係数
+	//t_color	kDif; //kd 拡散反射係数
+	//t_color	kSpe; //ks 鏡面反射係数
+	double	kAmb; //ka 環境光反射係数
+	double	kDif; //kd 拡散反射係数
+	double	kSpe; //ks 鏡面反射係数
 	double shininess; //alpha 光沢度
 	double lightIntensity; //Ii 光源の光の強度
 	double ambientIntensity; //Ialpha 環境光の強度

@@ -148,22 +148,21 @@ int	decide_color(t_vec v_w, t_map m)
 	double	t;
 	int	color;
 	
-	t = get_nearest_shape(v_w, m.v_sphere, m.sphereR, m);
-	double t2 = get_nearest_shape(v_w, m.v_sphere2, m.sphereR, m);
-	//color = ft_color(255, 255, 255);
-	//color = ft_color(0, 0, 0);
+	double chkt;
+	t_vec	chkobj[2] = {m.v_sphere, m.v_sphere2};
+	double	chkobjr[2] = {m.sphereR, m.sphereR};
+
+	t = -1;
 	color = draw_plane(v_w, m);
-	if (t >= 0 && t2 >= 0)
+	for (int i = 0; i < 2; i++)
 	{
-		if (t2 < t)
-			color = ray_trace(v_w, m, m.v_sphere2, t2);
-		else
-			color = ray_trace(v_w, m, m.v_sphere, t);
+		chkt = get_nearest_shape(v_w, chkobj[i], chkobjr[i], m);
+		if (chkt >= 0 && (t == -1 || chkt < t))
+		{
+			color = ray_trace(v_w, m, chkobj[i], chkt);
+			t = chkt;
+		}
 	}
-	else if (t2 >= 0)
-		color = ray_trace(v_w, m, m.v_sphere2, t2);
-	else if (t >= 0)
-		color = ray_trace(v_w, m, m.v_sphere, t);
 	return (color);
 }
 
@@ -177,6 +176,9 @@ void	init_m(t_map *m)
 	m->sphereR = 1.0;
 	ft_vecset(&m->v_light[0], -5, 5, -5);
 
+	//m->kAmb.r = 0.01;
+	//m->kAmb.g = 0.01;
+	//m->kAmb.b = 0.01;
 	m->kAmb = 0.01;
 	m->kDif = 0.69;
 	m->kSpe = 0.3;
