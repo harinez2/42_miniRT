@@ -78,7 +78,10 @@ double	get_nearest_shape(t_vec v_w, t_vec v_sphere, double sphereR, t_map m)
 int ray_trace(t_vec v_w, t_map m, t_vec v_sphere, double t)
 {
 	//(1) ambient light 環境光
-	double radianceAmb = m.kAmb * m.lightIntensity;
+	t_color radianceAmb;
+	radianceAmb.r = m.kAmb.r * m.ambientIntensity.r;
+	radianceAmb.g = m.kAmb.g * m.ambientIntensity.g;
+	radianceAmb.b = m.kAmb.b * m.ambientIntensity.b;
 
 	//(2) diffuse reflection 拡散反射光
 	t_vec v_de = ft_vecsub(v_w, m.v_eye[0]);
@@ -89,10 +92,13 @@ int ray_trace(t_vec v_w, t_map m, t_vec v_sphere, double t)
 	if (naiseki < 0)
 		naiseki = 0;
 	double nlDot = ft_map(naiseki, 0, 1, 0, 255);
-	double radianceDif = m.kDif * m.lightIntensity * nlDot;
+	t_color radianceDif;
+	radianceDif.r = m.kDif.r * m.lightIntensity.r * nlDot;
+	radianceDif.g = m.kDif.g * m.lightIntensity.g * nlDot;
+	radianceDif.b = m.kDif.b * m.lightIntensity.b * nlDot;
 	
 	//(3) specular reflection 鏡面反射光
-	double radianceSpe = 0.0f;
+	t_color radianceSpe;// = 0.0f;
 	if (naiseki > 0)
 	{
 		t_vec refDir = ft_vecsub(ft_vecmult(v_sphereN, 2 * naiseki), v_lightDir); 
@@ -101,18 +107,26 @@ int ray_trace(t_vec v_w, t_map m, t_vec v_sphere, double t)
 		if (vrDot < 0)
 			vrDot = 0;
 		vrDot = ft_map(pow(vrDot, m.shininess), 0, 1, 0, 255);
-		radianceSpe = m.kSpe * m.lightIntensity * vrDot;
+		radianceSpe.r = m.kSpe.r * m.lightIntensity.r * vrDot;
+		radianceSpe.g = m.kSpe.g * m.lightIntensity.g * vrDot;
+		radianceSpe.b = m.kSpe.b * m.lightIntensity.b * vrDot;
 		//radianceSpe = m.kSpe * m.lightIntensity * pow(vrDot, m.shininess);
 	}
 
 	//(1)-(3)合計
-	double rSum = radianceAmb + radianceDif + radianceSpe;
+	double rSumr = radianceAmb.r + radianceDif.r + radianceSpe.r;
+	double rSumg = radianceAmb.g + radianceDif.g + radianceSpe.g;
+	double rSumb = radianceAmb.b + radianceDif.b + radianceSpe.b;
 	//rSum = radianceAmb + radianceDif;
 	//rSum = radianceAmb + radianceSpe;
-	if (rSum > 255)
-		rSum = 255;
+	if (rSumr > 255)
+		rSumr = 255;
+	if (rSumg > 255)
+		rSumg = 255;
+	if (rSumb > 255)
+		rSumb = 255;
 	//return (ft_color(rSum, 0, 0));
-	return (ft_color(rSum, rSum, rSum));
+	return (ft_color(rSumr, rSumg, rSumb));
 }
 
 int	draw_plane(t_vec v_w, t_map m)
@@ -176,15 +190,27 @@ void	init_m(t_map *m)
 	m->sphereR = 1.0;
 	ft_vecset(&m->v_light[0], -5, 5, -5);
 
-	//m->kAmb.r = 0.01;
-	//m->kAmb.g = 0.01;
-	//m->kAmb.b = 0.01;
-	m->kAmb = 0.01;
-	m->kDif = 0.69;
-	m->kSpe = 0.3;
+	m->kAmb.r = 0.01;
+	m->kAmb.g = 0.01;
+	m->kAmb.b = 0.01;
+	
+	m->kDif.r = 0.69;
+	m->kDif.g = 0.69;
+	m->kDif.b = 0.69;
+
+	m->kSpe.r = 0.3;
+	m->kSpe.g = 0.3;
+	m->kSpe.b = 0.3;
+
 	m->shininess = 8;
-	m->lightIntensity = 1.0;
-	m->ambientIntensity = 0.1;
+
+	m->lightIntensity.r = 1.0;
+	m->lightIntensity.g = 1.0;
+	m->lightIntensity.b = 1.0;
+
+	m->ambientIntensity.r = 0.1;
+	m->ambientIntensity.g = 0.1;
+	m->ambientIntensity.b = 0.1;
 }
 
 /*
