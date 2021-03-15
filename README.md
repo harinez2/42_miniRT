@@ -8,7 +8,7 @@
 sudo apt install libx11-dev x11proto-core-dev libxt-dev libbsd-dev gcc
 ```
 
-## Compiles for myrt
+## Compiles for miniRT
 
 ```
 make
@@ -30,7 +30,7 @@ make minilibx-linux
 make minirt/libmlx.a
 ```
 
-### Compiles myrt
+### Compiles miniRT
 
 ```
 make minirt/miniRT
