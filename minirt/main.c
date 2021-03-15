@@ -138,7 +138,7 @@ int	draw_plane(t_vec v_w, t_map m)
 	ft_vecset(&p.position, 0.0, -1.0, 0.0);
 	double	dn_dot = ft_vecinnerprod(v_w, p.normal);
 	
-	if (dn_dot != 0)
+	if (dn_dot >= 0)
 	{
 		t_vec	v_sp;
 		double t;
@@ -160,20 +160,17 @@ int	draw_plane(t_vec v_w, t_map m)
 int	decide_color(t_vec v_w, t_map m)
 {
 	double	t;
-	int	color;
-	
-	double chkt;
-	t_vec	chkobj[2] = {m.v_sphere[0], m.v_sphere[1]};
-	double	chkobjr[2] = {m.sphereR[0], m.sphereR[1]};
+	int		color;
+	double 	chkt;
 
 	t = -1;
 	color = draw_plane(v_w, m);
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 5; i++)
 	{
-		chkt = get_nearest_shape(v_w, chkobj[i], chkobjr[i], m);
+		chkt = get_nearest_shape(v_w, m.v_sphere[i], m.sphereR[i], m);
 		if (chkt >= 0 && (t == -1 || chkt < t))
 		{
-			color = ray_trace(v_w, m, chkobj[i], chkt);
+			color = ray_trace(v_w, m, m.v_sphere[i], chkt);
 			t = chkt;
 		}
 	}
@@ -185,10 +182,18 @@ void	init_m(t_map *m)
 	m->window_x = 242;
 	m->window_y = 242;
 	ft_vecset(&m->v_eye[0], 0, 0, -5);
-	ft_vecset(&m->v_sphere[0], 0, 0, 5);
-	ft_vecset(&m->v_sphere[1], 1, 1, 2);
+	//ft_vecset(&m->v_sphere[0], 0, 0, 5);
+	//ft_vecset(&m->v_sphere[1], 1, 1, 2);
+	ft_vecset(&m->v_sphere[0], 3, 0, 25);
+	ft_vecset(&m->v_sphere[1], 2, 0, 20);
+	ft_vecset(&m->v_sphere[2], 1, 0, 15);
+	ft_vecset(&m->v_sphere[3], 0, 0, 10);
+	ft_vecset(&m->v_sphere[4], -1, 0, 5);
 	m->sphereR[0] = 1.0;
 	m->sphereR[1] = 1.0;
+	m->sphereR[2] = 1.0;
+	m->sphereR[3] = 1.0;
+	m->sphereR[4] = 1.0;
 	ft_vecset(&m->v_light[0], -5, 5, -5);
 
 	m->kAmb.r = 0.01;
@@ -196,8 +201,8 @@ void	init_m(t_map *m)
 	m->kAmb.b = 0.01;
 	
 	m->kDif.r = 0.69;
-	m->kDif.g = 0.69;
-	m->kDif.b = 0.69;
+	m->kDif.g = 0.0;
+	m->kDif.b = 0.0;
 
 	m->kSpe.r = 0.3;
 	m->kSpe.g = 0.3;
@@ -216,6 +221,9 @@ void	print_m(t_map *m)
 	printf("Eye[0]   : %.2f, %.2f, %.2f\n", m->v_eye[0].x, m->v_eye[0].y, m->v_eye[0].z);
 	printf("Sphere[0]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[0].x, m->v_sphere[0].y, m->v_sphere[0].z, m->sphereR[0]);
 	printf("Sphere[1]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[1].x, m->v_sphere[1].y, m->v_sphere[1].z, m->sphereR[1]);
+	printf("Sphere[2]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[2].x, m->v_sphere[2].y, m->v_sphere[2].z, m->sphereR[2]);
+	printf("Sphere[3]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[3].x, m->v_sphere[3].y, m->v_sphere[3].z, m->sphereR[3]);
+	printf("Sphere[4]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[4].x, m->v_sphere[4].y, m->v_sphere[4].z, m->sphereR[4]);
 	printf("Light[0] : %.2f, %.2f, %.2f\n", m->v_light[0].x, m->v_light[0].y, m->v_light[0].z);
 
 	printf("kAmb     : %.2f, %.2f, %.2f\n", m->kAmb.r, m->kAmb.g, m->kAmb.b);
