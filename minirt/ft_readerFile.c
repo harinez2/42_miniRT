@@ -58,8 +58,8 @@ int	readCmd2(int *i, char *line, t_map *m)
 	{
 		cmd = CMD_PLANE;
 		(*i) += 2;
-		readXyz(i, line, NULL);
-		readXyz(i, line, NULL);
+		readXyz(i, line, &m->pl.normal);
+		readXyz(i, line, &m->pl.position);
 		readRgb(i, line, NULL);
 printf("cmd:pl ");
 	}

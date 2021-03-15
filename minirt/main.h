@@ -30,28 +30,6 @@ typedef struct		s_color
 	double	b;
 }			t_color;
 
-typedef struct		s_map
-{
-	int	window_x;
-	int	window_y;
-
-	t_vec	v_eye[5];
-	t_vec	v_light[5];
-	t_vec	v_sphere[5];
-	double	sphereR[5];
-
-	t_color	kAmb; //ka 環境光反射係数
-	t_color	kDif; //kd 拡散反射係数
-	t_color	kSpe; //ks 鏡面反射係数
-
-	double shininess; //alpha 光沢度
-	double ambientIntensity; //Ialpha 環境光の強度
-	double lightIntensity; //Ii 光源の光の強度
-	
-	char	objtype[200];
-	void	*obj[200];
-}			t_map;
-
 /*objects*/
 typedef struct		s_sphere
 {
@@ -91,6 +69,29 @@ typedef struct		s_triangle
 	t_vec		third;
 	int		rgb;
 }			t_triangle;
+
+typedef struct		s_map
+{
+	int	window_x;
+	int	window_y;
+
+	t_vec	v_eye[5];
+	t_vec	v_light[5];
+	t_plane	pl;
+	t_vec	v_sphere[5];
+	double	sphereR[5];
+
+	t_color	kAmb; //ka 環境光反射係数
+	t_color	kDif; //kd 拡散反射係数
+	t_color	kSpe; //ks 鏡面反射係数
+
+	double shininess; //alpha 光沢度
+	double ambientIntensity; //Ialpha 環境光の強度
+	double lightIntensity; //Ii 光源の光の強度
+	
+	char	objtype[200];
+	void	*obj[200];
+}			t_map;
 
 double	ft_map(double x, int froma, int fromb, int toa, int tob);
 

@@ -131,21 +131,17 @@ int ray_trace(t_vec v_w, t_map m, t_vec v_sphere, double t)
 
 int	draw_plane(t_vec v_w, t_map m)
 {
-	(void)m;
+	double	dn_dot;
 
-	t_plane  p;
-	ft_vecset(&p.normal, 0.0, 1.0, 0.0);
-	ft_vecset(&p.position, 0.0, -1.0, 0.0);
-	double	dn_dot = ft_vecinnerprod(v_w, p.normal);
-	
+	dn_dot = ft_vecinnerprod(v_w, m.pl.normal);
 	if (dn_dot >= 0)
 	{
 		t_vec	v_sp;
 		double t;
-		v_sp.x = v_w.x - p.position.x;
-		v_sp.y = v_w.y - p.position.x;
-		v_sp.z = v_w.z - p.position.x;
-		t = - ft_vecinnerprod(v_sp, p.normal) / dn_dot;
+		v_sp.x = v_w.x - m.pl.position.x;
+		v_sp.y = v_w.y - m.pl.position.x;
+		v_sp.z = v_w.z - m.pl.position.x;
+		t = - ft_vecinnerprod(v_sp, m.pl.normal) / dn_dot;
 		if (t > 0)
 		{
 			return (t);
@@ -182,6 +178,10 @@ void	init_m(t_map *m)
 	m->window_x = 242;
 	m->window_y = 242;
 	ft_vecset(&m->v_eye[0], 0, 0, -5);
+	
+	ft_vecset(&m->pl.normal, 0.0, 1.0, 0.0);
+	ft_vecset(&m->pl.position, 0.0, -1.0, 0.0);
+	
 	//ft_vecset(&m->v_sphere[0], 0, 0, 5);
 	//ft_vecset(&m->v_sphere[1], 1, 1, 2);
 	ft_vecset(&m->v_sphere[0], 3, 0, 25);
@@ -219,6 +219,9 @@ void	print_m(t_map *m)
 	printf("===== current config begin =====\n");
 	printf("R        : %d x %d\n", m->window_x, m->window_y);
 	printf("Eye[0]   : %.2f, %.2f, %.2f\n", m->v_eye[0].x, m->v_eye[0].y, m->v_eye[0].z);
+	printf("Plane    : %.2f, %.2f, %.2f / %.2f, %.2f, %.2f\n", m->pl.normal.x, m->pl.normal.y, m->pl.normal.z,
+			m->pl.position.x, m->pl.position.y, m->pl.position.z);
+	
 	printf("Sphere[0]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[0].x, m->v_sphere[0].y, m->v_sphere[0].z, m->sphereR[0]);
 	printf("Sphere[1]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[1].x, m->v_sphere[1].y, m->v_sphere[1].z, m->sphereR[1]);
 	printf("Sphere[2]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[2].x, m->v_sphere[2].y, m->v_sphere[2].z, m->sphereR[2]);
