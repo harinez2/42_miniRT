@@ -195,7 +195,7 @@ void	init_m(t_map *m)
 	m->sphereR[3] = 1.0;
 	m->sphereR[4] = 1.0;
 	ft_vecset(&m->v_light[0], -5, 5, -5);
-
+	
 	m->kAmb.r = 0.01;
 	m->kAmb.g = 0.01;
 	m->kAmb.b = 0.01;
@@ -212,6 +212,20 @@ void	init_m(t_map *m)
 
 	m->lightIntensity = 1.0;
 	m->ambientIntensity = 0.1;
+
+	m->obj_count = 0;
+
+	m->obj_type[m->obj_count] = 'Q';
+	m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
+	ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, 3, 0, 25);
+	((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
+	m->obj_count++;
+
+	m->obj_type[m->obj_count] = 'Q';
+	m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
+	ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, 2, 0, 20);
+	((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
+	m->obj_count++;
 }
 
 void	print_m(t_map *m)
@@ -237,6 +251,11 @@ void	print_m(t_map *m)
 
 	printf("lightIntensity  : %.2f\n", m->lightIntensity);
 	printf("ambientIntensity: %.2f\n", m->ambientIntensity);
+	printf("obj_count       : %d\n", m->obj_count);
+	printf("Sphere[0]: %.2f, %.2f, %.2f (r:%.2f)\n", ((t_sphere *)m->obj[0])->center.x,
+			((t_sphere *)m->obj[0])->center.y, ((t_sphere *)m->obj[0])->center.z, ((t_sphere *)m->obj[0])->diameter);
+	printf("Sphere[1]: %.2f, %.2f, %.2f (r:%.2f)\n", ((t_sphere *)m->obj[1])->center.x,
+			((t_sphere *)m->obj[1])->center.y, ((t_sphere *)m->obj[1])->center.z, ((t_sphere *)m->obj[1])->diameter);
 	printf("===== current config end =====\n\n");
 }
 
@@ -310,15 +329,6 @@ int	main(int argc, char **argv)
 	printf("OK\n");
 
 
-	m.objtype[0] = 'Q';
-	m.obj[0] = malloc(sizeof(t_square));
-	if (m.objtype[0] == 'Q')
-	{
-		//t_square *sq = (t_square *)m.obj[0];
-	//	sq->center_x = 10;
-		((t_square *)m.obj[0])->center.x = 10;
-		printf("sq:%f\n", ((t_square *)m.obj[0])->center.x);
-	}
 
 
 	printf("Drawing sphere ...");

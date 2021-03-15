@@ -16,6 +16,8 @@
 # define CMD_CYLINDER	14
 # define CMD_TRIANGLE	15
 
+# define MAX_OBJ_COUNT	200
+
 typedef struct		s_vec
 {
 	double		x;
@@ -89,8 +91,9 @@ typedef struct		s_map
 	double ambientIntensity; //Ialpha 環境光の強度
 	double lightIntensity; //Ii 光源の光の強度
 	
-	char	objtype[200];
-	void	*obj[200];
+	int	obj_count;
+	char	obj_type[MAX_OBJ_COUNT];
+	void	*obj[MAX_OBJ_COUNT];
 }			t_map;
 
 double	ft_map(double x, int froma, int fromb, int toa, int tob);
