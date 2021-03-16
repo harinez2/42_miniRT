@@ -92,7 +92,7 @@ typedef struct		s_map
 	double lightIntensity; //Ii 光源の光の強度
 	
 	int	obj_count;
-	char	obj_type[MAX_OBJ_COUNT];
+	int	obj_type[MAX_OBJ_COUNT];
 	void	*obj[MAX_OBJ_COUNT];
 }			t_map;
 

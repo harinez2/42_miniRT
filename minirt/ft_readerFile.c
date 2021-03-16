@@ -131,6 +131,7 @@ void	readFromFile(char *filename, t_map *m)
 		write(1, "Failed to open file.\n", 21);
 		exit(-1);
 	}
+	write(1, "===== Config from File =====\n", 29);
 	while (1)	
 	{
 		i = get_next_line(fd, &line);

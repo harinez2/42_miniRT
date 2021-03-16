@@ -161,12 +161,14 @@ int	decide_color(t_vec v_w, t_map m)
 
 	t = -1;
 	color = draw_plane(v_w, m);
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < m.obj_count; i++)
 	{
-		chkt = get_nearest_shape(v_w, m.v_sphere[i], m.sphereR[i], m);
+		chkt = get_nearest_shape(v_w, ((t_sphere *)m.obj[i])->center,
+					((t_sphere *)m.obj[i])->diameter, m);
+		//chkt = get_nearest_shape(v_w, m.v_sphere[i], m.sphereR[i], m);
 		if (chkt >= 0 && (t == -1 || chkt < t))
 		{
-			color = ray_trace(v_w, m, m.v_sphere[i], chkt);
+			color = ray_trace(v_w, m, ((t_sphere *)m.obj[i])->center, chkt);
 			t = chkt;
 		}
 	}
@@ -175,8 +177,14 @@ int	decide_color(t_vec v_w, t_map m)
 
 void	init_m(t_map *m)
 {
+	m->obj_count = 0;
+}
+
+void	set_default_Value(t_map *m)
+{
 	m->window_x = 242;
 	m->window_y = 242;
+
 	ft_vecset(&m->v_eye[0], 0, 0, -5);
 	
 	ft_vecset(&m->pl.normal, 0.0, 1.0, 0.0);
@@ -213,18 +221,40 @@ void	init_m(t_map *m)
 	m->lightIntensity = 1.0;
 	m->ambientIntensity = 0.1;
 
-	m->obj_count = 0;
-
-	m->obj_type[m->obj_count] = 'Q';
+	m->obj_type[m->obj_count] = CMD_SPHERE;
 	m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
 	ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, 3, 0, 25);
 	((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
 	m->obj_count++;
 
-	m->obj_type[m->obj_count] = 'Q';
+	m->obj_type[m->obj_count] = CMD_SPHERE;
 	m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
 	ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, 2, 0, 20);
 	((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
+	m->obj_count++;
+
+	m->obj_type[m->obj_count] = CMD_SPHERE;
+	m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
+	ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, 1, 0, 15);
+	((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
+	m->obj_count++;
+
+	m->obj_type[m->obj_count] = CMD_SPHERE;
+	m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
+	ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, 0, 0, 10);
+	((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
+	m->obj_count++;
+
+	m->obj_type[m->obj_count] = CMD_SPHERE;
+	m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
+	ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, -1, 0, 5);
+	((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
+	m->obj_count++;
+	
+	m->obj_type[m->obj_count] = CMD_PLANE;
+	m->obj[m->obj_count] = (t_plane *)malloc(sizeof(t_plane));
+	ft_vecset(&((t_plane *)m->obj[m->obj_count])->normal, 0.0, 1.0, 0.0);
+	ft_vecset(&((t_plane *)m->obj[m->obj_count])->position, 0.0, -1.0, 0.0);
 	m->obj_count++;
 }
 
@@ -252,10 +282,36 @@ void	print_m(t_map *m)
 	printf("lightIntensity  : %.2f\n", m->lightIntensity);
 	printf("ambientIntensity: %.2f\n", m->ambientIntensity);
 	printf("obj_count       : %d\n", m->obj_count);
-	printf("Sphere[0]: %.2f, %.2f, %.2f (r:%.2f)\n", ((t_sphere *)m->obj[0])->center.x,
-			((t_sphere *)m->obj[0])->center.y, ((t_sphere *)m->obj[0])->center.z, ((t_sphere *)m->obj[0])->diameter);
-	printf("Sphere[1]: %.2f, %.2f, %.2f (r:%.2f)\n", ((t_sphere *)m->obj[1])->center.x,
-			((t_sphere *)m->obj[1])->center.y, ((t_sphere *)m->obj[1])->center.z, ((t_sphere *)m->obj[1])->diameter);
+	for (int i = 0; i < m->obj_count; i++)
+	{
+		printf("[%d] ", i);
+		if (m->obj_type[i] == CMD_SPHERE)
+		{
+			printf("Sphere");
+			printf(": %.2f, %.2f, %.2f (r:%.2f)\n",
+				((t_sphere *)m->obj[i])->center.x,
+				((t_sphere *)m->obj[i])->center.y,
+				((t_sphere *)m->obj[i])->center.z,
+				((t_sphere *)m->obj[i])->diameter);
+		}
+		else if (m->obj_type[i] == CMD_PLANE)
+		{
+			printf("Plane");
+			printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f\n",
+				((t_plane *)m->obj[i])->normal.x,
+				((t_plane *)m->obj[i])->normal.y,
+				((t_plane *)m->obj[i])->normal.z,
+				((t_plane *)m->obj[i])->position.x,
+				((t_plane *)m->obj[i])->position.y,
+				((t_plane *)m->obj[i])->position.z);
+		}
+		else if (m->obj_type[i] == CMD_SQUARE)
+			printf("Square");
+		else if (m->obj_type[i] == CMD_CYLINDER)
+			printf("Cylinder");
+		else if (m->obj_type[i] == CMD_TRIANGLE)
+			printf("Triangle");
+	}
 	printf("===== current config end =====\n\n");
 }
 
@@ -299,6 +355,18 @@ void	decide_endian(void)
 	printf("Local Endian : %d.\n",local_endian);
 }
 
+void	freeX(t_map *m)
+{
+	int		i;
+
+	i = 0;
+	while (i < m->obj_count)
+	{
+		free(m->obj[i]);
+		m->obj[i] = NULL;
+		i++;
+	}
+}
 /*
 ** main func
 **/
@@ -309,6 +377,8 @@ int	main(int argc, char **argv)
 	init_m(&m);
 	if (argc >= 2)
 		readFromFile(argv[1], &m);
+	else
+		set_default_Value(&m);
 	print_m(&m);
 
 	decide_endian();
@@ -337,5 +407,6 @@ int	main(int argc, char **argv)
 	mlx_key_hook(win1, key_win1, 0);
 	mlx_loop(mlx);
 	//sleep(2);
+	freeX(&m);
 	exit(0);
 }
