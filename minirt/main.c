@@ -16,8 +16,8 @@ int	key_win1(int key,void *p)
 }
 
 /*
-** Resizing scale
-**/
+ ** Resizing scale
+ **/
 double	ft_map(double x, int froma, int fromb, int toa, int tob)
 {
 	double pos = (x - (double)froma) / ((double)fromb - (double)froma);
@@ -26,8 +26,8 @@ double	ft_map(double x, int froma, int fromb, int toa, int tob)
 }
 
 /* color
-* specify color value between 0-255 for each params
-*/
+ * specify color value between 0-255 for each params
+ */
 int	ft_color(int red, int green, int blue)
 {
 	int	c;
@@ -37,14 +37,14 @@ int	ft_color(int red, int green, int blue)
 }
 
 /* Diffuse: 拡散反射
-*/
+ */
 double	calcDiffuse()
 {
 	return (0);
 }
 
 /* Specular: 鏡面反射
-*/
+ */
 double	calcSpecular()
 {
 	return (0);
@@ -55,7 +55,7 @@ double	get_nearest_shape(t_vec v_w, t_vec v_sphere, double sphereR, t_map m)
 	t_vec	v_de;
 	t_vec	v_tmp;
 	double	t;
-	
+
 	v_de = ft_vecsub(v_w, m.v_eye[0]);
 	v_tmp = ft_vecsub(m.v_eye[0], v_sphere);
 	double A = ft_vecnormsq(v_de);
@@ -96,7 +96,7 @@ int ray_trace(t_vec v_w, t_map m, t_vec v_sphere, double t)
 	radianceDif.r = m.kDif.r * m.lightIntensity * nlDot;
 	radianceDif.g = m.kDif.g * m.lightIntensity * nlDot;
 	radianceDif.b = m.kDif.b * m.lightIntensity * nlDot;
-	
+
 	//(3) specular reflection 鏡面反射光
 	t_color radianceSpe;// = 0.0f;
 	if (naiseki > 0)
@@ -164,7 +164,7 @@ int	decide_color(t_vec v_w, t_map m)
 	for (int i = 0; i < m.obj_count; i++)
 	{
 		chkt = get_nearest_shape(v_w, ((t_sphere *)m.obj[i])->center,
-					((t_sphere *)m.obj[i])->diameter, m);
+				((t_sphere *)m.obj[i])->diameter, m);
 		//chkt = get_nearest_shape(v_w, m.v_sphere[i], m.sphereR[i], m);
 		if (chkt >= 0 && (t == -1 || chkt < t))
 		{
@@ -186,10 +186,10 @@ void	set_default_Value(t_map *m)
 	m->window_y = 242;
 
 	ft_vecset(&m->v_eye[0], 0, 0, -5);
-	
+
 	ft_vecset(&m->pl.normal, 0.0, 1.0, 0.0);
 	ft_vecset(&m->pl.position, 0.0, -1.0, 0.0);
-	
+
 	//ft_vecset(&m->v_sphere[0], 0, 0, 5);
 	//ft_vecset(&m->v_sphere[1], 1, 1, 2);
 	ft_vecset(&m->v_sphere[0], 3, 0, 25);
@@ -203,11 +203,11 @@ void	set_default_Value(t_map *m)
 	m->sphereR[3] = 1.0;
 	m->sphereR[4] = 1.0;
 	ft_vecset(&m->v_light[0], -5, 5, -5);
-	
+
 	m->kAmb.r = 0.01;
 	m->kAmb.g = 0.01;
 	m->kAmb.b = 0.01;
-	
+
 	m->kDif.r = 0.69;
 	m->kDif.g = 0.0;
 	m->kDif.b = 0.0;
@@ -250,7 +250,7 @@ void	set_default_Value(t_map *m)
 	ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, -1, 0, 5);
 	((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
 	m->obj_count++;
-	
+
 	m->obj_type[m->obj_count] = CMD_PLANE;
 	m->obj[m->obj_count] = (t_plane *)malloc(sizeof(t_plane));
 	ft_vecset(&((t_plane *)m->obj[m->obj_count])->normal, 0.0, 1.0, 0.0);
@@ -265,7 +265,7 @@ void	print_m(t_map *m)
 	printf("Eye[0]   : %.2f, %.2f, %.2f\n", m->v_eye[0].x, m->v_eye[0].y, m->v_eye[0].z);
 	printf("Plane    : %.2f, %.2f, %.2f / %.2f, %.2f, %.2f\n", m->pl.normal.x, m->pl.normal.y, m->pl.normal.z,
 			m->pl.position.x, m->pl.position.y, m->pl.position.z);
-	
+
 	printf("Sphere[0]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[0].x, m->v_sphere[0].y, m->v_sphere[0].z, m->sphereR[0]);
 	printf("Sphere[1]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[1].x, m->v_sphere[1].y, m->v_sphere[1].z, m->sphereR[1]);
 	printf("Sphere[2]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[2].x, m->v_sphere[2].y, m->v_sphere[2].z, m->sphereR[2]);
@@ -276,7 +276,7 @@ void	print_m(t_map *m)
 	printf("kAmb     : %.2f, %.2f, %.2f\n", m->kAmb.r, m->kAmb.g, m->kAmb.b);
 	printf("kDif     : %.2f, %.2f, %.2f\n", m->kDif.r, m->kDif.g, m->kDif.b);
 	printf("kSpe     : %.2f, %.2f, %.2f\n", m->kSpe.r, m->kSpe.g, m->kSpe.b);
-	
+
 	printf("shininess       : %.2f\n", m->shininess);
 
 	printf("lightIntensity  : %.2f\n", m->lightIntensity);
@@ -289,21 +289,21 @@ void	print_m(t_map *m)
 		{
 			printf("Sphere");
 			printf(": %.2f, %.2f, %.2f (r:%.2f)\n",
-				((t_sphere *)m->obj[i])->center.x,
-				((t_sphere *)m->obj[i])->center.y,
-				((t_sphere *)m->obj[i])->center.z,
-				((t_sphere *)m->obj[i])->diameter);
+					((t_sphere *)m->obj[i])->center.x,
+					((t_sphere *)m->obj[i])->center.y,
+					((t_sphere *)m->obj[i])->center.z,
+					((t_sphere *)m->obj[i])->diameter);
 		}
 		else if (m->obj_type[i] == CMD_PLANE)
 		{
 			printf("Plane");
 			printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f\n",
-				((t_plane *)m->obj[i])->normal.x,
-				((t_plane *)m->obj[i])->normal.y,
-				((t_plane *)m->obj[i])->normal.z,
-				((t_plane *)m->obj[i])->position.x,
-				((t_plane *)m->obj[i])->position.y,
-				((t_plane *)m->obj[i])->position.z);
+					((t_plane *)m->obj[i])->normal.x,
+					((t_plane *)m->obj[i])->normal.y,
+					((t_plane *)m->obj[i])->normal.z,
+					((t_plane *)m->obj[i])->position.x,
+					((t_plane *)m->obj[i])->position.y,
+					((t_plane *)m->obj[i])->position.z);
 		}
 		else if (m->obj_type[i] == CMD_SQUARE)
 			printf("Square");
@@ -316,8 +316,8 @@ void	print_m(t_map *m)
 }
 
 /*
-** Sphere
-**/
+ ** Sphere
+ **/
 int	draw_sphere(void *win, int w, int h, t_map *m)
 {
 	int	x;
@@ -367,9 +367,116 @@ void	freeX(t_map *m)
 		i++;
 	}
 }
+
+void	display_window(t_map *m)
+{
+	if (!(mlx = mlx_init()))
+	{
+		write(1, "Error\nInitialization failed.\n", 29);
+		exit(1);
+	}
+	printf("Mlx init OK (use_xshm:%d, pshm_format:%d).\n",((t_xvar *)mlx)->use_xshm,((t_xvar *)mlx)->pshm_format);
+
+	printf("Window1 creation: %dx%d \"Title 1\" ...", m->window_x, m->window_y);
+	if (!(win1 = mlx_new_window(mlx, m->window_x, m->window_y, "Title1")))
+	{
+		printf(" !! KO !!\n");
+		exit(1);
+	}
+	printf("OK\n");
+
+	printf("Drawing sphere ...");
+	draw_sphere(win1, m->window_x, m->window_y, m);
+	printf("OK\n");
+	mlx_key_hook(win1, key_win1, 0);
+	mlx_loop(mlx);
+	//sleep(2);
+}
+
+int	write_bmp_simple_stream(FILE *fp)//, image_t *img) {
+{
+	uint8_t		header_buffer[DEFAULT_HEADER_SIZE];
+	BITMAPFILEHEADER *file = (BITMAPFILEHEADER*)header_buffer;
+	BITMAPINFOHEADER *info = (BITMAPINFOHEADER*)(header_buffer + FILE_HEADER_SIZE);
+	int x, y;
+	int stride;
+	uint8_t *row, *buffer;
+	/*
+	if (img->color_type != COLOR_TYPE_RGB) {
+		return -1;
+	}
+	*/
+	//stride = (img->width * 3 + 3) / 4 * 4;
+	stride = (100 * 3 + 3) / 4 * 4;
+	if ((buffer = malloc(stride)) == NULL) {
+		return -1;
+	}
+	file->bfType = FILE_TYPE;
+	//file->bfSize = DEFAULT_HEADER_SIZE + stride * img->height;
+	file->bfSize = DEFAULT_HEADER_SIZE + stride * 100;
+	file->bfReserved1 = 0;
+	file->bfReserved2 = 0;
+	file->bfOffBits = DEFAULT_HEADER_SIZE;
+	info->biSize = INFO_HEADER_SIZE;
+	info->biWidth = 100;//img->width;
+	//info->biHeight = img->height;
+	info->biHeight = 100;
+	info->biPlanes = 1;
+	info->biBitCount = 24;
+	info->biCompression = 0;
+	info->biSizeImage = stride * 100;//img->height;
+	info->biXPelsPerMeter = 0;
+	info->biYPelsPerMeter = 0;
+	info->biClrUsed = 0;
+	info->biClrImportant = 0;
+	if (fwrite(header_buffer, DEFAULT_HEADER_SIZE, 1, fp) != 1) {
+		goto error;
+	}
+	memset(buffer, 0, stride);
+	//for (y = img->height - 1; y >= 0; y--) {
+	for (y = 100 - 1; y >= 0; y--) {
+		row = buffer;
+		//for (x = 0; x < img->width; x++) {
+		for (x = 0; x < 100; x++) {
+			//*row++ = img->map[y][x].c.b;
+			//*row++ = img->map[y][x].c.g;
+			//*row++ = img->map[y][x].c.r;
+			*row++ = 0;
+			*row++ = 0;
+			*row++ = 255;
+		}
+		if (fwrite(buffer, stride, 1, fp) != 1) {
+			goto error;
+		}
+	}
+	free(buffer);
+	return (0);
+error:
+	free(buffer);
+	return (-1);
+}
+
+int	write_bmp(t_map *m)
+{
+	int	ret;
+	char	*filename = "out.bmp";
+
+	(void)m;
+
+	ret = -1;
+	FILE *fp = fopen(filename, "wb");
+	if (fp == NULL) {
+		perror(filename);
+		return ret;
+	}
+	ret = write_bmp_simple_stream(fp);//, img);
+	fclose(fp);
+	return ret;
+}
+
 /*
-** main func
-**/
+ ** main func
+ **/
 int	main(int argc, char **argv)
 {
 	t_map	m;
@@ -382,31 +489,10 @@ int	main(int argc, char **argv)
 	print_m(&m);
 
 	decide_endian();
-
-	if (!(mlx = mlx_init()))
-	{
-		write(1, "Error\nInitialization failed.\n", 29);
-		exit(1);
-	}
-	printf("Mlx init OK (use_xshm:%d, pshm_format:%d).\n",((t_xvar *)mlx)->use_xshm,((t_xvar *)mlx)->pshm_format);
-
-	printf("Window1 creation: %dx%d \"Title 1\" ...", m.window_x, m.window_y);
-	if (!(win1 = mlx_new_window(mlx, m.window_x, m.window_y, "Title1")))
-	{
-		printf(" !! KO !!\n");
-		exit(1);
-	}
-	printf("OK\n");
-
-
-
-
-	printf("Drawing sphere ...");
-	draw_sphere(win1, m.window_x, m.window_y, &m);
-	printf("OK\n");
-	mlx_key_hook(win1, key_win1, 0);
-	mlx_loop(mlx);
-	//sleep(2);
+	if (argc >= 3 && strcmp(argv[2], "--save") == 0)
+		write_bmp(&m);
+	else
+		display_window(&m);
 	freeX(&m);
-	exit(0);
+	return (0);
 }
