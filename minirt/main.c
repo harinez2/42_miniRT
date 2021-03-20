@@ -321,29 +321,33 @@ void	print_m(t_map *m)
 		if (m->obj_type[i] == CMD_SPHERE)
 		{
 			printf("Sphere");
-			printf(": %.2f, %.2f, %.2f (r:%.2f) / rgb:%d\n",
+			printf(": %.2f, %.2f, %.2f (r:%.2f) / rgb:%.2f %.2f %.2f\n",
 					((t_sphere *)m->obj[i])->center.x,
 					((t_sphere *)m->obj[i])->center.y,
 					((t_sphere *)m->obj[i])->center.z,
 					((t_sphere *)m->obj[i])->diameter,
-					((t_sphere *)m->obj[i])->rgb);
+					((t_sphere *)m->obj[i])->rgb.r,
+					((t_sphere *)m->obj[i])->rgb.g,
+					((t_sphere *)m->obj[i])->rgb.b);
 		}
 		else if (m->obj_type[i] == CMD_PLANE)
 		{
 			printf("Plane");
-			printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / rgb:%d\n",
+			printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / rgb:%.2f %.2f %.2f\n",
 					((t_plane *)m->obj[i])->normal.x,
 					((t_plane *)m->obj[i])->normal.y,
 					((t_plane *)m->obj[i])->normal.z,
 					((t_plane *)m->obj[i])->position.x,
 					((t_plane *)m->obj[i])->position.y,
 					((t_plane *)m->obj[i])->position.z,
-					((t_plane *)m->obj[i])->rgb);
+					((t_plane *)m->obj[i])->rgb.r,
+					((t_plane *)m->obj[i])->rgb.g,
+					((t_plane *)m->obj[i])->rgb.b);
 		}
 		else if (m->obj_type[i] == CMD_SQUARE)
 		{
 			printf("Square");
-			printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / %.2f / rgb:%d\n",
+			printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / %.2f / rgb:%.2f %.2f %.2f\n",
 					((t_square *)m->obj[i])->center.x,
 					((t_square *)m->obj[i])->center.y,
 					((t_square *)m->obj[i])->center.z,
@@ -351,12 +355,14 @@ void	print_m(t_map *m)
 					((t_square *)m->obj[i])->orientation.y,
 					((t_square *)m->obj[i])->orientation.z,
 					((t_square *)m->obj[i])->sidesize,
-					((t_square *)m->obj[i])->rgb);
+					((t_square *)m->obj[i])->rgb.r,
+					((t_square *)m->obj[i])->rgb.g,
+					((t_square *)m->obj[i])->rgb.b);
 		}
 		else if (m->obj_type[i] == CMD_CYLINDER)
 		{
 			printf("Cylinder");
-			printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / %.2f / %.2f / rgb:%d\n",
+			printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / %.2f / %.2f / rgb:%.2f %.2f %.2f\n",
 					((t_cylinder *)m->obj[i])->center.x,
 					((t_cylinder *)m->obj[i])->center.y,
 					((t_cylinder *)m->obj[i])->center.z,
@@ -365,12 +371,14 @@ void	print_m(t_map *m)
 					((t_cylinder *)m->obj[i])->orientation.z,
 					((t_cylinder *)m->obj[i])->diameter,
 					((t_cylinder *)m->obj[i])->height,
-					((t_cylinder *)m->obj[i])->rgb);
+					((t_cylinder *)m->obj[i])->rgb.r,
+					((t_cylinder *)m->obj[i])->rgb.g,
+					((t_cylinder *)m->obj[i])->rgb.b);
 		}
 		else if (m->obj_type[i] == CMD_TRIANGLE)
 		{
 			printf("Triangle");
-			printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / rgb:%d\n",
+			printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / rgb:%.2f %.2f %.2f\n",
 					((t_triangle *)m->obj[i])->first.x,
 					((t_triangle *)m->obj[i])->first.y,
 					((t_triangle *)m->obj[i])->first.z,
@@ -380,7 +388,9 @@ void	print_m(t_map *m)
 					((t_triangle *)m->obj[i])->third.x,
 					((t_triangle *)m->obj[i])->third.y,
 					((t_triangle *)m->obj[i])->third.z,
-					((t_triangle *)m->obj[i])->rgb);
+					((t_triangle *)m->obj[i])->rgb.r,
+					((t_triangle *)m->obj[i])->rgb.g,
+					((t_triangle *)m->obj[i])->rgb.b);
 		}
 	}
 	printf("===== current config end =====\n\n");

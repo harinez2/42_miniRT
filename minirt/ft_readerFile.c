@@ -45,7 +45,7 @@ int	readCmd1(int *i, char *line, t_map *m)
 		m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
 		readXyz(i, line, &((t_sphere *)m->obj[m->obj_count])->center);
 		((t_sphere *)m->obj[m->obj_count])->diameter = readDouble(i, line);
-		((t_sphere *)m->obj[m->obj_count])->rgb = readRgb(i, line, NULL);
+		readRgb(i, line, &((t_sphere *)m->obj[m->obj_count])->rgb);
 		m->obj_count++;
 	}
 	return (cmd);
@@ -64,7 +64,7 @@ int	readCmd2(int *i, char *line, t_map *m)
 		m->obj[m->obj_count] = (t_plane *)malloc(sizeof(t_plane));
 		readXyz(i, line, &((t_plane *)m->obj[m->obj_count])->normal);
 		readXyz(i, line, &((t_plane *)m->obj[m->obj_count])->position);
-		((t_plane *)m->obj[m->obj_count])->rgb = readRgb(i, line, NULL);
+		readRgb(i, line, &((t_plane *)m->obj[m->obj_count])->rgb);
 		m->obj_count++;
 	}
 	else if (line[*i] == 's' && line[*i + 1] == 'q')
@@ -76,7 +76,7 @@ int	readCmd2(int *i, char *line, t_map *m)
 		readXyz(i, line, &((t_square *)m->obj[m->obj_count])->center);
 		readXyz(i, line, &((t_square *)m->obj[m->obj_count])->orientation);
 		((t_square *)m->obj[m->obj_count])->sidesize = readDouble(i, line);
-		((t_sphere *)m->obj[m->obj_count])->rgb = readRgb(i, line, NULL);
+		readRgb(i, line, &((t_sphere *)m->obj[m->obj_count])->rgb);
 		m->obj_count++;
 	}
 	else if (line[*i] == 'c' && line[*i + 1] == 'y')
@@ -89,7 +89,7 @@ int	readCmd2(int *i, char *line, t_map *m)
 		readXyz(i, line, &((t_cylinder *)m->obj[m->obj_count])->orientation);
 		((t_cylinder *)m->obj[m->obj_count])->diameter = readDouble(i, line);
 		((t_cylinder *)m->obj[m->obj_count])->height = readDouble(i, line);
-		((t_cylinder *)m->obj[m->obj_count])->rgb = readRgb(i, line, NULL);
+		readRgb(i, line, &((t_cylinder *)m->obj[m->obj_count])->rgb);
 		m->obj_count++;
 	}
 	else if (line[*i] == 't' && line[*i + 1] == 'r')
@@ -101,7 +101,7 @@ int	readCmd2(int *i, char *line, t_map *m)
 		readXyz(i, line, &((t_triangle *)m->obj[m->obj_count])->first);
 		readXyz(i, line, &((t_triangle *)m->obj[m->obj_count])->second);
 		readXyz(i, line, &((t_triangle *)m->obj[m->obj_count])->third);
-		((t_triangle *)m->obj[m->obj_count])->rgb = readRgb(i, line, NULL);
+		readRgb(i, line, &((t_triangle *)m->obj[m->obj_count])->rgb);
 		m->obj_count++;
 	}
 	(void)m;

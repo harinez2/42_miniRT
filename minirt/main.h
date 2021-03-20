@@ -39,14 +39,14 @@ typedef struct		s_sphere
 {
 	t_vec		center;
 	double		diameter;
-	int			rgb;
+	t_color		rgb;
 }			t_sphere;
 
 typedef struct		s_plane
 {
 	t_vec		normal;		//法線ベクトル
 	t_vec		position;	//面が通る点の位置ベクトル
-	int			rgb;
+	t_color		rgb;
 }			t_plane;
 
 typedef struct		s_square
@@ -54,7 +54,7 @@ typedef struct		s_square
 	t_vec		center;
 	t_vec		orientation;
 	double		sidesize;
-	int		rgb;
+	t_color		rgb;
 }			t_square;
 
 typedef struct		s_cylinder
@@ -63,7 +63,7 @@ typedef struct		s_cylinder
 	t_vec		orientation;
 	double		diameter;
 	double		height;
-	int		rgb;
+	t_color		rgb;
 }			t_cylinder;
 
 typedef struct		s_triangle
@@ -71,7 +71,7 @@ typedef struct		s_triangle
 	t_vec		first;
 	t_vec		second;
 	t_vec		third;
-	int		rgb;
+	t_color		rgb;
 }			t_triangle;
 
 typedef struct		s_map
