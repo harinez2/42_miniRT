@@ -79,7 +79,9 @@ typedef struct		s_map
 	int	window_x;
 	int	window_y;
 
+	int	eye_count;
 	t_vec	v_eye[5];
+	int	light_count;
 	t_vec	v_light[5];
 	t_plane	pl;
 	t_vec	v_sphere[5];

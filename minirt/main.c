@@ -203,6 +203,8 @@ int	decide_color(t_vec v_w, t_map m)
 
 void	init_m(t_map *m)
 {
+	m->eye_count = 0;
+	m->light_count = 0;
 	m->obj_count = 0;
 }
 
@@ -211,7 +213,8 @@ void	set_default_Value(t_map *m)
 	m->window_x = 242;
 	m->window_y = 242;
 
-	ft_vecset(&m->v_eye[0], 0, 0, -5);
+	ft_vecset(&m->v_eye[m->eye_count++], 0, 0, -5);
+	ft_vecset(&m->v_eye[m->eye_count++], 0, 1, 2);
 
 	ft_vecset(&m->pl.normal, 0.0, 1.0, 0.0);
 	ft_vecset(&m->pl.position, 0.0, -1.0, 0.0);
@@ -228,7 +231,8 @@ void	set_default_Value(t_map *m)
 	m->sphereR[2] = 1.0;
 	m->sphereR[3] = 1.0;
 	m->sphereR[4] = 1.0;
-	ft_vecset(&m->v_light[0], -5, 5, -5);
+	ft_vecset(&m->v_light[m->light_count++], -5, 5, -5);
+	ft_vecset(&m->v_light[m->light_count++], -5, 3, -2);
 
 	m->kAmb.r = 0.01;
 	m->kAmb.g = 0.01;
@@ -288,7 +292,8 @@ void	print_m(t_map *m)
 {
 	printf("===== current config begin =====\n");
 	printf("R        : %d x %d\n", m->window_x, m->window_y);
-	printf("Eye[0]   : %.2f, %.2f, %.2f\n", m->v_eye[0].x, m->v_eye[0].y, m->v_eye[0].z);
+	for (int i = 0; i < m->eye_count; i++)
+		printf("Eye[%d]   : %.2f, %.2f, %.2f\n", i, m->v_eye[i].x, m->v_eye[i].y, m->v_eye[i].z);
 	printf("Plane    : %.2f, %.2f, %.2f / %.2f, %.2f, %.2f\n", m->pl.normal.x, m->pl.normal.y, m->pl.normal.z,
 			m->pl.position.x, m->pl.position.y, m->pl.position.z);
 
@@ -297,7 +302,8 @@ void	print_m(t_map *m)
 	printf("Sphere[2]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[2].x, m->v_sphere[2].y, m->v_sphere[2].z, m->sphereR[2]);
 	printf("Sphere[3]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[3].x, m->v_sphere[3].y, m->v_sphere[3].z, m->sphereR[3]);
 	printf("Sphere[4]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[4].x, m->v_sphere[4].y, m->v_sphere[4].z, m->sphereR[4]);
-	printf("Light[0] : %.2f, %.2f, %.2f\n", m->v_light[0].x, m->v_light[0].y, m->v_light[0].z);
+	for (int i = 0; i < m->light_count; i++)
+		printf("Light[%d] : %.2f, %.2f, %.2f\n", i, m->v_light[i].x, m->v_light[i].y, m->v_light[i].z);
 
 	printf("kAmb     : %.2f, %.2f, %.2f\n", m->kAmb.r, m->kAmb.g, m->kAmb.b);
 	printf("kDif     : %.2f, %.2f, %.2f\n", m->kDif.r, m->kDif.g, m->kDif.b);
