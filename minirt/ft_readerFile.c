@@ -24,7 +24,7 @@ int	readCmd1(int *i, char *line, t_map *m)
 	{
 		cmd = CMD_CAMERA;
 		(*i)++;
-		readXyz(i, line, &(m->v_eye[0]));
+		readXyz(i, line, &(m->v_eye[m->eye_count++]));
 		readXyz(i, line, NULL);
 		ret = readInt(i, line);
 		(void)ret;
@@ -33,8 +33,8 @@ int	readCmd1(int *i, char *line, t_map *m)
 	{
 		cmd = CMD_LIGHT;
 		(*i)++;
-		readXyz(i, line, &(m->v_light[0]));
-		m->lightIntensity = readDouble(i, line);
+		readXyz(i, line, &(m->v_light[m->light_count]));
+		m->lightIntensity[m->light_count++] = readDouble(i, line);
 		readRgb(i, line, NULL);
 	}
 	else if (line[*i] == 's' && line[*i + 1] == 'p')

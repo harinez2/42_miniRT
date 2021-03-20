@@ -88,9 +88,9 @@ int ray_trace(t_vec v_w, t_map m, t_vec v_sphere, double t)
 		naiseki = 0;
 	double nlDot = ft_map(naiseki, 0, 1, 0, 255);
 	t_color radianceDif;
-	radianceDif.r = m.kDif.r * m.lightIntensity * nlDot;
-	radianceDif.g = m.kDif.g * m.lightIntensity * nlDot;
-	radianceDif.b = m.kDif.b * m.lightIntensity * nlDot;
+	radianceDif.r = m.kDif.r * m.lightIntensity[0] * nlDot;
+	radianceDif.g = m.kDif.g * m.lightIntensity[0] * nlDot;
+	radianceDif.b = m.kDif.b * m.lightIntensity[0] * nlDot;
 
 	//(3) specular reflection 鏡面反射光
 	t_color radianceSpe;
@@ -105,9 +105,9 @@ int ray_trace(t_vec v_w, t_map m, t_vec v_sphere, double t)
 		if (vrDot < 0)
 			vrDot = 0;
 		double vrDotPow = ft_map(pow(vrDot, m.shininess), 0, 1, 0, 255);
-		radianceSpe.r = m.kSpe.r * m.lightIntensity * vrDotPow;
-		radianceSpe.g = m.kSpe.g * m.lightIntensity * vrDotPow;
-		radianceSpe.b = m.kSpe.b * m.lightIntensity * vrDotPow;
+		radianceSpe.r = m.kSpe.r * m.lightIntensity[0] * vrDotPow;
+		radianceSpe.g = m.kSpe.g * m.lightIntensity[0] * vrDotPow;
+		radianceSpe.b = m.kSpe.b * m.lightIntensity[0] * vrDotPow;
 	}
 
 	//(1)-(3)合計
@@ -147,9 +147,9 @@ int	draw_plane(t_vec v_w, t_map m)
 				naiseki = 0;
 			double nlDot = ft_map(naiseki, 0, 1, 0, 255);
 			t_color radianceDif;
-			radianceDif.r = m.kDif.r * m.lightIntensity * nlDot;
-			radianceDif.g = m.kDif.g * m.lightIntensity * nlDot;
-			radianceDif.b = m.kDif.b * m.lightIntensity * nlDot;
+			radianceDif.r = m.kDif.r * m.lightIntensity[0] * nlDot;
+			radianceDif.g = m.kDif.g * m.lightIntensity[0] * nlDot;
+			radianceDif.b = m.kDif.b * m.lightIntensity[0] * nlDot;
 			
 			//(3) specular reflection 鏡面反射光
 			t_color radianceSpe;
@@ -164,9 +164,9 @@ int	draw_plane(t_vec v_w, t_map m)
 				if (vrDot < 0)
 					vrDot = 0;
 				double vrDotPow = ft_map(pow(vrDot, m.shininess), 0, 1, 0, 255);
-				radianceSpe.r = m.kSpe.r * m.lightIntensity * vrDotPow;
-				radianceSpe.g = m.kSpe.g * m.lightIntensity * vrDotPow;
-				radianceSpe.b = m.kSpe.b * m.lightIntensity * vrDotPow;
+				radianceSpe.r = m.kSpe.r * m.lightIntensity[0] * vrDotPow;
+				radianceSpe.g = m.kSpe.g * m.lightIntensity[0] * vrDotPow;
+				radianceSpe.b = m.kSpe.b * m.lightIntensity[0] * vrDotPow;
 			}
 
 			//(1)-(3)合計
@@ -248,7 +248,7 @@ void	set_default_Value(t_map *m)
 
 	m->shininess = 8;
 
-	m->lightIntensity = 1.0;
+	m->lightIntensity[0] = 1.0;
 	m->ambientIntensity = 0.1;
 
 	m->obj_type[m->obj_count] = CMD_SPHERE;
@@ -311,7 +311,8 @@ void	print_m(t_map *m)
 
 	printf("shininess       : %.2f\n", m->shininess);
 
-	printf("lightIntensity  : %.2f\n", m->lightIntensity);
+	for (int i = 0; i < m->light_count; i++)
+		printf("lightIntensity[%d]  : %.2f\n", i, m->lightIntensity[i]);
 	printf("ambientIntensity: %.2f\n", m->ambientIntensity);
 	printf("obj_count       : %d\n", m->obj_count);
 	for (int i = 0; i < m->obj_count; i++)

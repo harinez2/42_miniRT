@@ -93,7 +93,7 @@ typedef struct		s_map
 
 	double shininess; //alpha 光沢度
 	double ambientIntensity; //Ialpha 環境光の強度
-	double lightIntensity; //Ii 光源の光の強度
+	double lightIntensity[5]; //Ii 光源の光の強度
 	
 	int	obj_count;
 	int	obj_type[MAX_OBJ_COUNT];
