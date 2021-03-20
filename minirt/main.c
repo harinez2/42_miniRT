@@ -85,9 +85,9 @@ int ray_trace(t_vec v_w, t_map m, t_vec v_sphere, double t)
 
 	//(2) diffuse reflection 拡散反射光
 	t_vec v_de = ft_vecsub(v_w, m.v_eye[0]);
-	t_vec v_tpos = ft_vecadd(m.v_eye[0], ft_vecmult(v_de, t));
-	t_vec v_lightDir = ft_vecnormalize(ft_vecsub(m.v_light[0], v_tpos));
-	t_vec v_sphereN = ft_vecnormalize(ft_vecsub(v_tpos, v_sphere));
+	t_vec v_tpos = ft_vecadd(m.v_eye[0], ft_vecmult(v_de, t));//tpos：視線と球上の交点(pi)
+	t_vec v_lightDir = ft_vecnormalize(ft_vecsub(m.v_light[0], v_tpos));//入射ベクトル(l)
+	t_vec v_sphereN = ft_vecnormalize(ft_vecsub(v_tpos, v_sphere));//法線ベクトル(n)
 	double naiseki = ft_vecinnerprod(v_sphereN, v_lightDir);
 	if (naiseki < 0)
 		naiseki = 0;
@@ -135,6 +135,7 @@ int	draw_plane(t_vec v_w, t_map m)
 
 	dn_dot = ft_vecinnerprod(v_w, m.pl.normal);
 	if (dn_dot >= 0)
+	#if (dn_dot != 0)
 	{
 		t_vec	v_sp;
 		double t;
@@ -143,14 +144,78 @@ int	draw_plane(t_vec v_w, t_map m)
 		v_sp.z = v_w.z - m.pl.position.x;
 		t = - ft_vecinnerprod(v_sp, m.pl.normal) / dn_dot;
 		if (t > 0)
+		#if (t >= 0)
 		{
-			return (t);
+			
+			//(1) ambient light 環境光
+			t_color radianceAmb;
+			radianceAmb.r = m.kAmb.r * m.ambientIntensity;
+			radianceAmb.g = m.kAmb.g * m.ambientIntensity;
+			radianceAmb.b = m.kAmb.b * m.ambientIntensity;
+
+			//(2) diffuse reflection 拡散反射光
+			t_vec v_de = ft_vecsub(v_w, m.v_eye[0]);
+			t_vec v_tpos = ft_vecadd(m.v_eye[0], ft_vecmult(v_de, t));
+			t_vec v_lightDir = ft_vecnormalize(ft_vecsub(m.v_light[0], v_tpos));
+
+			//t_vec v_sphereN = ft_vecnormalize(ft_vecsub(v_tpos, v_sphere));
+			//半径方向のベクトル、これは不要
+			//代わりにベクトルnormal
+
+			//double naiseki = ft_vecinnerprod(v_sphereN, v_lightDir);
+
+			double naiseki = ft_vecinnerprod(ft_vecnormalize(m.pl.normal), v_lightDir);
+			if (naiseki < 0)
+				naiseki = 0;//-naiseki;
+				//naiseki = 0;
+			double nlDot = ft_map(naiseki, 0, 1, 0, 255);
+			t_color radianceDif;
+			radianceDif.r = m.kDif.r * m.lightIntensity * nlDot;
+			radianceDif.g = m.kDif.g * m.lightIntensity * nlDot;
+			radianceDif.b = m.kDif.b * m.lightIntensity * nlDot;
+			
+			//(3) specular reflection 鏡面反射光
+			/*
+			t_color radianceSpe;// = 0.0f;
+			if (naiseki > 0)
+			{
+				t_vec refDir = ft_vecsub(ft_vecmult(v_sphereN, 2 * naiseki), v_lightDir); 
+				t_vec invEyeDir = ft_vecnormalize(ft_vecmult(v_de, -1));
+				double vrDot = ft_vecinnerprod(invEyeDir, refDir);
+				if (vrDot < 0)
+					vrDot = 0;
+				vrDot = ft_map(pow(vrDot, m.shininess), 0, 1, 0, 255);
+				radianceSpe.r = m.kSpe.r * m.lightIntensity * vrDot;
+				radianceSpe.g = m.kSpe.g * m.lightIntensity * vrDot;
+				radianceSpe.b = m.kSpe.b * m.lightIntensity * vrDot;
+				//radianceSpe = m.kSpe * m.lightIntensity * pow(vrDot, m.shininess);
+			}
+			*/
+
+			//(1)-(3)合計
+			//double rSumr = radianceAmb.r + radianceDif.r + radianceSpe.r;
+			//double rSumg = radianceAmb.g + radianceDif.g + radianceSpe.g;
+			//double rSumb = radianceAmb.b + radianceDif.b + radianceSpe.b;
+			double rSumr = radianceAmb.r + radianceDif.r;// + radianceSpe.r;
+			double rSumg = radianceAmb.g + radianceDif.g;// + radianceSpe.g;
+			double rSumb = radianceAmb.b + radianceDif.b;// + radianceSpe.b;
+			//rSum = radianceAmb + radianceDif;
+			//rSum = radianceAmb + radianceSpe;
+			if (rSumr > 255)
+				rSumr = 255;
+			if (rSumg > 255)
+				rSumg = 255;
+			if (rSumb > 255)
+				rSumb = 255;
+			//return (ft_color(rSum, 0, 0));
+			return (ft_color(rSumr, rSumg, rSumb));
+			
 		}
 		else
-			return (0);
+			return (50);
 	}
 	else
-		return (-1);
+		return (0);
 }
 
 int	decide_color(t_vec v_w, t_map m)
