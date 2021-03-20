@@ -135,7 +135,7 @@ int	draw_plane(t_vec v_w, t_map m)
 
 	dn_dot = ft_vecinnerprod(v_w, m.pl.normal);
 	if (dn_dot >= 0)
-	#if (dn_dot != 0)
+	//if (dn_dot != 0)
 	{
 		t_vec	v_sp;
 		double t;
@@ -144,7 +144,7 @@ int	draw_plane(t_vec v_w, t_map m)
 		v_sp.z = v_w.z - m.pl.position.x;
 		t = - ft_vecinnerprod(v_sp, m.pl.normal) / dn_dot;
 		if (t > 0)
-		#if (t >= 0)
+		//if (t >= 0)
 		{
 			
 			//(1) ambient light 環境光
