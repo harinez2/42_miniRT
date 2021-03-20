@@ -16,6 +16,7 @@
 # define CMD_SQUARE	13
 # define CMD_CYLINDER	14
 # define CMD_TRIANGLE	15
+# define CMD_NONE	-1
 
 # define MAX_OBJ_COUNT	200
 
@@ -166,6 +167,7 @@ typedef struct image_t {
 }	image_t;
 
 double	ft_map(double x, int froma, int fromb, int toa, int tob);
+int	ft_color(int red, int green, int blue);
 
 int	readCmd1(int *i, char *line, t_map *m);
 int	readCmd2(int *i, char *line, t_map *m);

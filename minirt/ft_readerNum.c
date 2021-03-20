@@ -69,7 +69,7 @@ int	readXyz(int *i, char *s, t_vec *v)
 		return (-1);
 	if (v != NULL)
 		ft_vecset(v, x, y, z);
-printf("<xyz:%.2f, %.2f, %.2f>", x,y,z);
+//printf("<xyz:%.2f, %.2f, %.2f>", x,y,z);
 	return (0);
 }
 
@@ -94,8 +94,8 @@ int	readRgb(int *i, char *s, t_color *c)
 		c->g = ft_map(g, 0, 255, 0, 1);
 		c->b = ft_map(b, 0, 255, 0, 1);
 	}
-printf("<rgb:%d,%d,%d>", r, g, b);
-	return (0);
+//printf("<rgb:%d,%d,%d>", r, g, b);
+	return (ft_color(r, g, b));
 }
 
 void	skipSep(int *i, char *line)

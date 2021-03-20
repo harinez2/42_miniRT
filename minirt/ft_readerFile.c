@@ -3,7 +3,7 @@
 int	readCmd1(int *i, char *line, t_map *m)
 {
 	int	cmd;
-	int ret;
+	int	ret;
 	
 	cmd = -1;
 	if (line[*i] == 'R')
@@ -27,7 +27,7 @@ int	readCmd1(int *i, char *line, t_map *m)
 		readXyz(i, line, &(m->v_eye[0]));
 		readXyz(i, line, NULL);
 		ret = readInt(i, line);
-printf("cmd:c int:%d ", ret);
+		(void)ret;
 	}
 	else if (line[*i] == 'l')
 	{
@@ -41,9 +41,12 @@ printf("cmd:c int:%d ", ret);
 	{
 		cmd = CMD_SPHERE;
 		(*i) += 2;
-		readXyz(i, line, &(m->v_sphere[0]));
-		m->sphereR[0] = readDouble(i, line);
-		readRgb(i, line, NULL);
+		m->obj_type[m->obj_count] = CMD_SPHERE;
+		m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
+		readXyz(i, line, &((t_sphere *)m->obj[m->obj_count])->center);
+		((t_sphere *)m->obj[m->obj_count])->diameter = readDouble(i, line);
+		((t_sphere *)m->obj[m->obj_count])->rgb = readRgb(i, line, NULL);
+		m->obj_count++;
 	}
 	return (cmd);
 }
@@ -51,49 +54,55 @@ printf("cmd:c int:%d ", ret);
 int	readCmd2(int *i, char *line, t_map *m)
 {
 	int	cmd;
-	double retd;
 	
 	cmd = -1;
 	if (line[*i] == 'p' && line[*i + 1] == 'l')
 	{
 		cmd = CMD_PLANE;
 		(*i) += 2;
-		readXyz(i, line, &m->pl.normal);
-		readXyz(i, line, &m->pl.position);
-		readRgb(i, line, NULL);
-printf("cmd:pl ");
+		m->obj_type[m->obj_count] = CMD_PLANE;
+		m->obj[m->obj_count] = (t_plane *)malloc(sizeof(t_plane));
+		readXyz(i, line, &((t_plane *)m->obj[m->obj_count])->normal);
+		readXyz(i, line, &((t_plane *)m->obj[m->obj_count])->position);
+		((t_plane *)m->obj[m->obj_count])->rgb = readRgb(i, line, NULL);
+		m->obj_count++;
 	}
 	else if (line[*i] == 's' && line[*i + 1] == 'q')
 	{
 		cmd = CMD_SQUARE;
 		(*i) += 2;
-		readXyz(i, line, NULL);
-		readXyz(i, line, NULL);
-		retd = readDouble(i, line);
-printf("cmd:sq dbl:%.2f ", retd);
-		readRgb(i, line, NULL);
+		m->obj_type[m->obj_count] = CMD_SQUARE;
+		m->obj[m->obj_count] = (t_square *)malloc(sizeof(t_square));
+		readXyz(i, line, &((t_square *)m->obj[m->obj_count])->center);
+		readXyz(i, line, &((t_square *)m->obj[m->obj_count])->orientation);
+		((t_square *)m->obj[m->obj_count])->sidesize = readDouble(i, line);
+		((t_sphere *)m->obj[m->obj_count])->rgb = readRgb(i, line, NULL);
+		m->obj_count++;
 	}
 	else if (line[*i] == 'c' && line[*i + 1] == 'y')
 	{
 		cmd = CMD_CYLINDER;
 		(*i) += 2;
-		readXyz(i, line, NULL);
-		readXyz(i, line, NULL);
-		retd = readDouble(i, line);
-printf("cmd:cy dbl:%.2f ", retd);
-		retd = readDouble(i, line);
-printf("dbl:%.2f ", retd);
-		readRgb(i, line, NULL);
+		m->obj_type[m->obj_count] = CMD_CYLINDER;
+		m->obj[m->obj_count] = (t_cylinder *)malloc(sizeof(t_cylinder));
+		readXyz(i, line, &((t_cylinder *)m->obj[m->obj_count])->center);
+		readXyz(i, line, &((t_cylinder *)m->obj[m->obj_count])->orientation);
+		((t_cylinder *)m->obj[m->obj_count])->diameter = readDouble(i, line);
+		((t_cylinder *)m->obj[m->obj_count])->height = readDouble(i, line);
+		((t_cylinder *)m->obj[m->obj_count])->rgb = readRgb(i, line, NULL);
+		m->obj_count++;
 	}
 	else if (line[*i] == 't' && line[*i + 1] == 'r')
 	{
 		cmd = CMD_TRIANGLE;
 		(*i) += 2;
-		readXyz(i, line, NULL);
-		readXyz(i, line, NULL);
-		readXyz(i, line, NULL);
-		readRgb(i, line, NULL);
-printf("cmd:tr ");
+		m->obj_type[m->obj_count] = CMD_TRIANGLE;
+		m->obj[m->obj_count] = (t_triangle *)malloc(sizeof(t_triangle));
+		readXyz(i, line, &((t_triangle *)m->obj[m->obj_count])->first);
+		readXyz(i, line, &((t_triangle *)m->obj[m->obj_count])->second);
+		readXyz(i, line, &((t_triangle *)m->obj[m->obj_count])->third);
+		((t_triangle *)m->obj[m->obj_count])->rgb = readRgb(i, line, NULL);
+		m->obj_count++;
 	}
 	(void)m;
 	return (cmd);
@@ -111,7 +120,6 @@ void	readLine(char *line, t_map *m)
 	ret = readCmd1(&i, line, m);
 	if (ret == -1)
 		ret = readCmd2(&i, line, m);
-printf(" // ");
 	if (line[i] == 'R')
 		printf("%s\n", line);
 	else
