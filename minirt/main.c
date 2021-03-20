@@ -36,18 +36,13 @@ int	ft_color(int red, int green, int blue)
 	return (c);
 }
 
-/* Diffuse: 拡散反射
- */
-double	calcDiffuse()
+int		set_rgb_inrange(double color)
 {
-	return (0);
-}
-
-/* Specular: 鏡面反射
- */
-double	calcSpecular()
-{
-	return (0);
+	if (color > 255)
+		color = 255;
+	if (color < 0)
+		color = 0;
+	return (color);
 }
 
 double	get_nearest_shape(t_vec v_w, t_vec v_sphere, double sphereR, t_map m)
@@ -98,7 +93,10 @@ int ray_trace(t_vec v_w, t_map m, t_vec v_sphere, double t)
 	radianceDif.b = m.kDif.b * m.lightIntensity * nlDot;
 
 	//(3) specular reflection 鏡面反射光
-	t_color radianceSpe;// = 0.0f;
+	t_color radianceSpe;
+	radianceSpe.r = 0;
+	radianceSpe.g = 0;
+	radianceSpe.b = 0;
 	if (naiseki > 0)
 	{
 		t_vec refDir = ft_vecsub(ft_vecmult(v_sphereN, 2 * naiseki), v_lightDir); 
@@ -106,47 +104,35 @@ int ray_trace(t_vec v_w, t_map m, t_vec v_sphere, double t)
 		double vrDot = ft_vecinnerprod(invEyeDir, refDir);
 		if (vrDot < 0)
 			vrDot = 0;
-		vrDot = ft_map(pow(vrDot, m.shininess), 0, 1, 0, 255);
-		radianceSpe.r = m.kSpe.r * m.lightIntensity * vrDot;
-		radianceSpe.g = m.kSpe.g * m.lightIntensity * vrDot;
-		radianceSpe.b = m.kSpe.b * m.lightIntensity * vrDot;
-		//radianceSpe = m.kSpe * m.lightIntensity * pow(vrDot, m.shininess);
+		double vrDotPow = ft_map(pow(vrDot, m.shininess), 0, 1, 0, 255);
+		radianceSpe.r = m.kSpe.r * m.lightIntensity * vrDotPow;
+		radianceSpe.g = m.kSpe.g * m.lightIntensity * vrDotPow;
+		radianceSpe.b = m.kSpe.b * m.lightIntensity * vrDotPow;
 	}
 
 	//(1)-(3)合計
 	double rSumr = radianceAmb.r + radianceDif.r + radianceSpe.r;
 	double rSumg = radianceAmb.g + radianceDif.g + radianceSpe.g;
 	double rSumb = radianceAmb.b + radianceDif.b + radianceSpe.b;
-	//rSum = radianceAmb + radianceDif;
-	//rSum = radianceAmb + radianceSpe;
-	if (rSumr > 255)
-		rSumr = 255;
-	if (rSumg > 255)
-		rSumg = 255;
-	if (rSumb > 255)
-		rSumb = 255;
-	//return (ft_color(rSum, 0, 0));
-	return (ft_color(rSumr, rSumg, rSumb));
+	return (ft_color(set_rgb_inrange(rSumr), set_rgb_inrange(rSumg), set_rgb_inrange(rSumb)));
 }
 
 int	draw_plane(t_vec v_w, t_map m)
 {
-	double	dn_dot;
+	double	wn_dot;
 
-	dn_dot = ft_vecinnerprod(v_w, m.pl.normal);
-	if (dn_dot >= 0)
-	//if (dn_dot != 0)
+	wn_dot = ft_vecinnerprod(v_w, m.pl.normal);
+	if (wn_dot != 0)
 	{
-		t_vec	v_sp;
 		double t;
-		v_sp.x = v_w.x - m.pl.position.x;
-		v_sp.y = v_w.y - m.pl.position.x;
-		v_sp.z = v_w.z - m.pl.position.x;
-		t = - ft_vecinnerprod(v_sp, m.pl.normal) / dn_dot;
+		
+		t_vec v_de = ft_vecsub(v_w, m.v_eye[0]);
+		double a = ft_vecinnerprod(m.pl.position, m.pl.normal);
+		double b = ft_vecinnerprod(m.v_eye[0], m.pl.normal);
+		double c = ft_vecinnerprod(v_de, m.pl.normal);
+		t = (a - b) / c;
 		if (t > 0)
-		//if (t >= 0)
 		{
-			
 			//(1) ambient light 環境光
 			t_color radianceAmb;
 			radianceAmb.r = m.kAmb.r * m.ambientIntensity;
@@ -154,20 +140,11 @@ int	draw_plane(t_vec v_w, t_map m)
 			radianceAmb.b = m.kAmb.b * m.ambientIntensity;
 
 			//(2) diffuse reflection 拡散反射光
-			t_vec v_de = ft_vecsub(v_w, m.v_eye[0]);
 			t_vec v_tpos = ft_vecadd(m.v_eye[0], ft_vecmult(v_de, t));
 			t_vec v_lightDir = ft_vecnormalize(ft_vecsub(m.v_light[0], v_tpos));
-
-			//t_vec v_sphereN = ft_vecnormalize(ft_vecsub(v_tpos, v_sphere));
-			//半径方向のベクトル、これは不要
-			//代わりにベクトルnormal
-
-			//double naiseki = ft_vecinnerprod(v_sphereN, v_lightDir);
-
 			double naiseki = ft_vecinnerprod(ft_vecnormalize(m.pl.normal), v_lightDir);
 			if (naiseki < 0)
-				naiseki = 0;//-naiseki;
-				//naiseki = 0;
+				naiseki = 0;
 			double nlDot = ft_map(naiseki, 0, 1, 0, 255);
 			t_color radianceDif;
 			radianceDif.r = m.kDif.r * m.lightIntensity * nlDot;
@@ -175,47 +152,31 @@ int	draw_plane(t_vec v_w, t_map m)
 			radianceDif.b = m.kDif.b * m.lightIntensity * nlDot;
 			
 			//(3) specular reflection 鏡面反射光
-			/*
-			t_color radianceSpe;// = 0.0f;
+			t_color radianceSpe;
+			radianceSpe.r = 0;
+			radianceSpe.g = 0;
+			radianceSpe.b = 0;
 			if (naiseki > 0)
 			{
-				t_vec refDir = ft_vecsub(ft_vecmult(v_sphereN, 2 * naiseki), v_lightDir); 
+				t_vec refDir = ft_vecsub(ft_vecmult(m.pl.normal, 2 * naiseki), v_lightDir); 
 				t_vec invEyeDir = ft_vecnormalize(ft_vecmult(v_de, -1));
 				double vrDot = ft_vecinnerprod(invEyeDir, refDir);
 				if (vrDot < 0)
 					vrDot = 0;
-				vrDot = ft_map(pow(vrDot, m.shininess), 0, 1, 0, 255);
-				radianceSpe.r = m.kSpe.r * m.lightIntensity * vrDot;
-				radianceSpe.g = m.kSpe.g * m.lightIntensity * vrDot;
-				radianceSpe.b = m.kSpe.b * m.lightIntensity * vrDot;
-				//radianceSpe = m.kSpe * m.lightIntensity * pow(vrDot, m.shininess);
+				double vrDotPow = ft_map(pow(vrDot, m.shininess), 0, 1, 0, 255);
+				radianceSpe.r = m.kSpe.r * m.lightIntensity * vrDotPow;
+				radianceSpe.g = m.kSpe.g * m.lightIntensity * vrDotPow;
+				radianceSpe.b = m.kSpe.b * m.lightIntensity * vrDotPow;
 			}
-			*/
 
 			//(1)-(3)合計
-			//double rSumr = radianceAmb.r + radianceDif.r + radianceSpe.r;
-			//double rSumg = radianceAmb.g + radianceDif.g + radianceSpe.g;
-			//double rSumb = radianceAmb.b + radianceDif.b + radianceSpe.b;
-			double rSumr = radianceAmb.r + radianceDif.r;// + radianceSpe.r;
-			double rSumg = radianceAmb.g + radianceDif.g;// + radianceSpe.g;
-			double rSumb = radianceAmb.b + radianceDif.b;// + radianceSpe.b;
-			//rSum = radianceAmb + radianceDif;
-			//rSum = radianceAmb + radianceSpe;
-			if (rSumr > 255)
-				rSumr = 255;
-			if (rSumg > 255)
-				rSumg = 255;
-			if (rSumb > 255)
-				rSumb = 255;
-			//return (ft_color(rSum, 0, 0));
-			return (ft_color(rSumr, rSumg, rSumb));
-			
+			double rSumr = radianceAmb.r + radianceDif.r + radianceSpe.r;
+			double rSumg = radianceAmb.g + radianceDif.g + radianceSpe.g;
+			double rSumb = radianceAmb.b + radianceDif.b + radianceSpe.b;
+			return (ft_color(set_rgb_inrange(rSumr), set_rgb_inrange(rSumg), set_rgb_inrange(rSumb)));
 		}
-		else
-			return (50);
 	}
-	else
-		return (0);
+	return (ft_color(92, 151, 243));//背景色
 }
 
 int	decide_color(t_vec v_w, t_map m)
@@ -380,10 +341,7 @@ void	print_m(t_map *m)
 	printf("===== current config end =====\n\n");
 }
 
-/*
- ** Sphere
- **/
-int	draw_sphere(void *win, int w, int h, t_map *m)
+int	draw_map(void *win, int w, int h, t_map *m)
 {
 	int	x;
 	int	y;
@@ -451,7 +409,7 @@ void	display_window(t_map *m)
 	printf("OK\n");
 
 	printf("Drawing sphere ...");
-	draw_sphere(win1, m->window_x, m->window_y, m);
+	draw_map(win1, m->window_x, m->window_y, m);
 	printf("OK\n");
 	mlx_key_hook(win1, key_win1, 0);
 	mlx_loop(mlx);
