@@ -13,9 +13,11 @@ int	readCmd1(int *i, char *line, t_map *m)
 		{
 			m->window_x = readInt(i, line);
 			m->window_y = readInt(i, line);
+			if (m->window_x <= 0 || m->window_y <= 0)
+				ft_showErrorExit(ERR_RD_OUTOFRANGE_R);
 		}
 		else
-			return (ERR_REDEFINED_R);
+			ft_showErrorExit(ERR_RD_REDEFINED_R);
 	}
 	else if (line[*i] == 'A')
 	{
@@ -27,7 +29,7 @@ int	readCmd1(int *i, char *line, t_map *m)
 			readRgb(i, line, &(m->kAmb));
 		}
 		else
-			return (ERR_REDEFINED_A);
+			ft_showErrorExit(ERR_RD_REDEFINED_A);
 	}
 	else if (line[*i] == 'c' && line[*i + 1] != 'y')
 	{
@@ -154,12 +156,9 @@ void	readFromFile(char *filename, t_map *m)
 		if (i < 0)
 			break;
 		ret = readLine(line, m);
-		if (ret < 0)
-		{
-			write(1, "Incorrect format file.\n", 23);
-			exit(-1);
-		}
 		free(line);
+		if (ret < 0)
+			ft_showErrorExit(ERR_RD_INCORRECTFORMAT);
 		if (i == 0)
 			break;
 	}

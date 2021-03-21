@@ -18,9 +18,19 @@
 # define CMD_TRIANGLE	15
 # define CMD_NONE	0
 
-# define ERR_FILE_OPEN		-1
-# define ERR_REDEFINED_R	-2
-# define ERR_REDEFINED_A	-3
+# define ERR_SYS_MALLOC		-1
+# define ERR_SYS_FILEOPEN	-2
+# define ERR_SYS_FILEWRITE	-3
+# define ERR_RD_REDEFINED_R	-11
+# define ERR_RD_REDEFINED_A	-12
+# define ERR_RD_OUTOFRANGE_R	-13
+# define ERR_RD_INCORRECTFORMAT	-14
+# define ERR_CHK_NO_R		-21
+# define ERR_CHK_NO_A		-22
+# define ERR_CHK_NO_C		-23
+# define ERR_CHK_NO_L		-24
+# define ERR_WND_MLXINIT	-31
+# define ERR_WND_WNDINIT	-32
 
 # define MAX_OBJ_COUNT	200
 
