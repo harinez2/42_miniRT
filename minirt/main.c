@@ -36,6 +36,14 @@ int	ft_color(int red, int green, int blue)
 	return (c);
 }
 
+void	set_color(t_color *c, double red, double green, double blue)
+{
+	c->r = red;
+	c->g = green;
+	c->b = blue;
+	return ;
+}
+
 int		set_rgb_inrange(double color)
 {
 	if (color > 255)
@@ -45,14 +53,14 @@ int		set_rgb_inrange(double color)
 	return (color);
 }
 
-double	get_nearest_shape(t_vec v_w, t_sphere *ts, t_map *m)
+double	get_nearest_shape(t_vec v_w, t_vec v_eye, t_sphere *ts)
 {
 	t_vec	v_de;
 	t_vec	v_tmp;
 	double	t;
 
-	v_de = ft_vecsub(v_w, m->v_eye[0]);
-	v_tmp = ft_vecsub(m->v_eye[0], ts->center);
+	v_de = ft_vecsub(v_w, v_eye);
+	v_tmp = ft_vecsub(v_eye, ts->center);
 	double A = ft_vecnormsq(v_de);
 	double B = 2 * ft_vecinnerprod(v_de, v_tmp);
 	double C = ft_vecnormsq(v_tmp) - ts->diameter * ts->diameter;
@@ -70,16 +78,16 @@ double	get_nearest_shape(t_vec v_w, t_sphere *ts, t_map *m)
 	return (t);
 }
 
-double	get_nearest_cylinder(t_vec v_w, t_cylinder *tc, t_map *m)
+double	get_nearest_cylinder(t_vec v_w, t_vec v_eye, t_cylinder *tc)
 {
 	t_vec	v_de;
 	double	mx;
 	double	mz;
 	double	t;
 
-	v_de = ft_vecsub(v_w, m->v_eye[0]);
-	mx = m->v_eye[0].x - tc->center.x;
-	mz = m->v_eye[0].z - tc->center.z;
+	v_de = ft_vecsub(v_w, v_eye);
+	mx = v_eye.x - tc->center.x;
+	mz = v_eye.z - tc->center.z;
 	double A = v_de.x * v_de.x + v_de.z * v_de.z;
 	double B = 2 * (v_de.x * mx + v_de.z * mz);
 	double C = mx * mx + mz * mz - tc->diameter * tc->diameter;
@@ -96,8 +104,7 @@ double	get_nearest_cylinder(t_vec v_w, t_cylinder *tc, t_map *m)
 	}
 	if (t > 0)
 	{
-		t_vec v_de = ft_vecsub(v_w, m->v_eye[0]);
-		t_vec v_tpos = ft_vecadd(m->v_eye[0], ft_vecmult(v_de, t));//tpos：視線と球上の交点(pi)
+		t_vec v_tpos = ft_vecadd(v_eye, ft_vecmult(v_de, t));//tpos：視線と球上の交点(pi)
 		double diff = v_tpos.y - tc->center.y;
 		if (diff < 0)
 			diff *= -1;
@@ -112,9 +119,7 @@ int	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
 	t_color color;
 
 	//(1) ambient light 環境光
-	color.r = m->kAmb.r * m->ambientIntensity;
-	color.g = m->kAmb.g * m->ambientIntensity;
-	color.b = m->kAmb.b * m->ambientIntensity;
+	set_color(&color, m->kAmb.r * m->ambItsty, m->kAmb.g * m->ambItsty, m->kAmb.b * m->ambItsty);
 
 	//(2) diffuse reflection 拡散反射光
 	t_vec v_de = ft_vecsub(v_w, m->v_eye[0]);
@@ -128,9 +133,9 @@ int	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
 	if (naiseki < 0)
 		naiseki = 0;
 	double nlDot = ft_map(naiseki, 0, 1, 0, 255);
-	color.r += m->kDif.r * m->lightIntensity[0] * nlDot;
-	color.g += m->kDif.g * m->lightIntensity[0] * nlDot;
-	color.b += m->kDif.b * m->lightIntensity[0] * nlDot;
+	color.r += m->kDif.r * m->lightItsty[0] * nlDot;
+	color.g += m->kDif.g * m->lightItsty[0] * nlDot;
+	color.b += m->kDif.b * m->lightItsty[0] * nlDot;
 
 	//(3) specular reflection 鏡面反射光
 	if (naiseki > 0)
@@ -141,9 +146,9 @@ int	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
 		if (vrDot < 0)
 			vrDot = 0;
 		double vrDotPow = ft_map(pow(vrDot, m->shininess), 0, 1, 0, 255);
-		color.r += m->kSpe.r * m->lightIntensity[0] * vrDotPow;
-		color.g += m->kSpe.g * m->lightIntensity[0] * vrDotPow;
-		color.b += m->kSpe.b * m->lightIntensity[0] * vrDotPow;
+		color.r += m->kSpe.r * m->lightItsty[0] * vrDotPow;
+		color.g += m->kSpe.g * m->lightItsty[0] * vrDotPow;
+		color.b += m->kSpe.b * m->lightItsty[0] * vrDotPow;
 	}
 	return (ft_color(set_rgb_inrange(color.r), set_rgb_inrange(color.g), set_rgb_inrange(color.b)));
 }
@@ -153,9 +158,7 @@ int ray_trace_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t)
 	t_color color;
 
 	//(1) ambient light 環境光
-	color.r = m->kAmb.r * m->ambientIntensity;
-	color.g = m->kAmb.g * m->ambientIntensity;
-	color.b = m->kAmb.b * m->ambientIntensity;
+	set_color(&color, m->kAmb.r * m->ambItsty, m->kAmb.g * m->ambItsty, m->kAmb.b * m->ambItsty);
 
 	//(2) diffuse reflection 拡散反射光
 	t_vec v_de = ft_vecsub(v_w, m->v_eye[0]);
@@ -166,9 +169,9 @@ int ray_trace_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t)
 	if (naiseki < 0)
 		naiseki = 0;
 	double nlDot = ft_map(naiseki, 0, 1, 0, 255);
-	color.r += m->kDif.r * m->lightIntensity[0] * nlDot;
-	color.g += m->kDif.g * m->lightIntensity[0] * nlDot;
-	color.b += m->kDif.b * m->lightIntensity[0] * nlDot;
+	color.r += m->kDif.r * m->lightItsty[0] * nlDot;
+	color.g += m->kDif.g * m->lightItsty[0] * nlDot;
+	color.b += m->kDif.b * m->lightItsty[0] * nlDot;
 
 	//(3) specular reflection 鏡面反射光
 	if (naiseki > 0)
@@ -179,30 +182,29 @@ int ray_trace_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t)
 		if (vrDot < 0)
 			vrDot = 0;
 		double vrDotPow = ft_map(pow(vrDot, m->shininess), 0, 1, 0, 255);
-		color.r += m->kSpe.r * m->lightIntensity[0] * vrDotPow;
-		color.g += m->kSpe.g * m->lightIntensity[0] * vrDotPow;
-		color.b += m->kSpe.b * m->lightIntensity[0] * vrDotPow;
+		color.r += m->kSpe.r * m->lightItsty[0] * vrDotPow;
+		color.g += m->kSpe.g * m->lightItsty[0] * vrDotPow;
+		color.b += m->kSpe.b * m->lightItsty[0] * vrDotPow;
 	}
 	return (ft_color(set_rgb_inrange(color.r), set_rgb_inrange(color.g), set_rgb_inrange(color.b)));
 }
 
-double	get_nearest_plane(t_vec v_w, t_map *m, t_plane *tp)
+double	get_nearest_plane(t_vec v_w, t_vec v_eye, t_plane *tp)
 {
 	double	wn_dot;
 	double t;
 
-	wn_dot = ft_vecinnerprod(v_w, m->pl.normal);
+	wn_dot = ft_vecinnerprod(v_w, tp->normal);
 	if (wn_dot != 0)
 	{
-		t_vec v_de = ft_vecsub(v_w, m->v_eye[0]);
-		double a = ft_vecinnerprod(m->pl.position, m->pl.normal);
-		double b = ft_vecinnerprod(m->v_eye[0], m->pl.normal);
-		double c = ft_vecinnerprod(v_de, m->pl.normal);
+		t_vec v_de = ft_vecsub(v_w, v_eye);
+		double a = ft_vecinnerprod(tp->position, tp->normal);
+		double b = ft_vecinnerprod(v_eye, tp->normal);
+		double c = ft_vecinnerprod(v_de, tp->normal);
 		t = (a - b) / c;
 		if (t > 0)
 			return (t);
 	}
-	(void)tp;
 	return (-1);
 }
 
@@ -210,41 +212,38 @@ int ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 {
 	t_color color;
 
-(void)tp;
 	//(1) ambient light 環境光
-	color.r = m->kAmb.r * m->ambientIntensity;
-	color.g = m->kAmb.g * m->ambientIntensity;
-	color.b = m->kAmb.b * m->ambientIntensity;
+	set_color(&color, m->kAmb.r * m->ambItsty, m->kAmb.g * m->ambItsty, m->kAmb.b * m->ambItsty);
 
 	//(2) diffuse reflection 拡散反射光
 	t_vec v_de = ft_vecsub(v_w, m->v_eye[0]);
 	t_vec v_tpos = ft_vecadd(m->v_eye[0], ft_vecmult(v_de, t));
 	t_vec v_lightDir = ft_vecnormalize(ft_vecsub(m->v_light[0], v_tpos));
-	double naiseki = ft_vecinnerprod(ft_vecnormalize(m->pl.normal), v_lightDir);
+	double naiseki = ft_vecinnerprod(ft_vecnormalize(tp->normal), v_lightDir);
 	if (naiseki < 0)
 		naiseki = 0;
 	double nlDot = ft_map(naiseki, 0, 1, 0, 255);
-	color.r += m->kDif.r * m->lightIntensity[0] * nlDot;
-	color.g += m->kDif.g * m->lightIntensity[0] * nlDot;
-	color.b += m->kDif.b * m->lightIntensity[0] * nlDot;
+	color.r += m->kDif.r * m->lightItsty[0] * nlDot;
+	color.g += m->kDif.g * m->lightItsty[0] * nlDot;
+	color.b += m->kDif.b * m->lightItsty[0] * nlDot;
 	
 	//(3) specular reflection 鏡面反射光
 	if (naiseki > 0)
 	{
-		t_vec refDir = ft_vecsub(ft_vecmult(m->pl.normal, 2 * naiseki), v_lightDir); 
+		t_vec refDir = ft_vecsub(ft_vecmult(tp->normal, 2 * naiseki), v_lightDir); 
 		t_vec invEyeDir = ft_vecnormalize(ft_vecmult(v_de, -1));
 		double vrDot = ft_vecinnerprod(invEyeDir, refDir);
 		if (vrDot < 0)
 			vrDot = 0;
 		double vrDotPow = ft_map(pow(vrDot, m->shininess), 0, 1, 0, 255);
-		color.r += m->kSpe.r * m->lightIntensity[0] * vrDotPow;
-		color.g += m->kSpe.g * m->lightIntensity[0] * vrDotPow;
-		color.b += m->kSpe.b * m->lightIntensity[0] * vrDotPow;
+		color.r += m->kSpe.r * m->lightItsty[0] * vrDotPow;
+		color.g += m->kSpe.g * m->lightItsty[0] * vrDotPow;
+		color.b += m->kSpe.b * m->lightItsty[0] * vrDotPow;
 	}
 	return (ft_color(set_rgb_inrange(color.r), set_rgb_inrange(color.g), set_rgb_inrange(color.b)));
 }
 
-int	decide_color(t_vec v_w, t_map m)
+int	decide_color(t_vec v_w, t_map *m)
 {
 	double	t;
 	int		color;
@@ -252,25 +251,24 @@ int	decide_color(t_vec v_w, t_map m)
 
 	t = -1;
 	color = ft_color(92, 151, 243);
-	//color = draw_plane(v_w, &m);
-	for (int i = 0; i < m.obj_count; i++)
+	for (int i = 0; i < m->obj_count; i++)
 	{
 		chkt = -1;
-		if (m.obj_type[i] == CMD_SPHERE)
-			chkt = get_nearest_shape(v_w, (t_sphere *)m.obj[i], &m);
-		else if (m.obj_type[i] == CMD_CYLINDER)
-			chkt = get_nearest_cylinder(v_w, (t_cylinder *)m.obj[i], &m);
-		else if (m.obj_type[i] == CMD_PLANE)
-			chkt = get_nearest_plane(v_w, &m, (t_plane *)m.obj[i]);
+		if (m->obj_type[i] == CMD_SPHERE)
+			chkt = get_nearest_shape(v_w, m->v_eye[0], (t_sphere *)m->obj[i]);
+		else if (m->obj_type[i] == CMD_CYLINDER)
+			chkt = get_nearest_cylinder(v_w, m->v_eye[0], (t_cylinder *)m->obj[i]);
+		else if (m->obj_type[i] == CMD_PLANE)
+			chkt = get_nearest_plane(v_w, m->v_eye[0], (t_plane *)m->obj[i]);
 		if (chkt >= 0 && (t == -1 || chkt < t))
 		{
 			t = chkt;
-			if (m.obj_type[i] == CMD_SPHERE)
-				color = ray_trace_sphere(v_w, &m, (t_sphere *)m.obj[i], chkt);
-			else if (m.obj_type[i] == CMD_CYLINDER)
-				color = ray_trace_cylinder(v_w, &m, (t_cylinder *)m.obj[i], chkt);
-			else if (m.obj_type[i] == CMD_PLANE)
-				color = ray_trace_plane(v_w, &m, (t_plane *)m.obj[i], chkt);
+			if (m->obj_type[i] == CMD_SPHERE)
+				color = ray_trace_sphere(v_w, m, (t_sphere *)m->obj[i], chkt);
+			else if (m->obj_type[i] == CMD_CYLINDER)
+				color = ray_trace_cylinder(v_w, m, (t_cylinder *)m->obj[i], chkt);
+			else if (m->obj_type[i] == CMD_PLANE)
+				color = ray_trace_plane(v_w, m, (t_plane *)m->obj[i], chkt);
 		}
 	}
 	return (color);
@@ -291,21 +289,6 @@ void	set_default_Value(t_map *m)
 	ft_vecset(&m->v_eye[m->eye_count++], 0, 0, -5);
 	ft_vecset(&m->v_eye[m->eye_count++], 0, 1, 2);
 
-	ft_vecset(&m->pl.normal, 0.0, 1.0, 0.0);
-	ft_vecset(&m->pl.position, 0.0, -1.0, 0.0);
-
-	//ft_vecset(&m->v_sphere[0], 0, 0, 5);
-	//ft_vecset(&m->v_sphere[1], 1, 1, 2);
-	ft_vecset(&m->v_sphere[0], 3, 0, 25);
-	ft_vecset(&m->v_sphere[1], 2, 0, 20);
-	ft_vecset(&m->v_sphere[2], 1, 0, 15);
-	ft_vecset(&m->v_sphere[3], 0, 0, 10);
-	ft_vecset(&m->v_sphere[4], -1, 0, 5);
-	m->sphereR[0] = 1.0;
-	m->sphereR[1] = 1.0;
-	m->sphereR[2] = 1.0;
-	m->sphereR[3] = 1.0;
-	m->sphereR[4] = 1.0;
 	ft_vecset(&m->v_light[m->light_count++], -5, 5, -5);
 	ft_vecset(&m->v_light[m->light_count++], -5, 3, -2);
 
@@ -323,8 +306,8 @@ void	set_default_Value(t_map *m)
 
 	m->shininess = 8;
 
-	m->lightIntensity[0] = 1.0;
-	m->ambientIntensity = 0.1;
+	m->lightItsty[0] = 1.0;
+	m->ambItsty = 0.1;
 
 	m->obj_type[m->obj_count] = CMD_SPHERE;
 	m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
@@ -410,14 +393,6 @@ void	print_m(t_map *m)
 	printf("R        : %d x %d\n", m->window_x, m->window_y);
 	for (int i = 0; i < m->eye_count; i++)
 		printf("Eye[%d]   : %.2f, %.2f, %.2f\n", i, m->v_eye[i].x, m->v_eye[i].y, m->v_eye[i].z);
-	printf("Plane    : %.2f, %.2f, %.2f / %.2f, %.2f, %.2f\n", m->pl.normal.x, m->pl.normal.y, m->pl.normal.z,
-			m->pl.position.x, m->pl.position.y, m->pl.position.z);
-
-	printf("Sphere[0]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[0].x, m->v_sphere[0].y, m->v_sphere[0].z, m->sphereR[0]);
-	printf("Sphere[1]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[1].x, m->v_sphere[1].y, m->v_sphere[1].z, m->sphereR[1]);
-	printf("Sphere[2]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[2].x, m->v_sphere[2].y, m->v_sphere[2].z, m->sphereR[2]);
-	printf("Sphere[3]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[3].x, m->v_sphere[3].y, m->v_sphere[3].z, m->sphereR[3]);
-	printf("Sphere[4]: %.2f, %.2f, %.2f (r:%.2f)\n", m->v_sphere[4].x, m->v_sphere[4].y, m->v_sphere[4].z, m->sphereR[4]);
 	for (int i = 0; i < m->light_count; i++)
 		printf("Light[%d] : %.2f, %.2f, %.2f\n", i, m->v_light[i].x, m->v_light[i].y, m->v_light[i].z);
 
@@ -428,8 +403,8 @@ void	print_m(t_map *m)
 	printf("shininess       : %.2f\n", m->shininess);
 
 	for (int i = 0; i < m->light_count; i++)
-		printf("lightIntensity[%d]  : %.2f\n", i, m->lightIntensity[i]);
-	printf("ambientIntensity: %.2f\n", m->ambientIntensity);
+		printf("lightItsty[%d]  : %.2f\n", i, m->lightItsty[i]);
+	printf("ambItsty        : %.2f\n", m->ambItsty);
 	printf("obj_count       : %d\n", m->obj_count);
 	for (int i = 0; i < m->obj_count; i++)
 	{
@@ -528,7 +503,7 @@ int	draw_map(void *win, int w, int h, t_map *m)
 		while (x < w)
 		{
 			v_w.x = ft_map(x, 0, w-1, -1, 1);
-			color = decide_color(v_w, *m);
+			color = decide_color(v_w, m);
 			mlx_pixel_put(mlx, win, x, y, color);
 			x++;
 		}
