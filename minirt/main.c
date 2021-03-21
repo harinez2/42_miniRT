@@ -243,6 +243,39 @@ int ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 	return (ft_color(set_rgb_inrange(color.r), set_rgb_inrange(color.g), set_rgb_inrange(color.b)));
 }
 
+double	get_nearest_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt)
+{
+	t_plane tp;
+	double t;
+
+	tp.normal = tt->normal;
+	//tp.position = ft_vecsub(tt->second, tt->first);
+	tp.position = tt->first;
+	t = get_nearest_plane(v_w, v_eye, &tp);
+	if (t >= 0)
+	{
+		t_vec v_de = ft_vecsub(v_w, v_eye);
+		t_vec v_tpos = ft_vecadd(v_eye, ft_vecmult(v_de, t));//tpos：視線と面上の交点(pi)
+		int	a,b,c;
+		a = ft_veccrossprod_sign(v_tpos, tt->first, tt->second) < 0 ? -1 : 1;
+		b = ft_veccrossprod_sign(v_tpos, tt->second, tt->third) < 0 ? -1 : 1;
+		c = ft_veccrossprod_sign(v_tpos, tt->third, tt->first) < 0 ? -1 : 1;
+		if (a != b || b != c)
+			t = -1;
+	}
+	return (t);
+}
+
+int	ray_trace_triangle(t_vec v_w, t_map *m, t_triangle *tt, double t)
+{
+	t_plane tp;
+
+	tp.normal = tt->normal;
+	//tp.position = ft_vecnormalize(ft_vecsub(tt->second, tt->first));
+	tp.position = tt->first;
+	return (ray_trace_plane(v_w, m, &tp, t));
+}
+
 int	decide_color(t_vec v_w, t_map *m)
 {
 	double	t;
@@ -260,6 +293,8 @@ int	decide_color(t_vec v_w, t_map *m)
 			chkt = get_nearest_cylinder(v_w, m->v_eye[0], (t_cylinder *)m->obj[i]);
 		else if (m->obj_type[i] == CMD_PLANE)
 			chkt = get_nearest_plane(v_w, m->v_eye[0], (t_plane *)m->obj[i]);
+		else if (m->obj_type[i] == CMD_TRIANGLE)
+			chkt = get_nearest_triangle(v_w, m->v_eye[0], (t_triangle *)m->obj[i]);
 		if (chkt >= 0 && (t == -1 || chkt < t))
 		{
 			t = chkt;
@@ -269,6 +304,8 @@ int	decide_color(t_vec v_w, t_map *m)
 				color = ray_trace_cylinder(v_w, m, (t_cylinder *)m->obj[i], chkt);
 			else if (m->obj_type[i] == CMD_PLANE)
 				color = ray_trace_plane(v_w, m, (t_plane *)m->obj[i], chkt);
+			else if (m->obj_type[i] == CMD_TRIANGLE)
+				color = ray_trace_triangle(v_w, m, (t_triangle *)m->obj[i], chkt);
 		}
 	}
 	return (color);
@@ -321,29 +358,29 @@ void	set_default_Value(t_map *m)
 	((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
 	m->obj_count++;
 
-	m->obj_type[m->obj_count] = CMD_SPHERE;
-	m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
-	ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, 1, 0, 15);
-	((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
-	m->obj_count++;
+	// m->obj_type[m->obj_count] = CMD_SPHERE;
+	// m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
+	// ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, 1, 0, 15);
+	// ((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
+	// m->obj_count++;
 
-	m->obj_type[m->obj_count] = CMD_SPHERE;
-	m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
-	ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, 0, 0, 10);
-	((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
-	m->obj_count++;
+	// m->obj_type[m->obj_count] = CMD_SPHERE;
+	// m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
+	// ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, 0, 0, 10);
+	// ((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
+	// m->obj_count++;
 
-	m->obj_type[m->obj_count] = CMD_SPHERE;
-	m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
-	ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, -1, 0, 5);
-	((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
-	m->obj_count++;
+	// m->obj_type[m->obj_count] = CMD_SPHERE;
+	// m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
+	// ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, -1, 0, 5);
+	// ((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
+	// m->obj_count++;
 
-	m->obj_type[m->obj_count] = CMD_PLANE;
-	m->obj[m->obj_count] = (t_plane *)malloc(sizeof(t_plane));
-	ft_vecset(&((t_plane *)m->obj[m->obj_count])->normal, 0.0, 1.0, 0.0);
-	ft_vecset(&((t_plane *)m->obj[m->obj_count])->position, 0.0, -1.0, 0.0);
-	m->obj_count++;
+	// m->obj_type[m->obj_count] = CMD_PLANE;
+	// m->obj[m->obj_count] = (t_plane *)malloc(sizeof(t_plane));
+	// ft_vecset(&((t_plane *)m->obj[m->obj_count])->normal, 0.0, 1.0, 0.0);
+	// ft_vecset(&((t_plane *)m->obj[m->obj_count])->position, 0.0, -1.0, 0.0);
+	// m->obj_count++;
 
 	// m->obj_type[m->obj_count] = CMD_CYLINDER;
 	// m->obj[m->obj_count] = (t_cylinder *)malloc(sizeof(t_cylinder));
@@ -384,6 +421,20 @@ void	set_default_Value(t_map *m)
 	// ((t_cylinder *)m->obj[m->obj_count])->diameter = 1.0;
 	// ((t_cylinder *)m->obj[m->obj_count])->height = 2.0;
 	// m->obj_count++;
+
+	m->obj_type[m->obj_count] = CMD_TRIANGLE;
+	m->obj[m->obj_count] = (t_triangle *)malloc(sizeof(t_triangle));
+	ft_vecset(&((t_triangle *)m->obj[m->obj_count])->first, 0.0, 5.0, 0.0);
+	ft_vecset(&((t_triangle *)m->obj[m->obj_count])->second, 0.0, 0.0, -2.0);
+	ft_vecset(&((t_triangle *)m->obj[m->obj_count])->third, 5.0, 0.0, 00.0);
+	// ft_vecset(&((t_triangle *)m->obj[m->obj_count])->first, 10.0, 20.0, 10.0);
+	// ft_vecset(&((t_triangle *)m->obj[m->obj_count])->second, 10.0, 10.0, 20.0);
+	// ft_vecset(&((t_triangle *)m->obj[m->obj_count])->third, 20.0, 10.0, 10.0);
+	t_triangle *t = (t_triangle *)m->obj[m->obj_count];
+	t_vec n = ft_veccrossprod(ft_vecsub(t->second, t->first), ft_vecsub(t->third, t->first));
+	n = ft_vecnormalize(n);
+	ft_vecset(&((t_triangle *)m->obj[m->obj_count])->normal, n.x, n.y, n.z);
+	m->obj_count++;
 
 }
 

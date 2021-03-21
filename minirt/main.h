@@ -71,6 +71,7 @@ typedef struct		s_triangle
 	t_vec		first;
 	t_vec		second;
 	t_vec		third;
+	t_vec		normal;		//法線ベクトル
 	t_color		rgb;
 }			t_triangle;
 
@@ -186,6 +187,8 @@ t_vec	ft_vecmult(t_vec v, double k);
 t_vec	ft_vecdiv(t_vec v, double k);
 
 double	ft_vecinnerprod(t_vec v, t_vec w);
+t_vec	ft_veccrossprod(t_vec v, t_vec w);
+double ft_veccrossprod_sign(t_vec v1, t_vec v2, t_vec v3);
 double	ft_vecnorm(t_vec v);
 double	ft_vecnormsq(t_vec v);
 t_vec	ft_vecnormalize(t_vec v);
