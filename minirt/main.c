@@ -70,7 +70,94 @@ double	get_nearest_shape(t_vec v_w, t_vec v_sphere, double sphereR, t_map m)
 	return (t);
 }
 
-int ray_trace(t_vec v_w, t_map m, t_vec v_sphere, double t)
+double	get_nearest_cylinder(t_vec v_w, t_cylinder *tc, t_map *m)
+{
+	t_vec	v_de;
+	double	mx;
+	double	mz;
+	double	t;
+
+	v_de = ft_vecsub(v_w, m->v_eye[0]);
+	mx = m->v_eye[0].x - tc->center.x;
+	mz = m->v_eye[0].z - tc->center.z;
+	double A = v_de.x * v_de.x + v_de.z * v_de.z;
+	double B = 2 * (v_de.x * mx + v_de.z * mz);
+	double C = mx * mx + mz * mz - tc->diameter * tc->diameter;
+	double D = B * B - 4 * A * C;
+
+	t = -1;
+	if (D == 0)
+		t = -B / (2 * A);
+	else if (D > 0)
+	{
+		double t1 = (-B - sqrt(D)) / (2 * A);
+		double t2 = (-B + sqrt(D)) / (2 * A);
+		t = t1 > 0 && t2 > 0 ? fmin(t1, t2) : fmax(t1, t2);
+	}
+	if (t > 0)
+	{
+		t_vec v_de = ft_vecsub(v_w, m->v_eye[0]);
+		t_vec v_tpos = ft_vecadd(m->v_eye[0], ft_vecmult(v_de, t));//tpos：視線と球上の交点(pi)
+		double diff = v_tpos.y - tc->center.y;
+		if (diff < 0)
+			diff *= -1;
+		if (diff > tc->height / 2)
+			t = -1;
+	}
+	return (t);
+}
+
+int	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
+{
+	//(1) ambient light 環境光
+	t_color radianceAmb;
+	radianceAmb.r = m->kAmb.r * m->ambientIntensity;
+	radianceAmb.g = m->kAmb.g * m->ambientIntensity;
+	radianceAmb.b = m->kAmb.b * m->ambientIntensity;
+
+	//(2) diffuse reflection 拡散反射光
+	t_vec v_de = ft_vecsub(v_w, m->v_eye[0]);
+	t_vec v_tpos = ft_vecadd(m->v_eye[0], ft_vecmult(v_de, t));//tpos：視線と球上の交点(pi)
+	t_vec v_lightDir = ft_vecnormalize(ft_vecsub(m->v_light[0], v_tpos));//入射ベクトル(l)
+	t_vec v_n;//法線ベクトル(n)
+	v_n.x = 2 * (v_tpos.x - tc->center.x);
+	v_n.y = 0;
+	v_n.z = 2 * (v_tpos.z - tc->center.z);
+	double naiseki = ft_vecinnerprod(ft_vecnormalize(v_n), v_lightDir);
+	if (naiseki < 0)
+		naiseki = 0;
+	double nlDot = ft_map(naiseki, 0, 1, 0, 255);
+	t_color radianceDif;
+	radianceDif.r = m->kDif.r * m->lightIntensity[0] * nlDot;
+	radianceDif.g = m->kDif.g * m->lightIntensity[0] * nlDot;
+	radianceDif.b = m->kDif.b * m->lightIntensity[0] * nlDot;
+
+	//(3) specular reflection 鏡面反射光
+	t_color radianceSpe;
+	radianceSpe.r = 0;
+	radianceSpe.g = 0;
+	radianceSpe.b = 0;
+	if (naiseki > 0)
+	{
+		t_vec refDir = ft_vecnormalize(ft_vecsub(ft_vecmult(ft_vecnormalize(v_n), 2 * naiseki), v_lightDir)); 
+		t_vec invEyeDir = ft_vecnormalize(ft_vecmult(v_de, -1));
+		double vrDot = ft_vecinnerprod(invEyeDir, refDir);
+		if (vrDot < 0)
+			vrDot = 0;
+		double vrDotPow = ft_map(pow(vrDot, m->shininess), 0, 1, 0, 255);
+		radianceSpe.r = m->kSpe.r * m->lightIntensity[0] * vrDotPow;
+		radianceSpe.g = m->kSpe.g * m->lightIntensity[0] * vrDotPow;
+		radianceSpe.b = m->kSpe.b * m->lightIntensity[0] * vrDotPow;
+	}
+
+	//(1)-(3)合計
+	double rSumr = radianceAmb.r + radianceDif.r + radianceSpe.r;
+	double rSumg = radianceAmb.g + radianceDif.g + radianceSpe.g;
+	double rSumb = radianceAmb.b + radianceDif.b + radianceSpe.b;
+	return (ft_color(set_rgb_inrange(rSumr), set_rgb_inrange(rSumg), set_rgb_inrange(rSumb)));
+}
+
+int ray_trace_sphere(t_vec v_w, t_map m, t_vec v_sphere, double t)
 {
 	//(1) ambient light 環境光
 	t_color radianceAmb;
@@ -189,13 +276,20 @@ int	decide_color(t_vec v_w, t_map m)
 	color = draw_plane(v_w, m);
 	for (int i = 0; i < m.obj_count; i++)
 	{
-		chkt = get_nearest_shape(v_w, ((t_sphere *)m.obj[i])->center,
+		chkt = -1;
+		if (m.obj_type[i] == CMD_SPHERE)
+			chkt = get_nearest_shape(v_w, ((t_sphere *)m.obj[i])->center,
 				((t_sphere *)m.obj[i])->diameter, m);
+		else if (m.obj_type[i] == CMD_CYLINDER)
+			chkt = get_nearest_cylinder(v_w, (t_cylinder *)m.obj[i], &m);
 		//chkt = get_nearest_shape(v_w, m.v_sphere[i], m.sphereR[i], m);
 		if (chkt >= 0 && (t == -1 || chkt < t))
 		{
-			color = ray_trace(v_w, m, ((t_sphere *)m.obj[i])->center, chkt);
 			t = chkt;
+			if (m.obj_type[i] == CMD_SPHERE)
+				color = ray_trace_sphere(v_w, m, ((t_sphere *)m.obj[i])->center, chkt);
+			else if (m.obj_type[i] == CMD_CYLINDER)
+				color = ray_trace_cylinder(v_w, &m, (t_cylinder *)m.obj[i], chkt);
 		}
 	}
 	return (color);
@@ -251,41 +345,82 @@ void	set_default_Value(t_map *m)
 	m->lightIntensity[0] = 1.0;
 	m->ambientIntensity = 0.1;
 
-	m->obj_type[m->obj_count] = CMD_SPHERE;
-	m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
-	ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, 3, 0, 25);
-	((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
-	m->obj_count++;
+	// m->obj_type[m->obj_count] = CMD_SPHERE;
+	// m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
+	// ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, 3, 0, 25);
+	// ((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
+	// m->obj_count++;
 
-	m->obj_type[m->obj_count] = CMD_SPHERE;
-	m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
-	ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, 2, 0, 20);
-	((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
-	m->obj_count++;
+	// m->obj_type[m->obj_count] = CMD_SPHERE;
+	// m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
+	// ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, 2, 0, 20);
+	// ((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
+	// m->obj_count++;
 
-	m->obj_type[m->obj_count] = CMD_SPHERE;
-	m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
-	ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, 1, 0, 15);
-	((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
-	m->obj_count++;
+	// m->obj_type[m->obj_count] = CMD_SPHERE;
+	// m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
+	// ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, 1, 0, 15);
+	// ((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
+	// m->obj_count++;
 
-	m->obj_type[m->obj_count] = CMD_SPHERE;
-	m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
-	ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, 0, 0, 10);
-	((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
-	m->obj_count++;
+	// m->obj_type[m->obj_count] = CMD_SPHERE;
+	// m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
+	// ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, 0, 0, 10);
+	// ((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
+	// m->obj_count++;
 
-	m->obj_type[m->obj_count] = CMD_SPHERE;
-	m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
-	ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, -1, 0, 5);
-	((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
-	m->obj_count++;
+	// m->obj_type[m->obj_count] = CMD_SPHERE;
+	// m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
+	// ft_vecset(&((t_sphere *)m->obj[m->obj_count])->center, -1, 0, 5);
+	// ((t_sphere *)m->obj[m->obj_count])->diameter = 1.0;
+	// m->obj_count++;
 
 	m->obj_type[m->obj_count] = CMD_PLANE;
 	m->obj[m->obj_count] = (t_plane *)malloc(sizeof(t_plane));
 	ft_vecset(&((t_plane *)m->obj[m->obj_count])->normal, 0.0, 1.0, 0.0);
 	ft_vecset(&((t_plane *)m->obj[m->obj_count])->position, 0.0, -1.0, 0.0);
 	m->obj_count++;
+
+	m->obj_type[m->obj_count] = CMD_CYLINDER;
+	m->obj[m->obj_count] = (t_cylinder *)malloc(sizeof(t_cylinder));
+	ft_vecset(&((t_cylinder *)m->obj[m->obj_count])->center, 3, 0, 25);
+	ft_vecset(&((t_cylinder *)m->obj[m->obj_count])->orientation, 0.0, -1.0, 0.0);
+	((t_cylinder *)m->obj[m->obj_count])->diameter = 1.0;
+	((t_cylinder *)m->obj[m->obj_count])->height = 2.0;
+	m->obj_count++;
+	
+	m->obj_type[m->obj_count] = CMD_CYLINDER;
+	m->obj[m->obj_count] = (t_cylinder *)malloc(sizeof(t_cylinder));
+	ft_vecset(&((t_cylinder *)m->obj[m->obj_count])->center, 2, 0, 20);
+	ft_vecset(&((t_cylinder *)m->obj[m->obj_count])->orientation, 0.0, -1.0, 0.0);
+	((t_cylinder *)m->obj[m->obj_count])->diameter = 1.0;
+	((t_cylinder *)m->obj[m->obj_count])->height = 2.0;
+	m->obj_count++;
+	
+	m->obj_type[m->obj_count] = CMD_CYLINDER;
+	m->obj[m->obj_count] = (t_cylinder *)malloc(sizeof(t_cylinder));
+	ft_vecset(&((t_cylinder *)m->obj[m->obj_count])->center, 1, 0, 15);
+	ft_vecset(&((t_cylinder *)m->obj[m->obj_count])->orientation, 0.0, -1.0, 0.0);
+	((t_cylinder *)m->obj[m->obj_count])->diameter = 1.0;
+	((t_cylinder *)m->obj[m->obj_count])->height = 2.0;
+	m->obj_count++;
+	
+	m->obj_type[m->obj_count] = CMD_CYLINDER;
+	m->obj[m->obj_count] = (t_cylinder *)malloc(sizeof(t_cylinder));
+	ft_vecset(&((t_cylinder *)m->obj[m->obj_count])->center, 0, 0, 10);
+	ft_vecset(&((t_cylinder *)m->obj[m->obj_count])->orientation, 0.0, -1.0, 0.0);
+	((t_cylinder *)m->obj[m->obj_count])->diameter = 1.0;
+	((t_cylinder *)m->obj[m->obj_count])->height = 2.0;
+	m->obj_count++;
+	
+	m->obj_type[m->obj_count] = CMD_CYLINDER;
+	m->obj[m->obj_count] = (t_cylinder *)malloc(sizeof(t_cylinder));
+	ft_vecset(&((t_cylinder *)m->obj[m->obj_count])->center, -1, 0, 5);
+	ft_vecset(&((t_cylinder *)m->obj[m->obj_count])->orientation, 0.0, -1.0, 0.0);
+	((t_cylinder *)m->obj[m->obj_count])->diameter = 1.0;
+	((t_cylinder *)m->obj[m->obj_count])->height = 2.0;
+	m->obj_count++;
+
 }
 
 void	print_m(t_map *m)
