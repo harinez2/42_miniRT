@@ -316,6 +316,15 @@ void	init_m(t_map *m)
 	m->eye_count = 0;
 	m->light_count = 0;
 	m->obj_count = 0;
+	
+	m->window_x = -1;
+	m->window_y = -1;
+
+	m->kAmb.r = -1;
+	m->kAmb.g = -1;
+	m->kAmb.b = -1;
+	
+	m->ambItsty = -1;
 }
 
 void	set_default_Value(t_map *m)

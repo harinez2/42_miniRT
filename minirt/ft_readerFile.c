@@ -3,39 +3,47 @@
 int	readCmd1(int *i, char *line, t_map *m)
 {
 	int	cmd;
-	int	ret;
 	
-	cmd = -1;
+	cmd = CMD_NONE;
 	if (line[*i] == 'R')
 	{
 		cmd = CMD_RESOLUTION;
 		(*i)++;
-		m->window_x = readInt(i, line);
-		m->window_y = readInt(i, line);
+		if (m->window_x == -1)
+		{
+			m->window_x = readInt(i, line);
+			m->window_y = readInt(i, line);
+		}
+		else
+			return (ERR_REDEFINED_R);
 	}
 	else if (line[*i] == 'A')
 	{
 		cmd = CMD_AMBIENT;
 		(*i)++;
-		m->ambItsty = readDouble(i, line);
-		readRgb(i, line, &(m->kAmb));
+		if (m->ambItsty == -1)
+		{
+			m->ambItsty = readDouble(i, line);
+			readRgb(i, line, &(m->kAmb));
+		}
+		else
+			return (ERR_REDEFINED_A);
 	}
 	else if (line[*i] == 'c' && line[*i + 1] != 'y')
 	{
 		cmd = CMD_CAMERA;
 		(*i)++;
-		readXyz(i, line, &(m->v_eye[m->eye_count++]));
-		readXyz(i, line, NULL);
-		ret = readInt(i, line);
-		(void)ret;
+		readXyz(i, line, &(m->v_eye[m->eye_count]));
+		readXyz(i, line, &(m->v_eye_orientation[m->eye_count]));
+		m->eye_fov[m->eye_count++] = readDouble(i, line);
 	}
 	else if (line[*i] == 'l')
 	{
 		cmd = CMD_LIGHT;
 		(*i)++;
 		readXyz(i, line, &(m->v_light[m->light_count]));
-		m->lightItsty[m->light_count++] = readDouble(i, line);
-		readRgb(i, line, NULL);
+		m->lightItsty[m->light_count] = readDouble(i, line);
+		readRgb(i, line, &m->light_rgb[m->light_count++]);
 	}
 	else if (line[*i] == 's' && line[*i + 1] == 'p')
 	{
@@ -55,7 +63,7 @@ int	readCmd2(int *i, char *line, t_map *m)
 {
 	int	cmd;
 	
-	cmd = -1;
+	cmd = CMD_NONE;
 	if (line[*i] == 'p' && line[*i + 1] == 'l')
 	{
 		cmd = CMD_PLANE;
@@ -104,11 +112,10 @@ int	readCmd2(int *i, char *line, t_map *m)
 		readRgb(i, line, &((t_triangle *)m->obj[m->obj_count])->rgb);
 		m->obj_count++;
 	}
-	(void)m;
 	return (cmd);
 }
 
-void	readLine(char *line, t_map *m)
+int	readLine(char *line, t_map *m)
 {
 	int	i;
 	int	ret;
@@ -116,15 +123,14 @@ void	readLine(char *line, t_map *m)
 	i = 0;
 	skipSep(&i, line);
 	if (line[i] == '#' || line[i] == '\0')
-		return;
+		return (0);
 	ret = readCmd1(&i, line, m);
-	if (ret == -1)
+	if (ret == CMD_NONE)
 		ret = readCmd2(&i, line, m);
-	if (line[i] == 'R')
-		printf("%s\n", line);
-	else
-		printf("%s\n", line);
-
+	if (ret < 0)
+		return (ret);
+	printf("%s\n", line);
+	return (0);
 }
 
 void	readFromFile(char *filename, t_map *m)
@@ -132,7 +138,9 @@ void	readFromFile(char *filename, t_map *m)
 	int	fd;
 	char	*line;
 	int	i;
+	int	ret;
 
+	ret = 0;
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 	{
@@ -145,13 +153,17 @@ void	readFromFile(char *filename, t_map *m)
 		i = get_next_line(fd, &line);
 		if (i < 0)
 			break;
-		readLine(line, m);
+		ret = readLine(line, m);
+		if (ret < 0)
+		{
+			write(1, "Incorrect format file.\n", 23);
+			exit(-1);
+		}
 		free(line);
 		if (i == 0)
 			break;
 	}
 	close(fd);
-	(void)m;
 }
 
 /*

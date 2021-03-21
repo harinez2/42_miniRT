@@ -16,7 +16,11 @@
 # define CMD_SQUARE	13
 # define CMD_CYLINDER	14
 # define CMD_TRIANGLE	15
-# define CMD_NONE	-1
+# define CMD_NONE	0
+
+# define ERR_FILE_OPEN		-1
+# define ERR_REDEFINED_R	-2
+# define ERR_REDEFINED_A	-3
 
 # define MAX_OBJ_COUNT	200
 
@@ -82,8 +86,13 @@ typedef struct		s_map
 
 	int	eye_count;
 	t_vec	v_eye[5];
+	t_vec	v_eye_orientation[5];
+	double	eye_fov[5];
+
 	int	light_count;
 	t_vec	v_light[5];
+	double	light_brightness[5];
+	t_color	light_rgb[5];
 
 	t_color	kAmb; //ka 環境光反射係数
 	t_color	kDif; //kd 拡散反射係数
@@ -171,7 +180,7 @@ int	ft_color(int red, int green, int blue);
 
 int	readCmd1(int *i, char *line, t_map *m);
 int	readCmd2(int *i, char *line, t_map *m);
-void	readLine(char *line, t_map *m);
+int	readLine(char *line, t_map *m);
 void	readFromFile(char *filename, t_map *m);
 
 int		readInt(int *i, char *line);
@@ -193,5 +202,7 @@ double	ft_vecnorm(t_vec v);
 double	ft_vecnormsq(t_vec v);
 t_vec	ft_vecnormalize(t_vec v);
 void	ft_vecprint(t_vec *v);
+
+void	ft_showErrorExit(int errNo);
 
 #endif
