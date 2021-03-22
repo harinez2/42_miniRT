@@ -620,19 +620,6 @@ void	decide_endian(void)
 	printf("Local Endian : %d.\n",local_endian);
 }
 
-void	freeX(t_map *m)
-{
-	int		i;
-
-	i = 0;
-	while (i < m->obj_count)
-	{
-		free(m->obj[i]);
-		m->obj[i] = NULL;
-		i++;
-	}
-}
-
 void	display_window(t_map *m)
 {
 	if (!(mlx = mlx_init()))

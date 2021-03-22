@@ -14,10 +14,10 @@ int	readCmd1(int *i, char *line, t_map *m)
 			m->window_x = readInt(i, line);
 			m->window_y = readInt(i, line);
 			if (m->window_x <= 0 || m->window_y <= 0)
-				ft_showErrorExit(ERR_RD_OUTOFRANGE_R);
+				ft_showErrorExit(ERR_RD_OUTOFRANGE_SCREEN, m);
 		}
 		else
-			ft_showErrorExit(ERR_RD_REDEFINED_R);
+			ft_showErrorExit(ERR_RD_REDEFINED_R, m);
 	}
 	else if (line[*i] == 'A')
 	{
@@ -26,26 +26,26 @@ int	readCmd1(int *i, char *line, t_map *m)
 		if (m->ambItsty == -1)
 		{
 			m->ambItsty = readDouble(i, line);
-			readRgb(i, line, &(m->kAmb));
+			m->kAmb = readRgb(i, line, m);
 		}
 		else
-			ft_showErrorExit(ERR_RD_REDEFINED_A);
+			ft_showErrorExit(ERR_RD_REDEFINED_A, m);
 	}
 	else if (line[*i] == 'c' && line[*i + 1] != 'y')
 	{
 		cmd = CMD_CAMERA;
 		(*i)++;
-		readXyz(i, line, &(m->v_eye[m->eye_count]));
-		readXyz(i, line, &(m->v_eye_orientation[m->eye_count]));
+		m->v_eye[m->eye_count] = readXyz(i, line, m);
+		m->v_eye_orientation[m->eye_count] = readXyz(i, line, m);
 		m->eye_fov[m->eye_count++] = readDouble(i, line);
 	}
 	else if (line[*i] == 'l')
 	{
 		cmd = CMD_LIGHT;
 		(*i)++;
-		readXyz(i, line, &(m->v_light[m->light_count]));
+		m->v_light[m->light_count] = readXyz(i, line, m);
 		m->lightItsty[m->light_count] = readDouble(i, line);
-		readRgb(i, line, &m->light_rgb[m->light_count++]);
+		m->light_rgb[m->light_count++] = readRgb(i, line, m);
 	}
 	else if (line[*i] == 's' && line[*i + 1] == 'p')
 	{
@@ -53,9 +53,9 @@ int	readCmd1(int *i, char *line, t_map *m)
 		(*i) += 2;
 		m->obj_type[m->obj_count] = CMD_SPHERE;
 		m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
-		readXyz(i, line, &((t_sphere *)m->obj[m->obj_count])->center);
+		((t_sphere *)m->obj[m->obj_count])->center = readXyz(i, line, m);
 		((t_sphere *)m->obj[m->obj_count])->diameter = readDouble(i, line);
-		readRgb(i, line, &((t_sphere *)m->obj[m->obj_count])->rgb);
+		((t_sphere *)m->obj[m->obj_count])->rgb = readRgb(i, line, m);
 		m->obj_count++;
 	}
 	return (cmd);
@@ -72,9 +72,9 @@ int	readCmd2(int *i, char *line, t_map *m)
 		(*i) += 2;
 		m->obj_type[m->obj_count] = CMD_PLANE;
 		m->obj[m->obj_count] = (t_plane *)malloc(sizeof(t_plane));
-		readXyz(i, line, &((t_plane *)m->obj[m->obj_count])->normal);
-		readXyz(i, line, &((t_plane *)m->obj[m->obj_count])->position);
-		readRgb(i, line, &((t_plane *)m->obj[m->obj_count])->rgb);
+		((t_plane *)m->obj[m->obj_count])->normal = readXyz(i, line, m);
+		((t_plane *)m->obj[m->obj_count])->position = readXyz(i, line, m);
+		((t_plane *)m->obj[m->obj_count])->rgb = readRgb(i, line, m);
 		m->obj_count++;
 	}
 	else if (line[*i] == 's' && line[*i + 1] == 'q')
@@ -83,10 +83,10 @@ int	readCmd2(int *i, char *line, t_map *m)
 		(*i) += 2;
 		m->obj_type[m->obj_count] = CMD_SQUARE;
 		m->obj[m->obj_count] = (t_square *)malloc(sizeof(t_square));
-		readXyz(i, line, &((t_square *)m->obj[m->obj_count])->center);
-		readXyz(i, line, &((t_square *)m->obj[m->obj_count])->orientation);
+		((t_square *)m->obj[m->obj_count])->center = readXyz(i, line, m);
+		((t_square *)m->obj[m->obj_count])->orientation = readXyz(i, line, m);
 		((t_square *)m->obj[m->obj_count])->sidesize = readDouble(i, line);
-		readRgb(i, line, &((t_sphere *)m->obj[m->obj_count])->rgb);
+		((t_sphere *)m->obj[m->obj_count])->rgb = readRgb(i, line, m);
 		m->obj_count++;
 	}
 	else if (line[*i] == 'c' && line[*i + 1] == 'y')
@@ -95,11 +95,11 @@ int	readCmd2(int *i, char *line, t_map *m)
 		(*i) += 2;
 		m->obj_type[m->obj_count] = CMD_CYLINDER;
 		m->obj[m->obj_count] = (t_cylinder *)malloc(sizeof(t_cylinder));
-		readXyz(i, line, &((t_cylinder *)m->obj[m->obj_count])->center);
-		readXyz(i, line, &((t_cylinder *)m->obj[m->obj_count])->orientation);
+		((t_cylinder *)m->obj[m->obj_count])->center = readXyz(i, line, m);
+		((t_cylinder *)m->obj[m->obj_count])->orientation = readXyz(i, line, m);
 		((t_cylinder *)m->obj[m->obj_count])->diameter = readDouble(i, line);
 		((t_cylinder *)m->obj[m->obj_count])->height = readDouble(i, line);
-		readRgb(i, line, &((t_cylinder *)m->obj[m->obj_count])->rgb);
+		((t_cylinder *)m->obj[m->obj_count])->rgb = readRgb(i, line, m);
 		m->obj_count++;
 	}
 	else if (line[*i] == 't' && line[*i + 1] == 'r')
@@ -108,10 +108,10 @@ int	readCmd2(int *i, char *line, t_map *m)
 		(*i) += 2;
 		m->obj_type[m->obj_count] = CMD_TRIANGLE;
 		m->obj[m->obj_count] = (t_triangle *)malloc(sizeof(t_triangle));
-		readXyz(i, line, &((t_triangle *)m->obj[m->obj_count])->first);
-		readXyz(i, line, &((t_triangle *)m->obj[m->obj_count])->second);
-		readXyz(i, line, &((t_triangle *)m->obj[m->obj_count])->third);
-		readRgb(i, line, &((t_triangle *)m->obj[m->obj_count])->rgb);
+		((t_triangle *)m->obj[m->obj_count])->first = readXyz(i, line, m);
+		((t_triangle *)m->obj[m->obj_count])->second = readXyz(i, line, m);
+		((t_triangle *)m->obj[m->obj_count])->third = readXyz(i, line, m);
+		((t_triangle *)m->obj[m->obj_count])->rgb = readRgb(i, line, m);
 		m->obj_count++;
 	}
 	return (cmd);
@@ -158,7 +158,7 @@ void	readFromFile(char *filename, t_map *m)
 		ret = readLine(line, m);
 		free(line);
 		if (ret < 0)
-			ft_showErrorExit(ERR_RD_INCORRECTFORMAT);
+			ft_showErrorExit(ERR_RD_INCORRECTFORMAT, m);
 		if (i == 0)
 			break;
 	}

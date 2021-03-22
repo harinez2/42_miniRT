@@ -23,8 +23,9 @@
 # define ERR_SYS_FILEWRITE	-3
 # define ERR_RD_REDEFINED_R	-11
 # define ERR_RD_REDEFINED_A	-12
-# define ERR_RD_OUTOFRANGE_R	-13
-# define ERR_RD_INCORRECTFORMAT	-14
+# define ERR_RD_OUTOFRANGE_SCREEN	-13
+# define ERR_RD_OUTOFRANGE_RGB	-14
+# define ERR_RD_INCORRECTFORMAT	-15
 # define ERR_CHK_NO_R		-21
 # define ERR_CHK_NO_A		-22
 # define ERR_CHK_NO_C		-23
@@ -193,12 +194,13 @@ int	readCmd2(int *i, char *line, t_map *m);
 int	readLine(char *line, t_map *m);
 void	readFromFile(char *filename, t_map *m);
 
-int		readInt(int *i, char *line);
+int		readInt(int *i, char *s);
 double	readDouble(int *i, char *s);
-int		readXyz(int *i, char *s, t_vec *v);
-int		readRgb(int *i, char *s, t_color *c);
+t_vec	readXyz(int *i, char *s, t_map *m);
+t_color	readRgb(int *i, char *s, t_map *m);
 void	skipSep(int *i, char *s);
 
+t_vec	ft_vecinit(double x, double y, double z);
 void	ft_vecset(t_vec *v, double x, double y, double z);
 t_vec	ft_vecadd(t_vec v, t_vec w);
 t_vec	ft_vecsub(t_vec v, t_vec w);
@@ -213,6 +215,7 @@ double	ft_vecnormsq(t_vec v);
 t_vec	ft_vecnormalize(t_vec v);
 void	ft_vecprint(t_vec *v);
 
-void	ft_showErrorExit(int errNo);
+void	ft_showErrorExit(int errNo, t_map *m);
+void	freeX(t_map *m);
 
 #endif

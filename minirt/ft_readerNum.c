@@ -1,50 +1,50 @@
 #include	"main.h"
 
-int	readInt(int *i, char *line)
+int	readInt(int *i, char *s)
 {
 	int	ret;
 	int	minus;
 
-	skipSep(i, line);
+	skipSep(i, s);
 	ret = 0;
 	minus = 1;
-	if (line[*i] == '-')
+	if (s[*i] == '-')
 	{
 		minus = -1;
 		(*i)++;
 	}
-	while ('0' <= line[*i] && line[*i] <= '9')
-		ret = ret * 10 + line[(*i)++] - '0';
+	while ('0' <= s[*i] && s[*i] <= '9')
+		ret = ret * 10 + s[(*i)++] - '0';
 	return (minus * ret);
 }
 
-double	readDouble(int *i, char *line)
+double	readDouble(int *i, char *s)
 {
 	double	ret;
 	double	dot;
 	int	minus;
 
-	skipSep(i, line);
+	skipSep(i, s);
 	ret = 0;
 	dot = 0;
 	minus = 1;
-	if (line[*i] == '-')
+	if (s[*i] == '-')
 	{
 		minus = -1;
 		(*i)++;
 	}
-	while (line[*i])
+	while (s[*i])
 	{
-		if (line[*i] == '.')
+		if (s[*i] == '.')
 			dot = 10;
-		else if ('0' <= line[*i] && line[*i] <= '9')
+		else if ('0' <= s[*i] && s[*i] <= '9')
 			if (dot)
 			{
-				ret = ret + (line[*i] - '0') / dot;
+				ret = ret + (s[*i] - '0') / dot;
 				dot *= 10;
 			}
 			else
-				ret = ret * 10 + line[*i] - '0';
+				ret = ret * 10 + s[*i] - '0';
 		else
 			break;
 		(*i)++;
@@ -52,50 +52,44 @@ double	readDouble(int *i, char *line)
 	return (minus * ret);
 }
 
-int	readXyz(int *i, char *s, t_vec *v)
+t_vec	readXyz(int *i, char *s, t_map *m)
 {
-	double	x;
-	double	y;
-	double	z;
+	t_vec	v;
 
-	x = readDouble(i, s);
+	v.x = readDouble(i, s);
 	if (s[(*i)++] != ',')
-		return (-1);
-	y = readDouble(i, s);
+		ft_showErrorExit(ERR_RD_INCORRECTFORMAT, m);
+	v.y = readDouble(i, s);
 	if (s[(*i)++] != ',')
-		return (-1);
-	z = readDouble(i, s);
-	if (0)
-		return (-1);
-	if (v != NULL)
-		ft_vecset(v, x, y, z);
-//printf("<xyz:%.2f, %.2f, %.2f>", x,y,z);
-	return (0);
+		ft_showErrorExit(ERR_RD_INCORRECTFORMAT, m);
+	v.z = readDouble(i, s);
+//printf("<xyz:%.2f, %.2f, %.2f>", v.x,v.y,v.z);
+	return (v);
 }
 
-int	readRgb(int *i, char *s, t_color *c)
+t_color	readRgb(int *i, char *s, t_map *m)
 {
-	int	r;
-	int	g;
-	int	b;
+	t_color		c;
 
-	r = readInt(i, s);
-	if (r < 0 || r > 255 || s[(*i)++] != ',')
-		return (-1);
-	g = readInt(i, s);
-	if (g < 0 || g > 255 || s[(*i)++] != ',')
-		return (-1);
-	b = readInt(i, s);
-	if (b < 0 || b > 255)
-		return (-1);
-	if (c != NULL)
-	{
-		c->r = ft_map(r, 0, 255, 0, 1);
-		c->g = ft_map(g, 0, 255, 0, 1);
-		c->b = ft_map(b, 0, 255, 0, 1);
-	}
+	c.r = readInt(i, s);
+	if (s[(*i)++] != ',')
+		ft_showErrorExit(ERR_RD_INCORRECTFORMAT, m);
+	else if (c.r < 0 || c.r > 255)
+		ft_showErrorExit(ERR_RD_OUTOFRANGE_RGB, m);
+	c.g = readInt(i, s);
+	if (s[(*i)++] != ',')
+		ft_showErrorExit(ERR_RD_INCORRECTFORMAT, m);
+	else if (c.g < 0 || c.g > 255)
+		ft_showErrorExit(ERR_RD_OUTOFRANGE_RGB, m);
+	c.b = readInt(i, s);
+	if (c.b < 0 || c.b > 255)
+		ft_showErrorExit(ERR_RD_OUTOFRANGE_RGB, m);
+	c.r = ft_map(c.r, 0, 255, 0, 1);
+	c.g = ft_map(c.g, 0, 255, 0, 1);
+	c.b = ft_map(c.b, 0, 255, 0, 1);
 //printf("<rgb:%d,%d,%d>", r, g, b);
-	return (ft_color(r, g, b));
+	//return (ft_color(c.r, c.g, c.b));
+	return (c);
 }
 
 void	skipSep(int *i, char *line)
