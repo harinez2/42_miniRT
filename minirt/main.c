@@ -35,6 +35,16 @@ int	ft_color(int red, int green, int blue)
 	return (c);
 }
 
+t_color	ft_color_rev(int rgb)
+{
+	t_color	c;
+
+	c.r = rgb >> 16;
+	c.g = rgb >> 8 & 0x11111111;
+	c.b = rgb & 0x11111111;
+	return (c);
+}
+
 void	set_color(t_color *c, double red, double green, double blue)
 {
 	c->r = red;
@@ -308,8 +318,8 @@ double	get_nearest_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt)
 			b = ft_veccrossprod(ft_vecsub(tt->third, tt->second), ft_vecsub(v_tpos, tt->third)).y;
 			c = ft_veccrossprod(ft_vecsub(tt->first, tt->third), ft_vecsub(v_tpos, tt->first)).y;
 		}
-		printf("tr %.2f %.2f %.2f / ", v_tpos.x, v_tpos.y, v_tpos.z);
-		printf("%.2f %.2f %.2f\n", a, b, c);
+		//printf("tr %.2f %.2f %.2f / ", v_tpos.x, v_tpos.y, v_tpos.z);
+		//printf("%.2f %.2f %.2f\n", a, b, c);
 		if (!((a >=0 && b >= 0 && c >= 0) || (a < 0 && b < 0 && c < 0)))
 			t = -1;
 	}
@@ -684,7 +694,7 @@ void	display_window(t_map *m)
 	//sleep(2);
 }
 
-int	write_bmp_simple_stream(FILE *fp)//, image_t *img) {
+int	write_bmp_simple_stream(FILE *fp, int w, int h, t_map *m)//image_t *img)
 {
 	uint8_t		header_buffer[DEFAULT_HEADER_SIZE];
 	BITMAPFILEHEADER *file = (BITMAPFILEHEADER*)header_buffer;
@@ -698,24 +708,24 @@ int	write_bmp_simple_stream(FILE *fp)//, image_t *img) {
 	}
 	*/
 	//stride = (img->width * 3 + 3) / 4 * 4;
-	stride = (100 * 3 + 3) / 4 * 4;
+	stride = (w * 3 + 3) / 4 * 4;
 	if ((buffer = malloc(stride)) == NULL) {
 		return -1;
 	}
 	file->bfType = FILE_TYPE;
 	//file->bfSize = DEFAULT_HEADER_SIZE + stride * img->height;
-	file->bfSize = DEFAULT_HEADER_SIZE + stride * 100;
+	file->bfSize = DEFAULT_HEADER_SIZE + stride * h;
 	file->bfReserved1 = 0;
 	file->bfReserved2 = 0;
 	file->bfOffBits = DEFAULT_HEADER_SIZE;
 	info->biSize = INFO_HEADER_SIZE;
-	info->biWidth = 100;//img->width;
+	info->biWidth = w;//img->width;
 	//info->biHeight = img->height;
-	info->biHeight = 100;
+	info->biHeight = h;
 	info->biPlanes = 1;
 	info->biBitCount = 24;
 	info->biCompression = 0;
-	info->biSizeImage = stride * 100;//img->height;
+	info->biSizeImage = stride * h;//img->height;
 	info->biXPelsPerMeter = 0;
 	info->biYPelsPerMeter = 0;
 	info->biClrUsed = 0;
@@ -724,22 +734,52 @@ int	write_bmp_simple_stream(FILE *fp)//, image_t *img) {
 		goto error;
 	}
 	memset(buffer, 0, stride);
+
+	/*
 	//for (y = img->height - 1; y >= 0; y--) {
-	for (y = 100 - 1; y >= 0; y--) {
+	for (y = h - 1; y >= 0; y--) {
 		row = buffer;
 		//for (x = 0; x < img->width; x++) {
-		for (x = 0; x < 100; x++) {
-			//*row++ = img->map[y][x].c.b;
-			//*row++ = img->map[y][x].c.g;
-			//*row++ = img->map[y][x].c.r;
-			*row++ = 0;
-			*row++ = 0;
-			*row++ = 255;
+		for (x = 0; x < w; x++) {
+			*row++ = img->map[y][x].c.b;
+			*row++ = img->map[y][x].c.g;
+			*row++ = img->map[y][x].c.r;
+			// *row++ = 0;
+			// *row++ = 0;
+			// *row++ = 255;
 		}
 		if (fwrite(buffer, stride, 1, fp) != 1) {
 			goto error;
 		}
 	}
+	*/
+	t_vec	v_w;
+	int	color;
+	v_w.z = 0;
+	y = 0;
+	while (y < h)
+	{
+		row = buffer;
+
+		v_w.y = ft_map(y, 0, h-1, 1, -1);
+		x = 0;
+		while (x < w)
+		{
+			v_w.x = ft_map(x, 0, w-1, -1, 1);
+			color = decide_color(v_w, m);
+			t_color c = ft_color_rev(color);;
+			//img->map[y][x] = color;
+			*row++ = c.b;
+			*row++ = c.g;
+			*row++ = c.r;
+			x++;
+		}
+		if (fwrite(buffer, stride, 1, fp) != 1) {
+			goto error;
+		}
+		y++;
+	}
+
 	free(buffer);
 	return (0);
 error:
@@ -747,12 +787,10 @@ error:
 	return (-1);
 }
 
-int	write_bmp(t_map *m)
+int	write_bmp(t_map *m)//, image_t *img)
 {
 	int	ret;
 	char	*filename = "out.bmp";
-
-	(void)m;
 
 	ret = -1;
 	FILE *fp = fopen(filename, "wb");
@@ -760,9 +798,27 @@ int	write_bmp(t_map *m)
 		perror(filename);
 		return ret;
 	}
-	ret = write_bmp_simple_stream(fp);//, img);
+	ret = write_bmp_simple_stream(fp, m->window_x, m->window_y, m);//img);
 	fclose(fp);
 	return ret;
+}
+
+/*
+int	draw_map_image(image_t *img, int w, int h, t_map *m)
+{
+	return (0);
+}
+*/
+
+void	output_bmp(t_map *m)
+{
+	//image_t	*img;
+
+	//img = malloc(sizeof(image_t) * m->window_x * m->window_y);
+	//img = allocateimage(m->window_x, m->window_y, COLOR_TYPE_RGB);
+	//draw_map_image(img, m->window_x, m->window_y, m);	
+	write_bmp(m);
+	//free(img);
 }
 
 /*
@@ -777,11 +833,12 @@ int	main(int argc, char **argv)
 		readFromFile(argv[1], &m);
 	else
 		set_default_Value(&m);
+	//set_default_Value(&m);
 	print_m(&m);
 
 	decide_endian();
 	if (argc >= 3 && strcmp(argv[2], "--save") == 0)
-		write_bmp(&m);
+		output_bmp(&m);
 	else
 		display_window(&m);
 	freeX(&m);
