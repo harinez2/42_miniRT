@@ -95,7 +95,7 @@ double	get_nearest_sphere(t_vec v_w, t_vec v_eye, t_sphere *ts)
 	return (t);
 }
 
-int ray_trace_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t)
+t_color ray_trace_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t)
 {
 	t_color color;
 
@@ -128,8 +128,7 @@ int ray_trace_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t)
 		color.g += m->kSpe.g * m->lightItsty[0] * vrDotPow;
 		color.b += m->kSpe.b * m->lightItsty[0] * vrDotPow;
 	}
-	color = set_rgb_inrange(color);
-	return (ft_color(color.r, color.g, color.b));
+	return (set_rgb_inrange(color));
 }
 
 double	get_nearest_plane(t_vec v_w, t_vec v_eye, t_plane *tp)
@@ -151,7 +150,7 @@ double	get_nearest_plane(t_vec v_w, t_vec v_eye, t_plane *tp)
 	return (-1);
 }
 
-int ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
+t_color ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 {
 	t_color color;
 
@@ -183,8 +182,7 @@ int ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 		color.g += m->kSpe.g * m->lightItsty[0] * vrDotPow;
 		color.b += m->kSpe.b * m->lightItsty[0] * vrDotPow;
 	}
-	color = set_rgb_inrange(color);
-	return (ft_color(color.r, color.g, color.b));
+	return (set_rgb_inrange(color));
 }
 
 double	get_nearest_square(t_vec v_w, t_vec v_eye, t_square *ts)
@@ -195,13 +193,16 @@ double	get_nearest_square(t_vec v_w, t_vec v_eye, t_square *ts)
 	return (-1);
 }
 
-int	ray_trace_square(t_vec v_w, t_map *m, t_square *ts, double t)
+t_color	ray_trace_square(t_vec v_w, t_map *m, t_square *ts, double t)
 {
+	t_color c;
+
 	(void)v_w;
 	(void)m;
 	(void)ts;
 	(void)t;
-	return (0);
+	set_color(&c, 0, 0, 0);
+	return (c);
 }
 
 double	get_nearest_cylinder(t_vec v_w, t_vec v_eye, t_cylinder *tc)
@@ -240,7 +241,7 @@ double	get_nearest_cylinder(t_vec v_w, t_vec v_eye, t_cylinder *tc)
 	return (t);
 }
 
-int	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
+t_color	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
 {
 	t_color color;
 
@@ -276,8 +277,7 @@ int	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
 		color.g += m->kSpe.g * m->lightItsty[0] * vrDotPow;
 		color.b += m->kSpe.b * m->lightItsty[0] * vrDotPow;
 	}
-	color = set_rgb_inrange(color);
-	return (ft_color(color.r, color.g, color.b));
+	return (set_rgb_inrange(color));
 }
 
 double	get_nearest_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt)
@@ -326,7 +326,7 @@ double	get_nearest_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt)
 	return (t);
 }
 
-int	ray_trace_triangle(t_vec v_w, t_map *m, t_triangle *tt, double t)
+t_color	ray_trace_triangle(t_vec v_w, t_map *m, t_triangle *tt, double t)
 {
 	t_plane tp;
 
@@ -336,14 +336,15 @@ int	ray_trace_triangle(t_vec v_w, t_map *m, t_triangle *tt, double t)
 	return (ray_trace_plane(v_w, m, &tp, t));
 }
 
-int	decide_color(t_vec v_w, t_map *m)
+t_color	decide_color(t_vec v_w, t_map *m)
 {
 	double	t;
-	int		color;
+	t_color		color;
 	double 	chkt;
 
 	t = -1;
-	color = ft_color(92, 151, 243);
+	set_color(&color, 92, 151, 243);
+	//color = ft_color(92, 151, 243);
 	for (int i = 0; i < m->obj_count; i++)
 	{
 		chkt = -1;
@@ -637,7 +638,8 @@ int	draw_map(void *win, int w, int h, t_map *m)
 	int	x;
 	int	y;
 	t_vec	v_w;
-	int	color;
+	t_color	color;
+	int	colorint;
 
 	v_w.z = 0;
 	y = 0;
@@ -649,7 +651,8 @@ int	draw_map(void *win, int w, int h, t_map *m)
 		{
 			v_w.x = ft_map(x, 0, w-1, -1, 1);
 			color = decide_color(v_w, m);
-			mlx_pixel_put(mlx, win, x, y, color);
+			colorint = ft_color(color.r, color.g, color.b);
+			mlx_pixel_put(mlx, win, x, y, colorint);
 			x++;
 		}
 		y++;
@@ -754,20 +757,21 @@ int	write_bmp_simple_stream(FILE *fp, int w, int h, t_map *m)//image_t *img)
 	}
 	*/
 	t_vec	v_w;
-	int	color;
+	//int	color;
 	v_w.z = 0;
 	y = 0;
 	while (y < h)
 	{
 		row = buffer;
 
-		v_w.y = ft_map(y, 0, h-1, 1, -1);
+		v_w.y = ft_map(y, 0, h-1, -1, 1);
 		x = 0;
 		while (x < w)
 		{
 			v_w.x = ft_map(x, 0, w-1, -1, 1);
-			color = decide_color(v_w, m);
-			t_color c = ft_color_rev(color);;
+			t_color c = decide_color(v_w, m);
+			//color = decide_color(v_w, m);
+			//t_color c = ft_color_rev(color);;
 			//img->map[y][x] = color;
 			*row++ = c.b;
 			*row++ = c.g;
