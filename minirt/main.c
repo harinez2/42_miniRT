@@ -1,4 +1,3 @@
-
 #include	"main.h"
 
 void	*mlx;
@@ -44,13 +43,21 @@ void	set_color(t_color *c, double red, double green, double blue)
 	return ;
 }
 
-int		set_rgb_inrange(double color)
+t_color		set_rgb_inrange(t_color c)
 {
-	if (color > 255)
-		color = 255;
-	if (color < 0)
-		color = 0;
-	return (color);
+	if (c.r > 255)
+		c.r = 255;
+	if (c.r < 0)
+		c.r = 0;
+	if (c.g > 255)
+		c.g = 255;
+	if (c.g < 0)
+		c.g = 0;
+	if (c.b > 255)
+		c.b = 255;
+	if (c.b < 0)
+		c.b = 0;
+	return (c);
 }
 
 double	get_nearest_sphere(t_vec v_w, t_vec v_eye, t_sphere *ts)
@@ -111,7 +118,8 @@ int ray_trace_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t)
 		color.g += m->kSpe.g * m->lightItsty[0] * vrDotPow;
 		color.b += m->kSpe.b * m->lightItsty[0] * vrDotPow;
 	}
-	return (ft_color(set_rgb_inrange(color.r), set_rgb_inrange(color.g), set_rgb_inrange(color.b)));
+	color = set_rgb_inrange(color);
+	return (ft_color(color.r, color.g, color.b));
 }
 
 double	get_nearest_plane(t_vec v_w, t_vec v_eye, t_plane *tp)
@@ -165,7 +173,8 @@ int ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 		color.g += m->kSpe.g * m->lightItsty[0] * vrDotPow;
 		color.b += m->kSpe.b * m->lightItsty[0] * vrDotPow;
 	}
-	return (ft_color(set_rgb_inrange(color.r), set_rgb_inrange(color.g), set_rgb_inrange(color.b)));
+	color = set_rgb_inrange(color);
+	return (ft_color(color.r, color.g, color.b));
 }
 
 double	get_nearest_square(t_vec v_w, t_vec v_eye, t_square *ts)
@@ -257,7 +266,8 @@ int	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
 		color.g += m->kSpe.g * m->lightItsty[0] * vrDotPow;
 		color.b += m->kSpe.b * m->lightItsty[0] * vrDotPow;
 	}
-	return (ft_color(set_rgb_inrange(color.r), set_rgb_inrange(color.g), set_rgb_inrange(color.b)));
+	color = set_rgb_inrange(color);
+	return (ft_color(color.r, color.g, color.b));
 }
 
 double	get_nearest_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt)
