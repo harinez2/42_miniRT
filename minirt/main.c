@@ -53,7 +53,7 @@ int		set_rgb_inrange(double color)
 	return (color);
 }
 
-double	get_nearest_shape(t_vec v_w, t_vec v_eye, t_sphere *ts)
+double	get_nearest_sphere(t_vec v_w, t_vec v_eye, t_sphere *ts)
 {
 	t_vec	v_de;
 	t_vec	v_tmp;
@@ -76,81 +76,6 @@ double	get_nearest_shape(t_vec v_w, t_vec v_eye, t_sphere *ts)
 		t = t1 > 0 && t2 > 0 ? fmin(t1, t2) : fmax(t1, t2);
 	}
 	return (t);
-}
-
-double	get_nearest_cylinder(t_vec v_w, t_vec v_eye, t_cylinder *tc)
-{
-	t_vec	v_de;
-	double	mx;
-	double	mz;
-	double	t;
-
-	v_de = ft_vecsub(v_w, v_eye);
-	mx = v_eye.x - tc->center.x;
-	mz = v_eye.z - tc->center.z;
-	double A = v_de.x * v_de.x + v_de.z * v_de.z;
-	double B = 2 * (v_de.x * mx + v_de.z * mz);
-	double C = mx * mx + mz * mz - tc->diameter * tc->diameter;
-	double D = B * B - 4 * A * C;
-
-	t = -1;
-	if (D == 0)
-		t = -B / (2 * A);
-	else if (D > 0)
-	{
-		double t1 = (-B - sqrt(D)) / (2 * A);
-		double t2 = (-B + sqrt(D)) / (2 * A);
-		t = t1 > 0 && t2 > 0 ? fmin(t1, t2) : fmax(t1, t2);
-	}
-	if (t > 0)
-	{
-		t_vec v_tpos = ft_vecadd(v_eye, ft_vecmult(v_de, t));//tpos：視線と球上の交点(pi)
-		double diff = v_tpos.y - tc->center.y;
-		if (diff < 0)
-			diff *= -1;
-		if (diff > tc->height / 2)
-			t = -1;
-	}
-	return (t);
-}
-
-int	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
-{
-	t_color color;
-
-	//(1) ambient light 環境光
-	set_color(&color, m->kAmb.r * m->ambItsty, m->kAmb.g * m->ambItsty, m->kAmb.b * m->ambItsty);
-
-	//(2) diffuse reflection 拡散反射光
-	t_vec v_de = ft_vecsub(v_w, m->v_eye[0]);
-	t_vec v_tpos = ft_vecadd(m->v_eye[0], ft_vecmult(v_de, t));//tpos：視線と球上の交点(pi)
-	t_vec v_lightDir = ft_vecnormalize(ft_vecsub(m->v_light[0], v_tpos));//入射ベクトル(l)
-	t_vec v_n;//法線ベクトル(n)
-	v_n.x = 2 * (v_tpos.x - tc->center.x);
-	v_n.y = 0;
-	v_n.z = 2 * (v_tpos.z - tc->center.z);
-	double naiseki = ft_vecinnerprod(ft_vecnormalize(v_n), v_lightDir);
-	if (naiseki < 0)
-		naiseki = 0;
-	double nlDot = ft_map(naiseki, 0, 1, 0, 255);
-	color.r += m->kDif.r * m->lightItsty[0] * nlDot;
-	color.g += m->kDif.g * m->lightItsty[0] * nlDot;
-	color.b += m->kDif.b * m->lightItsty[0] * nlDot;
-
-	//(3) specular reflection 鏡面反射光
-	if (naiseki > 0)
-	{
-		t_vec refDir = ft_vecnormalize(ft_vecsub(ft_vecmult(ft_vecnormalize(v_n), 2 * naiseki), v_lightDir)); 
-		t_vec invEyeDir = ft_vecnormalize(ft_vecmult(v_de, -1));
-		double vrDot = ft_vecinnerprod(invEyeDir, refDir);
-		if (vrDot < 0)
-			vrDot = 0;
-		double vrDotPow = ft_map(pow(vrDot, m->shininess), 0, 1, 0, 255);
-		color.r += m->kSpe.r * m->lightItsty[0] * vrDotPow;
-		color.g += m->kSpe.g * m->lightItsty[0] * vrDotPow;
-		color.b += m->kSpe.b * m->lightItsty[0] * vrDotPow;
-	}
-	return (ft_color(set_rgb_inrange(color.r), set_rgb_inrange(color.g), set_rgb_inrange(color.b)));
 }
 
 int ray_trace_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t)
@@ -243,6 +168,98 @@ int ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 	return (ft_color(set_rgb_inrange(color.r), set_rgb_inrange(color.g), set_rgb_inrange(color.b)));
 }
 
+double	get_nearest_square(t_vec v_w, t_vec v_eye, t_square *ts)
+{
+	(void)v_w;
+	(void)v_eye;
+	(void)ts;
+	return (-1);
+}
+
+int	ray_trace_square(t_vec v_w, t_map *m, t_square *ts, double t)
+{
+	(void)v_w;
+	(void)m;
+	(void)ts;
+	(void)t;
+	return (0);
+}
+
+double	get_nearest_cylinder(t_vec v_w, t_vec v_eye, t_cylinder *tc)
+{
+	t_vec	v_de;
+	double	mx;
+	double	mz;
+	double	t;
+
+	v_de = ft_vecsub(v_w, v_eye);
+	mx = v_eye.x - tc->center.x;
+	mz = v_eye.z - tc->center.z;
+	double A = v_de.x * v_de.x + v_de.z * v_de.z;
+	double B = 2 * (v_de.x * mx + v_de.z * mz);
+	double C = mx * mx + mz * mz - tc->diameter * tc->diameter;
+	double D = B * B - 4 * A * C;
+
+	t = -1;
+	if (D == 0)
+		t = -B / (2 * A);
+	else if (D > 0)
+	{
+		double t1 = (-B - sqrt(D)) / (2 * A);
+		double t2 = (-B + sqrt(D)) / (2 * A);
+		t = t1 > 0 && t2 > 0 ? fmin(t1, t2) : fmax(t1, t2);
+	}
+	if (t > 0)
+	{
+		t_vec v_tpos = ft_vecadd(v_eye, ft_vecmult(v_de, t));//tpos：視線と球上の交点(pi)
+		double diff = v_tpos.y - tc->center.y;
+		if (diff < 0)
+			diff *= -1;
+		if (diff > tc->height / 2)
+			t = -1;
+	}
+	return (t);
+}
+
+int	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
+{
+	t_color color;
+
+	//(1) ambient light 環境光
+	set_color(&color, m->kAmb.r * m->ambItsty, m->kAmb.g * m->ambItsty, m->kAmb.b * m->ambItsty);
+
+	//(2) diffuse reflection 拡散反射光
+	t_vec v_de = ft_vecsub(v_w, m->v_eye[0]);
+	t_vec v_tpos = ft_vecadd(m->v_eye[0], ft_vecmult(v_de, t));//tpos：視線と球上の交点(pi)
+	t_vec v_lightDir = ft_vecnormalize(ft_vecsub(m->v_light[0], v_tpos));//入射ベクトル(l)
+	t_vec v_n;//法線ベクトル(n)
+	v_n.x = 2 * (v_tpos.x - tc->center.x);
+	v_n.y = 0;
+	v_n.z = 2 * (v_tpos.z - tc->center.z);
+	double naiseki = ft_vecinnerprod(ft_vecnormalize(v_n), v_lightDir);
+	if (naiseki < 0)
+		naiseki = 0;
+	double nlDot = ft_map(naiseki, 0, 1, 0, 255);
+	color.r += m->kDif.r * m->lightItsty[0] * nlDot;
+	color.g += m->kDif.g * m->lightItsty[0] * nlDot;
+	color.b += m->kDif.b * m->lightItsty[0] * nlDot;
+
+	//(3) specular reflection 鏡面反射光
+	if (naiseki > 0)
+	{
+		t_vec refDir = ft_vecnormalize(ft_vecsub(ft_vecmult(ft_vecnormalize(v_n), 2 * naiseki), v_lightDir)); 
+		t_vec invEyeDir = ft_vecnormalize(ft_vecmult(v_de, -1));
+		double vrDot = ft_vecinnerprod(invEyeDir, refDir);
+		if (vrDot < 0)
+			vrDot = 0;
+		double vrDotPow = ft_map(pow(vrDot, m->shininess), 0, 1, 0, 255);
+		color.r += m->kSpe.r * m->lightItsty[0] * vrDotPow;
+		color.g += m->kSpe.g * m->lightItsty[0] * vrDotPow;
+		color.b += m->kSpe.b * m->lightItsty[0] * vrDotPow;
+	}
+	return (ft_color(set_rgb_inrange(color.r), set_rgb_inrange(color.g), set_rgb_inrange(color.b)));
+}
+
 double	get_nearest_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt)
 {
 	t_plane tp;
@@ -288,11 +305,13 @@ int	decide_color(t_vec v_w, t_map *m)
 	{
 		chkt = -1;
 		if (m->obj_type[i] == CMD_SPHERE)
-			chkt = get_nearest_shape(v_w, m->v_eye[0], (t_sphere *)m->obj[i]);
-		else if (m->obj_type[i] == CMD_CYLINDER)
-			chkt = get_nearest_cylinder(v_w, m->v_eye[0], (t_cylinder *)m->obj[i]);
+			chkt = get_nearest_sphere(v_w, m->v_eye[0], (t_sphere *)m->obj[i]);
 		else if (m->obj_type[i] == CMD_PLANE)
 			chkt = get_nearest_plane(v_w, m->v_eye[0], (t_plane *)m->obj[i]);
+		else if (m->obj_type[i] == CMD_SQUARE)
+			chkt = get_nearest_square(v_w, m->v_eye[0], (t_square *)m->obj[i]);
+		else if (m->obj_type[i] == CMD_CYLINDER)
+			chkt = get_nearest_cylinder(v_w, m->v_eye[0], (t_cylinder *)m->obj[i]);
 		else if (m->obj_type[i] == CMD_TRIANGLE)
 			chkt = get_nearest_triangle(v_w, m->v_eye[0], (t_triangle *)m->obj[i]);
 		if (chkt >= 0 && (t == -1 || chkt < t))
@@ -300,10 +319,12 @@ int	decide_color(t_vec v_w, t_map *m)
 			t = chkt;
 			if (m->obj_type[i] == CMD_SPHERE)
 				color = ray_trace_sphere(v_w, m, (t_sphere *)m->obj[i], chkt);
-			else if (m->obj_type[i] == CMD_CYLINDER)
-				color = ray_trace_cylinder(v_w, m, (t_cylinder *)m->obj[i], chkt);
 			else if (m->obj_type[i] == CMD_PLANE)
 				color = ray_trace_plane(v_w, m, (t_plane *)m->obj[i], chkt);
+			else if (m->obj_type[i] == CMD_SQUARE)
+				color = ray_trace_square(v_w, m, (t_square *)m->obj[i], chkt);
+			else if (m->obj_type[i] == CMD_CYLINDER)
+				color = ray_trace_cylinder(v_w, m, (t_cylinder *)m->obj[i], chkt);
 			else if (m->obj_type[i] == CMD_TRIANGLE)
 				color = ray_trace_triangle(v_w, m, (t_triangle *)m->obj[i], chkt);
 		}
@@ -447,6 +468,85 @@ void	set_default_Value(t_map *m)
 
 }
 
+void	print_sphere(t_sphere *ts)
+{
+	printf("Sphere");
+	printf(": %.2f, %.2f, %.2f (r:%.2f) / rgb:%.2f %.2f %.2f\n",
+			ts->center.x,
+			ts->center.y,
+			ts->center.z,
+			ts->diameter,
+			ts->rgb.r,
+			ts->rgb.g,
+			ts->rgb.b);
+}
+
+void	print_plane(t_plane *tp)
+{
+	printf("Plane");
+	printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / rgb:%.2f %.2f %.2f\n",
+			tp->normal.x,
+			tp->normal.y,
+			tp->normal.z,
+			tp->position.x,
+			tp->position.y,
+			tp->position.z,
+			tp->rgb.r,
+			tp->rgb.g,
+			tp->rgb.b);
+}
+
+void	print_square(t_square *ts)
+{
+	printf("Square");
+	printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / %.2f / rgb:%.2f %.2f %.2f\n",
+			ts->center.x,
+			ts->center.y,
+			ts->center.z,
+			ts->orientation.x,
+			ts->orientation.y,
+			ts->orientation.z,
+			ts->sidesize,
+			ts->rgb.r,
+			ts->rgb.g,
+			ts->rgb.b);
+}
+
+void	print_cylinder(t_cylinder *tc)
+{
+	printf("Cylinder");
+	printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / %.2f / %.2f / rgb:%.2f %.2f %.2f\n",
+			tc->center.x,
+			tc->center.y,
+			tc->center.z,
+			tc->orientation.x,
+			tc->orientation.y,
+			tc->orientation.z,
+			tc->diameter,
+			tc->height,
+			tc->rgb.r,
+			tc->rgb.g,
+			tc->rgb.b);
+}
+
+void	print_triangle(t_triangle *tt)
+{
+	printf("Triangle");
+	printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / rgb:%.2f %.2f %.2f\n",
+			tt->first.x,
+			tt->first.y,
+			tt->first.z,
+			tt->second.x,
+			tt->second.y,
+			tt->second.z,
+			tt->third.x,
+			tt->third.y,
+			tt->third.z,
+			tt->rgb.r,
+			tt->rgb.g,
+			tt->rgb.b);
+}
+
 void	print_m(t_map *m)
 {
 	printf("===== current config begin =====\n");
@@ -470,79 +570,15 @@ void	print_m(t_map *m)
 	{
 		printf("[%d] ", i);
 		if (m->obj_type[i] == CMD_SPHERE)
-		{
-			printf("Sphere");
-			printf(": %.2f, %.2f, %.2f (r:%.2f) / rgb:%.2f %.2f %.2f\n",
-					((t_sphere *)m->obj[i])->center.x,
-					((t_sphere *)m->obj[i])->center.y,
-					((t_sphere *)m->obj[i])->center.z,
-					((t_sphere *)m->obj[i])->diameter,
-					((t_sphere *)m->obj[i])->rgb.r,
-					((t_sphere *)m->obj[i])->rgb.g,
-					((t_sphere *)m->obj[i])->rgb.b);
-		}
+			print_sphere(m->obj[i]);
 		else if (m->obj_type[i] == CMD_PLANE)
-		{
-			printf("Plane");
-			printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / rgb:%.2f %.2f %.2f\n",
-					((t_plane *)m->obj[i])->normal.x,
-					((t_plane *)m->obj[i])->normal.y,
-					((t_plane *)m->obj[i])->normal.z,
-					((t_plane *)m->obj[i])->position.x,
-					((t_plane *)m->obj[i])->position.y,
-					((t_plane *)m->obj[i])->position.z,
-					((t_plane *)m->obj[i])->rgb.r,
-					((t_plane *)m->obj[i])->rgb.g,
-					((t_plane *)m->obj[i])->rgb.b);
-		}
+			print_plane(m->obj[i]);
 		else if (m->obj_type[i] == CMD_SQUARE)
-		{
-			printf("Square");
-			printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / %.2f / rgb:%.2f %.2f %.2f\n",
-					((t_square *)m->obj[i])->center.x,
-					((t_square *)m->obj[i])->center.y,
-					((t_square *)m->obj[i])->center.z,
-					((t_square *)m->obj[i])->orientation.x,
-					((t_square *)m->obj[i])->orientation.y,
-					((t_square *)m->obj[i])->orientation.z,
-					((t_square *)m->obj[i])->sidesize,
-					((t_square *)m->obj[i])->rgb.r,
-					((t_square *)m->obj[i])->rgb.g,
-					((t_square *)m->obj[i])->rgb.b);
-		}
+			print_square(m->obj[i]);
 		else if (m->obj_type[i] == CMD_CYLINDER)
-		{
-			printf("Cylinder");
-			printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / %.2f / %.2f / rgb:%.2f %.2f %.2f\n",
-					((t_cylinder *)m->obj[i])->center.x,
-					((t_cylinder *)m->obj[i])->center.y,
-					((t_cylinder *)m->obj[i])->center.z,
-					((t_cylinder *)m->obj[i])->orientation.x,
-					((t_cylinder *)m->obj[i])->orientation.y,
-					((t_cylinder *)m->obj[i])->orientation.z,
-					((t_cylinder *)m->obj[i])->diameter,
-					((t_cylinder *)m->obj[i])->height,
-					((t_cylinder *)m->obj[i])->rgb.r,
-					((t_cylinder *)m->obj[i])->rgb.g,
-					((t_cylinder *)m->obj[i])->rgb.b);
-		}
+			print_cylinder(m->obj[i]);
 		else if (m->obj_type[i] == CMD_TRIANGLE)
-		{
-			printf("Triangle");
-			printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / rgb:%.2f %.2f %.2f\n",
-					((t_triangle *)m->obj[i])->first.x,
-					((t_triangle *)m->obj[i])->first.y,
-					((t_triangle *)m->obj[i])->first.z,
-					((t_triangle *)m->obj[i])->second.x,
-					((t_triangle *)m->obj[i])->second.y,
-					((t_triangle *)m->obj[i])->second.z,
-					((t_triangle *)m->obj[i])->third.x,
-					((t_triangle *)m->obj[i])->third.y,
-					((t_triangle *)m->obj[i])->third.z,
-					((t_triangle *)m->obj[i])->rgb.r,
-					((t_triangle *)m->obj[i])->rgb.g,
-					((t_triangle *)m->obj[i])->rgb.b);
-		}
+			print_triangle(m->obj[i]);
 	}
 	printf("===== current config end =====\n\n");
 }
