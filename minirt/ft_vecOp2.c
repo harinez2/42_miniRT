@@ -16,9 +16,9 @@ t_vec	ft_veccrossprod(t_vec v, t_vec w)
 {
 	t_vec	ret;
 
-	ret.x = v.y * w.z + v.z * w.y;
-	ret.y = v.z * w.x + v.x * w.z;
-	ret.z = v.x * w.y + v.y * w.x;
+	ret.x = v.y * w.z - v.z * w.y;
+	ret.y = v.z * w.x - v.x * w.z;
+	ret.z = v.x * w.y - v.y * w.x;
 	return (ret);
 }
 

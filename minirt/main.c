@@ -283,11 +283,34 @@ double	get_nearest_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt)
 	{
 		t_vec v_de = ft_vecsub(v_w, v_eye);
 		t_vec v_tpos = ft_vecadd(v_eye, ft_vecmult(v_de, t));//tpos：視線と面上の交点(pi)
-		int	a,b,c;
-		a = ft_veccrossprod_sign(v_tpos, tt->first, tt->second) < 0 ? -1 : 1;
-		b = ft_veccrossprod_sign(v_tpos, tt->second, tt->third) < 0 ? -1 : 1;
-		c = ft_veccrossprod_sign(v_tpos, tt->third, tt->first) < 0 ? -1 : 1;
-		if (a != b || b != c)
+		// int	a,b,c;
+		// a = ft_veccrossprod_sign(v_tpos, tt->first, tt->second) < 0 ? -1 : 1;
+		// b = ft_veccrossprod_sign(v_tpos, tt->second, tt->third) < 0 ? -1 : 1;
+		// c = ft_veccrossprod_sign(v_tpos, tt->third, tt->first) < 0 ? -1 : 1;
+		// printf("tr %.2f %.2f %.2f / ", v_tpos.x, v_tpos.y, v_tpos.z);
+		// printf("%.2f ", ft_veccrossprod_sign(v_tpos, tt->first, tt->second));
+		// printf("%.2f ", ft_veccrossprod_sign(v_tpos, tt->second, tt->third));
+		// printf("%.2f / ", ft_veccrossprod_sign(v_tpos, tt->third, tt->first));
+		// printf("%d %d %d\n", a, b, c);
+		// if (a != b || b != c)
+		// 	t = -1;
+		
+		double a, b, c;
+		if (tt->first.x == tt->second.x && tt->first.x == tt->third.x)
+		{
+			a = ft_veccrossprod(ft_vecsub(tt->second, tt->first), ft_vecsub(v_tpos, tt->second)).x;
+			b = ft_veccrossprod(ft_vecsub(tt->third, tt->second), ft_vecsub(v_tpos, tt->third)).x;
+			c = ft_veccrossprod(ft_vecsub(tt->first, tt->third), ft_vecsub(v_tpos, tt->first)).x;
+		}
+		else
+		{
+			a = ft_veccrossprod(ft_vecsub(tt->second, tt->first), ft_vecsub(v_tpos, tt->second)).y;
+			b = ft_veccrossprod(ft_vecsub(tt->third, tt->second), ft_vecsub(v_tpos, tt->third)).y;
+			c = ft_veccrossprod(ft_vecsub(tt->first, tt->third), ft_vecsub(v_tpos, tt->first)).y;
+		}
+		printf("tr %.2f %.2f %.2f / ", v_tpos.x, v_tpos.y, v_tpos.z);
+		printf("%.2f %.2f %.2f\n", a, b, c);
+		if (!((a >=0 && b >= 0 && c >= 0) || (a < 0 && b < 0 && c < 0)))
 			t = -1;
 	}
 	return (t);
@@ -464,16 +487,22 @@ void	set_default_Value(t_map *m)
 
 	m->obj_type[m->obj_count] = CMD_TRIANGLE;
 	m->obj[m->obj_count] = (t_triangle *)malloc(sizeof(t_triangle));
-	ft_vecset(&((t_triangle *)m->obj[m->obj_count])->first, 0.0, 5.0, 0.0);
-	ft_vecset(&((t_triangle *)m->obj[m->obj_count])->second, 0.0, 0.0, -2.0);
-	ft_vecset(&((t_triangle *)m->obj[m->obj_count])->third, 5.0, 0.0, 00.0);
+	ft_vecset(&((t_triangle *)m->obj[m->obj_count])->first, 1.0, -1.0, 1.0);
+	ft_vecset(&((t_triangle *)m->obj[m->obj_count])->second, -1.0, -1.0, 1.0);
+	ft_vecset(&((t_triangle *)m->obj[m->obj_count])->third, 0.0, -1.0, 8.0);
+	// ft_vecset(&((t_triangle *)m->obj[m->obj_count])->first, 0.0, -1.0, 0.0);
+	// ft_vecset(&((t_triangle *)m->obj[m->obj_count])->second, 0.0, 0.0, -1.0);
+	// ft_vecset(&((t_triangle *)m->obj[m->obj_count])->third, 1.0, 0.0, 00.0);
 	// ft_vecset(&((t_triangle *)m->obj[m->obj_count])->first, 10.0, 20.0, 10.0);
 	// ft_vecset(&((t_triangle *)m->obj[m->obj_count])->second, 10.0, 10.0, 20.0);
 	// ft_vecset(&((t_triangle *)m->obj[m->obj_count])->third, 20.0, 10.0, 10.0);
 	t_triangle *t = (t_triangle *)m->obj[m->obj_count];
 	t_vec n = ft_veccrossprod(ft_vecsub(t->second, t->first), ft_vecsub(t->third, t->first));
+	printf("tri vec: %.2f %.2f %.2f\n", n.x, n.y, n.z);
 	n = ft_vecnormalize(n);
+	printf("tri vec: %.2f %.2f %.2f\n", n.x, n.y, n.z);
 	ft_vecset(&((t_triangle *)m->obj[m->obj_count])->normal, n.x, n.y, n.z);
+	//ft_vecset(&((t_triangle *)m->obj[m->obj_count])->normal, 0, 1, 0);
 	m->obj_count++;
 
 }
