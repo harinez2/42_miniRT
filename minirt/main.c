@@ -35,16 +35,6 @@ int	ft_color(int red, int green, int blue)
 	return (c);
 }
 
-t_color	ft_color_rev(int rgb)
-{
-	t_color	c;
-
-	c.r = rgb >> 16;
-	c.g = rgb >> 8 & 0x11111111;
-	c.b = rgb & 0x11111111;
-	return (c);
-}
-
 void	set_color(t_color *c, double red, double green, double blue)
 {
 	c->r = red;
@@ -610,12 +600,12 @@ void	print_m(t_map *m)
 	printf("kDif     : %.2f, %.2f, %.2f\n", m->kDif.r, m->kDif.g, m->kDif.b);
 	printf("kSpe     : %.2f, %.2f, %.2f\n", m->kSpe.r, m->kSpe.g, m->kSpe.b);
 
-	printf("shininess       : %.2f\n", m->shininess);
+	printf("shininess     : %.2f\n", m->shininess);
 
 	for (int i = 0; i < m->light_count; i++)
-		printf("lightItsty[%d]  : %.2f\n", i, m->lightItsty[i]);
-	printf("ambItsty        : %.2f\n", m->ambItsty);
-	printf("obj_count       : %d\n", m->obj_count);
+		printf("lightItsty[%d] : %.2f\n", i, m->lightItsty[i]);
+	printf("ambItsty      : %.2f\n", m->ambItsty);
+	printf("obj_count     : %d\n", m->obj_count);
 	for (int i = 0; i < m->obj_count; i++)
 	{
 		printf("[%d] ", i);
@@ -633,26 +623,24 @@ void	print_m(t_map *m)
 	printf("===== current config end =====\n\n");
 }
 
-int	draw_map_wnd(void *win, int w, int h, t_map *m)
+int	draw_map_wnd(void *win, t_map *m)
 {
 	int	x;
 	int	y;
 	t_vec	v_w;
 	t_color	color;
-	int	colorint;
 
 	v_w.z = 0;
 	y = 0;
-	while (y < h)
+	while (y < m->window_y)
 	{
-		v_w.y = ft_map(y, 0, h-1, 1, -1);
+		v_w.y = ft_map(y, 0, m->window_y - 1, 1, -1);
 		x = 0;
-		while (x < w)
+		while (x < m->window_x)
 		{
-			v_w.x = ft_map(x, 0, w-1, -1, 1);
+			v_w.x = ft_map(x, 0, m->window_x - 1, -1, 1);
 			color = decide_color(v_w, m);
-			colorint = ft_color(color.r, color.g, color.b);
-			mlx_pixel_put(mlx, win, x, y, colorint);
+			mlx_pixel_put(mlx, win, x, y, ft_color(color.r, color.g, color.b));
 			x++;
 		}
 		y++;
@@ -690,7 +678,7 @@ void	display_window(t_map *m)
 	printf("OK\n");
 
 	printf("Drawing sphere ...");
-	draw_map_wnd(win1, m->window_x, m->window_y, m);
+	draw_map_wnd(win1, m);
 	printf("OK\n");
 	mlx_key_hook(win1, key_win1, 0);
 	mlx_loop(mlx);
@@ -724,15 +712,15 @@ void	set_bmp_header(uint8_t *header_buffer, int stride, t_map *m)
 
 int	draw_map_bmp(FILE *fp, uint8_t *buffer, int stride, t_map *m)
 {
-	int x, y;
-	uint8_t *row;
+	int		x, y;
+	uint8_t	*row;
 	t_vec	v_w;
+	
 	v_w.z = 0;
 	y = 0;
 	while (y < m->window_y)
 	{
 		row = buffer;
-
 		v_w.y = ft_map(y, 0, m->window_y - 1, -1, 1);
 		x = 0;
 		while (x < m->window_x)
@@ -744,50 +732,31 @@ int	draw_map_bmp(FILE *fp, uint8_t *buffer, int stride, t_map *m)
 			*row++ = c.r;
 			x++;
 		}
-		if (fwrite(buffer, stride, 1, fp) != 1) {
+		if (fwrite(buffer, stride, 1, fp) != 1)
+		{
 			free(buffer);
 			return (-1);
 		}
 		y++;
 	}
 	return (0);
-	/*
-	//for (y = img->height - 1; y >= 0; y--) {
-	for (y = h - 1; y >= 0; y--) {
-		row = buffer;
-		//for (x = 0; x < img->width; x++) {
-		for (x = 0; x < w; x++) {
-			*row++ = img->map[y][x].c.b;
-			*row++ = img->map[y][x].c.g;
-			*row++ = img->map[y][x].c.r;
-			// *row++ = 0;
-			// *row++ = 0;
-			// *row++ = 255;
-		}
-		if (fwrite(buffer, stride, 1, fp) != 1) {
-			goto error;
-		}
-	}
-	*/
 }
 
 int	write_bmp_simple_stream(FILE *fp, t_map *m)
 {
 	uint8_t		header_buffer[DEFAULT_HEADER_SIZE];
-	int stride;
-	uint8_t *buffer;
-	/*
-	if (img->color_type != COLOR_TYPE_RGB) {
-		return -1;
-	}
-	*/
+	int			stride;
+	uint8_t		*buffer;
+
 	//stride = (img->width * 3 + 3) / 4 * 4;
 	stride = (m->window_x * 3 + 3) / 4 * 4;
-	if ((buffer = malloc(stride)) == NULL) {
+	if ((buffer = malloc(stride)) == NULL)
+	{
 		return -1;
 	}
 	set_bmp_header(header_buffer, stride, m);
-	if (fwrite(header_buffer, DEFAULT_HEADER_SIZE, 1, fp) != 1) {
+	if (fwrite(header_buffer, DEFAULT_HEADER_SIZE, 1, fp) != 1)
+	{
 		free(buffer);
 		return (-1);
 	}
@@ -799,12 +768,14 @@ int	write_bmp_simple_stream(FILE *fp, t_map *m)
 
 int	write_bmp(t_map *m)
 {
-	int	ret;
+	int		ret;
 	char	*filename = "out.bmp";
+	FILE	*fp;
 
 	ret = -1;
-	FILE *fp = fopen(filename, "wb");
-	if (fp == NULL) {
+	fp = fopen(filename, "wb");
+	if (fp == NULL)
+	{
 		perror(filename);
 		return ret;
 	}
