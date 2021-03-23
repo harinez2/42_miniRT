@@ -1,13 +1,10 @@
 #include	"main.h"
 
-void	*mlx;
-void	*win1;
 int		local_endian;
 
 int	key_win1(int key,void *p)
 {
-	(void) p;
-
+	(void)p;
 	printf("Key in Win1 : %d\n",key);
 	if (key==0xFF1B)
 		exit(0);
@@ -623,7 +620,7 @@ void	print_m(t_map *m)
 	printf("===== current config end =====\n\n");
 }
 
-int	draw_map_wnd(void *win, t_map *m)
+int	draw_map_wnd(void *mlx, void *win, t_map *m)
 {
 	int	x;
 	int	y;
@@ -662,6 +659,9 @@ void	decide_endian(void)
 
 void	display_window(t_map *m)
 {
+	void	*mlx;
+	void	*win1;
+
 	if (!(mlx = mlx_init()))
 	{
 		write(1, "Error\nInitialization failed.\n", 29);
@@ -678,7 +678,7 @@ void	display_window(t_map *m)
 	printf("OK\n");
 
 	printf("Drawing sphere ...");
-	draw_map_wnd(win1, m);
+	draw_map_wnd(mlx, win1, m);
 	printf("OK\n");
 	mlx_key_hook(win1, key_win1, 0);
 	mlx_loop(mlx);
@@ -691,19 +691,17 @@ void	set_bmp_header(uint8_t *header_buffer, int stride, t_map *m)
 	BITMAPINFOHEADER *info = (BITMAPINFOHEADER*)(header_buffer + FILE_HEADER_SIZE);
 
 	file->bfType = FILE_TYPE;
-	//file->bfSize = DEFAULT_HEADER_SIZE + stride * img->height;
 	file->bfSize = DEFAULT_HEADER_SIZE + stride * m->window_y;
 	file->bfReserved1 = 0;
 	file->bfReserved2 = 0;
 	file->bfOffBits = DEFAULT_HEADER_SIZE;
 	info->biSize = INFO_HEADER_SIZE;
-	info->biWidth = m->window_x;//img->width;
-	//info->biHeight = img->height;
+	info->biWidth = m->window_x;
 	info->biHeight = m->window_y;
 	info->biPlanes = 1;
 	info->biBitCount = 24;
 	info->biCompression = 0;
-	info->biSizeImage = stride * m->window_y;//img->height;
+	info->biSizeImage = stride * m->window_y;
 	info->biXPelsPerMeter = 0;
 	info->biYPelsPerMeter = 0;
 	info->biClrUsed = 0;
@@ -748,7 +746,6 @@ int	write_bmp_simple_stream(FILE *fp, t_map *m)
 	int			stride;
 	uint8_t		*buffer;
 
-	//stride = (img->width * 3 + 3) / 4 * 4;
 	stride = (m->window_x * 3 + 3) / 4 * 4;
 	if ((buffer = malloc(stride)) == NULL)
 	{
