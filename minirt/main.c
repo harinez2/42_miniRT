@@ -633,7 +633,7 @@ void	print_m(t_map *m)
 	printf("===== current config end =====\n\n");
 }
 
-int	draw_map(void *win, int w, int h, t_map *m)
+int	draw_map_wnd(void *win, int w, int h, t_map *m)
 {
 	int	x;
 	int	y;
@@ -690,54 +690,67 @@ void	display_window(t_map *m)
 	printf("OK\n");
 
 	printf("Drawing sphere ...");
-	draw_map(win1, m->window_x, m->window_y, m);
+	draw_map_wnd(win1, m->window_x, m->window_y, m);
 	printf("OK\n");
 	mlx_key_hook(win1, key_win1, 0);
 	mlx_loop(mlx);
 	//sleep(2);
 }
 
-int	write_bmp_simple_stream(FILE *fp, int w, int h, t_map *m)//image_t *img)
+void	set_bmp_header(uint8_t *header_buffer, int stride, t_map *m)
 {
-	uint8_t		header_buffer[DEFAULT_HEADER_SIZE];
 	BITMAPFILEHEADER *file = (BITMAPFILEHEADER*)header_buffer;
 	BITMAPINFOHEADER *info = (BITMAPINFOHEADER*)(header_buffer + FILE_HEADER_SIZE);
-	int x, y;
-	int stride;
-	uint8_t *row, *buffer;
-	/*
-	if (img->color_type != COLOR_TYPE_RGB) {
-		return -1;
-	}
-	*/
-	//stride = (img->width * 3 + 3) / 4 * 4;
-	stride = (w * 3 + 3) / 4 * 4;
-	if ((buffer = malloc(stride)) == NULL) {
-		return -1;
-	}
+
 	file->bfType = FILE_TYPE;
 	//file->bfSize = DEFAULT_HEADER_SIZE + stride * img->height;
-	file->bfSize = DEFAULT_HEADER_SIZE + stride * h;
+	file->bfSize = DEFAULT_HEADER_SIZE + stride * m->window_y;
 	file->bfReserved1 = 0;
 	file->bfReserved2 = 0;
 	file->bfOffBits = DEFAULT_HEADER_SIZE;
 	info->biSize = INFO_HEADER_SIZE;
-	info->biWidth = w;//img->width;
+	info->biWidth = m->window_x;//img->width;
 	//info->biHeight = img->height;
-	info->biHeight = h;
+	info->biHeight = m->window_y;
 	info->biPlanes = 1;
 	info->biBitCount = 24;
 	info->biCompression = 0;
-	info->biSizeImage = stride * h;//img->height;
+	info->biSizeImage = stride * m->window_y;//img->height;
 	info->biXPelsPerMeter = 0;
 	info->biYPelsPerMeter = 0;
 	info->biClrUsed = 0;
 	info->biClrImportant = 0;
-	if (fwrite(header_buffer, DEFAULT_HEADER_SIZE, 1, fp) != 1) {
-		goto error;
-	}
-	memset(buffer, 0, stride);
+}
 
+int	draw_map_bmp(FILE *fp, uint8_t *buffer, int stride, t_map *m)
+{
+	int x, y;
+	uint8_t *row;
+	t_vec	v_w;
+	v_w.z = 0;
+	y = 0;
+	while (y < m->window_y)
+	{
+		row = buffer;
+
+		v_w.y = ft_map(y, 0, m->window_y - 1, -1, 1);
+		x = 0;
+		while (x < m->window_x)
+		{
+			v_w.x = ft_map(x, 0, m->window_x - 1, -1, 1);
+			t_color c = decide_color(v_w, m);
+			*row++ = c.b;
+			*row++ = c.g;
+			*row++ = c.r;
+			x++;
+		}
+		if (fwrite(buffer, stride, 1, fp) != 1) {
+			free(buffer);
+			return (-1);
+		}
+		y++;
+	}
+	return (0);
 	/*
 	//for (y = img->height - 1; y >= 0; y--) {
 	for (y = h - 1; y >= 0; y--) {
@@ -756,42 +769,35 @@ int	write_bmp_simple_stream(FILE *fp, int w, int h, t_map *m)//image_t *img)
 		}
 	}
 	*/
-	t_vec	v_w;
-	//int	color;
-	v_w.z = 0;
-	y = 0;
-	while (y < h)
-	{
-		row = buffer;
-
-		v_w.y = ft_map(y, 0, h-1, -1, 1);
-		x = 0;
-		while (x < w)
-		{
-			v_w.x = ft_map(x, 0, w-1, -1, 1);
-			t_color c = decide_color(v_w, m);
-			//color = decide_color(v_w, m);
-			//t_color c = ft_color_rev(color);;
-			//img->map[y][x] = color;
-			*row++ = c.b;
-			*row++ = c.g;
-			*row++ = c.r;
-			x++;
-		}
-		if (fwrite(buffer, stride, 1, fp) != 1) {
-			goto error;
-		}
-		y++;
-	}
-
-	free(buffer);
-	return (0);
-error:
-	free(buffer);
-	return (-1);
 }
 
-int	write_bmp(t_map *m)//, image_t *img)
+int	write_bmp_simple_stream(FILE *fp, t_map *m)
+{
+	uint8_t		header_buffer[DEFAULT_HEADER_SIZE];
+	int stride;
+	uint8_t *buffer;
+	/*
+	if (img->color_type != COLOR_TYPE_RGB) {
+		return -1;
+	}
+	*/
+	//stride = (img->width * 3 + 3) / 4 * 4;
+	stride = (m->window_x * 3 + 3) / 4 * 4;
+	if ((buffer = malloc(stride)) == NULL) {
+		return -1;
+	}
+	set_bmp_header(header_buffer, stride, m);
+	if (fwrite(header_buffer, DEFAULT_HEADER_SIZE, 1, fp) != 1) {
+		free(buffer);
+		return (-1);
+	}
+	memset(buffer, 0, stride);
+	draw_map_bmp(fp, buffer, stride, m);
+	free(buffer);
+	return (0);
+}
+
+int	write_bmp(t_map *m)
 {
 	int	ret;
 	char	*filename = "out.bmp";
@@ -802,27 +808,9 @@ int	write_bmp(t_map *m)//, image_t *img)
 		perror(filename);
 		return ret;
 	}
-	ret = write_bmp_simple_stream(fp, m->window_x, m->window_y, m);//img);
+	ret = write_bmp_simple_stream(fp, m);
 	fclose(fp);
 	return ret;
-}
-
-/*
-int	draw_map_image(image_t *img, int w, int h, t_map *m)
-{
-	return (0);
-}
-*/
-
-void	output_bmp(t_map *m)
-{
-	//image_t	*img;
-
-	//img = malloc(sizeof(image_t) * m->window_x * m->window_y);
-	//img = allocateimage(m->window_x, m->window_y, COLOR_TYPE_RGB);
-	//draw_map_image(img, m->window_x, m->window_y, m);	
-	write_bmp(m);
-	//free(img);
 }
 
 /*
@@ -837,12 +825,12 @@ int	main(int argc, char **argv)
 		readFromFile(argv[1], &m);
 	else
 		set_default_Value(&m);
-	//set_default_Value(&m);
+	set_default_Value(&m);
 	print_m(&m);
 
 	decide_endian();
 	if (argc >= 3 && strcmp(argv[2], "--save") == 0)
-		output_bmp(&m);
+		write_bmp(&m);
 	else
 		display_window(&m);
 	freeX(&m);
