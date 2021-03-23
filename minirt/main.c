@@ -626,6 +626,12 @@ void	decide_endian(void)
 	printf("Local Endian : %d.\n",local_endian);
 }
 
+void	close_win()
+{
+	printf("window close button pressed.\n");
+	exit(0);
+}
+
 void	display_window(t_map *m)
 {
 	void	*mlx;
@@ -650,6 +656,7 @@ void	display_window(t_map *m)
 	draw_map_wnd(mlx, win1, m);
 	printf("OK\n");
 	mlx_key_hook(win1, key_win1, 0);
+	mlx_hook(win1, 33, 0, (void *)close_win, 0);
 	mlx_loop(mlx);
 	//sleep(2);
 }
