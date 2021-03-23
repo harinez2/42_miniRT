@@ -280,17 +280,6 @@ double	get_nearest_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt)
 	{
 		t_vec v_de = ft_vecsub(v_w, v_eye);
 		t_vec v_tpos = ft_vecadd(v_eye, ft_vecmult(v_de, t));//tpos：視線と面上の交点(pi)
-		// int	a,b,c;
-		// a = ft_veccrossprod_sign(v_tpos, tt->first, tt->second) < 0 ? -1 : 1;
-		// b = ft_veccrossprod_sign(v_tpos, tt->second, tt->third) < 0 ? -1 : 1;
-		// c = ft_veccrossprod_sign(v_tpos, tt->third, tt->first) < 0 ? -1 : 1;
-		// printf("tr %.2f %.2f %.2f / ", v_tpos.x, v_tpos.y, v_tpos.z);
-		// printf("%.2f ", ft_veccrossprod_sign(v_tpos, tt->first, tt->second));
-		// printf("%.2f ", ft_veccrossprod_sign(v_tpos, tt->second, tt->third));
-		// printf("%.2f / ", ft_veccrossprod_sign(v_tpos, tt->third, tt->first));
-		// printf("%d %d %d\n", a, b, c);
-		// if (a != b || b != c)
-		// 	t = -1;
 		
 		double a, b, c;
 		if (tt->first.x == tt->second.x && tt->first.x == tt->third.x)
