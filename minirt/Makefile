@@ -4,7 +4,7 @@ CLONE_DIR	= ../minilibx-linux
 INCLIB		= /usr/lib
 SRCS		= main.c \
 		  ft_readerFile.c ft_readerNum.c \
-		  ft_vecOp1.c ft_vecOp2.c \
+		  ft_vecOp1.c ft_vecOp2.c ft_objInitializer.c \
 		  ft_errorclean.c \
 		  ../gnl/get_next_line.c ../gnl/get_next_line_utils.c
 OBJS		= $(SRCS:.c=.o)

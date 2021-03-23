@@ -174,22 +174,20 @@ t_color ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 
 double	get_nearest_square(t_vec v_w, t_vec v_eye, t_square *ts)
 {
-	(void)v_w;
-	(void)v_eye;
-	(void)ts;
-	return (-1);
+	double t;
+
+	t = get_nearest_plane(v_w, v_eye, &ts->tr_a.plane);
+	if (t >= 0)
+	{
+		;
+	}
+	//printf("%.2f ", t);
+	return (t);
 }
 
 t_color	ray_trace_square(t_vec v_w, t_map *m, t_square *ts, double t)
 {
-	t_color c;
-
-	(void)v_w;
-	(void)m;
-	(void)ts;
-	(void)t;
-	set_color(&c, 0, 0, 0);
-	return (c);
+	return (ray_trace_plane(v_w, m, &ts->tr_a.plane, t));
 }
 
 double	get_nearest_cylinder(t_vec v_w, t_vec v_eye, t_cylinder *tc)
@@ -269,18 +267,14 @@ t_color	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
 
 double	get_nearest_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt)
 {
-	t_plane tp;
 	double t;
 
-	tp.normal = tt->normal;
-	//tp.position = ft_vecsub(tt->second, tt->first);
-	tp.position = tt->first;
-	t = get_nearest_plane(v_w, v_eye, &tp);
+	t = get_nearest_plane(v_w, v_eye, &tt->plane);
 	if (t >= 0)
 	{
 		t_vec v_de = ft_vecsub(v_w, v_eye);
 		t_vec v_tpos = ft_vecadd(v_eye, ft_vecmult(v_de, t));//tpos：視線と面上の交点(pi)
-		
+
 		double a, b, c;
 		if (tt->first.x == tt->second.x && tt->first.x == tt->third.x)
 		{
@@ -304,12 +298,7 @@ double	get_nearest_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt)
 
 t_color	ray_trace_triangle(t_vec v_w, t_map *m, t_triangle *tt, double t)
 {
-	t_plane tp;
-
-	tp.normal = tt->normal;
-	//tp.position = ft_vecnormalize(ft_vecsub(tt->second, tt->first));
-	tp.position = tt->first;
-	return (ray_trace_plane(v_w, m, &tp, t));
+	return (ray_trace_plane(v_w, m, &tt->plane, t));
 }
 
 t_color	decide_color(t_vec v_w, t_map *m)
@@ -320,7 +309,6 @@ t_color	decide_color(t_vec v_w, t_map *m)
 
 	t = -1;
 	set_color(&color, 92, 151, 243);
-	//color = ft_color(92, 151, 243);
 	for (int i = 0; i < m->obj_count; i++)
 	{
 		chkt = -1;
@@ -483,13 +471,15 @@ void	set_default_Value(t_map *m)
 	// ft_vecset(&((t_triangle *)m->obj[m->obj_count])->first, 10.0, 20.0, 10.0);
 	// ft_vecset(&((t_triangle *)m->obj[m->obj_count])->second, 10.0, 10.0, 20.0);
 	// ft_vecset(&((t_triangle *)m->obj[m->obj_count])->third, 20.0, 10.0, 10.0);
-	t_triangle *t = (t_triangle *)m->obj[m->obj_count];
-	t_vec n = ft_veccrossprod(ft_vecsub(t->second, t->first), ft_vecsub(t->third, t->first));
-	printf("tri vec: %.2f %.2f %.2f\n", n.x, n.y, n.z);
-	n = ft_vecnormalize(n);
-	printf("tri vec: %.2f %.2f %.2f\n", n.x, n.y, n.z);
-	ft_vecset(&((t_triangle *)m->obj[m->obj_count])->normal, n.x, n.y, n.z);
-	//ft_vecset(&((t_triangle *)m->obj[m->obj_count])->normal, 0, 1, 0);
+	ft_initTriangle(m->obj[m->obj_count]);
+	m->obj_count++;
+
+	m->obj_type[m->obj_count] = CMD_SQUARE;
+	m->obj[m->obj_count] = (t_square *)malloc(sizeof(t_square));
+	ft_vecset(&((t_square *)m->obj[m->obj_count])->center, 1.0, -1.0, 1.0);
+	ft_vecset(&((t_square *)m->obj[m->obj_count])->orientation, 0.0, 1.0, 0.0);
+	((t_square *)m->obj[m->obj_count])->sidesize = 10.0;
+	ft_initSquare(m->obj[m->obj_count]);
 	m->obj_count++;
 
 }
@@ -522,22 +512,6 @@ void	print_plane(t_plane *tp)
 			tp->rgb.b);
 }
 
-void	print_square(t_square *ts)
-{
-	printf("Square");
-	printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / %.2f / rgb:%.2f %.2f %.2f\n",
-			ts->center.x,
-			ts->center.y,
-			ts->center.z,
-			ts->orientation.x,
-			ts->orientation.y,
-			ts->orientation.z,
-			ts->sidesize,
-			ts->rgb.r,
-			ts->rgb.g,
-			ts->rgb.b);
-}
-
 void	print_cylinder(t_cylinder *tc)
 {
 	printf("Cylinder");
@@ -557,20 +531,26 @@ void	print_cylinder(t_cylinder *tc)
 
 void	print_triangle(t_triangle *tt)
 {
-	printf("Triangle");
-	printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / rgb:%.2f %.2f %.2f\n",
-			tt->first.x,
-			tt->first.y,
-			tt->first.z,
-			tt->second.x,
-			tt->second.y,
-			tt->second.z,
-			tt->third.x,
-			tt->third.y,
-			tt->third.z,
-			tt->rgb.r,
-			tt->rgb.g,
-			tt->rgb.b);
+	printf("Triangle: ");
+	printf("%.2f, %.2f, %.2f / ", tt->first.x, tt->first.y, tt->first.z);
+	printf("%.2f, %.2f, %.2f / ", tt->second.x, tt->second.y, tt->second.z);
+	printf("%.2f, %.2f, %.2f / ", tt->third.x, tt->third.y, tt->third.z);
+	printf("rgb:%.2f %.2f %.2f\n", tt->rgb.r, tt->rgb.g, tt->rgb.b);
+	printf("        ");
+	print_plane(&tt->plane);
+}
+
+void	print_square(t_square *ts)
+{
+	printf("Square: ");
+	printf("%.2f, %.2f, %.2f / ", ts->center.x, ts->center.y, ts->center.z);
+	printf("%.2f, %.2f, %.2f / ", ts->orientation.x, ts->orientation.y, ts->orientation.z);
+	printf("%.2f / ", ts->sidesize);
+	printf("rgb:%.2f %.2f %.2f\n", ts->rgb.r, ts->rgb.g, ts->rgb.b);
+	printf("      ");
+	print_triangle(&ts->tr_a);
+	printf("      ");
+	print_triangle(&ts->tr_b);
 }
 
 void	print_m(t_map *m)
@@ -782,7 +762,7 @@ int	main(int argc, char **argv)
 		readFromFile(argv[1], &m);
 	else
 		set_default_Value(&m);
-	set_default_Value(&m);
+	//set_default_Value(&m);
 	print_m(&m);
 
 	decide_endian();

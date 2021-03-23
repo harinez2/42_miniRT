@@ -64,14 +64,6 @@ typedef struct		s_plane
 	t_color		rgb;
 }			t_plane;
 
-typedef struct		s_square
-{
-	t_vec		center;
-	t_vec		orientation;
-	double		sidesize;
-	t_color		rgb;
-}			t_square;
-
 typedef struct		s_cylinder
 {
 	t_vec		center;
@@ -86,9 +78,19 @@ typedef struct		s_triangle
 	t_vec		first;
 	t_vec		second;
 	t_vec		third;
-	t_vec		normal;		//法線ベクトル
 	t_color		rgb;
+	t_plane		plane;
 }			t_triangle;
+
+typedef struct		s_square
+{
+	t_vec		center;
+	t_vec		orientation;
+	double		sidesize;
+	t_color		rgb;
+	t_triangle	tr_a;
+	t_triangle	tr_b;
+}			t_square;
 
 typedef struct		s_map
 {
@@ -202,6 +204,7 @@ void	skipSep(int *i, char *s);
 
 t_vec	ft_vecinit(double x, double y, double z);
 void	ft_vecset(t_vec *v, double x, double y, double z);
+t_vec	ft_vec(double x, double y, double z);
 t_vec	ft_vecadd(t_vec v, t_vec w);
 t_vec	ft_vecsub(t_vec v, t_vec w);
 t_vec	ft_vecmult(t_vec v, double k);
@@ -214,6 +217,9 @@ double	ft_vecnorm(t_vec v);
 double	ft_vecnormsq(t_vec v);
 t_vec	ft_vecnormalize(t_vec v);
 void	ft_vecprint(t_vec *v);
+
+void    ft_initTriangle(t_triangle *tt);
+void    ft_initSquare(t_square *ts);
 
 void	ft_showErrorExit(int errNo, t_map *m);
 void	freeX(t_map *m);

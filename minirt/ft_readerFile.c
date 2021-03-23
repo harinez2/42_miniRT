@@ -112,6 +112,7 @@ int	readCmd2(int *i, char *line, t_map *m)
 		((t_triangle *)m->obj[m->obj_count])->second = readXyz(i, line, m);
 		((t_triangle *)m->obj[m->obj_count])->third = readXyz(i, line, m);
 		((t_triangle *)m->obj[m->obj_count])->rgb = readRgb(i, line, m);
+		ft_initTriangle(m->obj[m->obj_count]);
 		m->obj_count++;
 	}
 	return (cmd);

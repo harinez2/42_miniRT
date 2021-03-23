@@ -17,6 +17,15 @@ void	ft_vecset(t_vec *v, double x, double y, double z)
 	v->z = z;
 }
 
+t_vec	ft_vec(double x, double y, double z)
+{
+	t_vec	v;
+	v.x = x;
+	v.y = y;
+	v.z = z;
+	return (v);
+}
+
 t_vec	ft_vecadd(t_vec v, t_vec w)
 {
 	t_vec ret;
