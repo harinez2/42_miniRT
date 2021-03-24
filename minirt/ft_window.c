@@ -54,15 +54,14 @@ int	key_win1(int key, t_map *m)
 
 void	close_win()
 {
-
 	printf("window close button pressed.\n");
 	exit(0);
 }
 
 int	draw_map_wnd(void *mlx, void *win, t_map *m)
 {
-	int	x;
-	int	y;
+	int		x;
+	int		y;
 	t_vec	v_w;
 	t_color	color;
 
