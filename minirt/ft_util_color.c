@@ -35,3 +35,8 @@ t_color	set_rgb_inrange(t_color c)
 		c.b = 0;
 	return (c);
 }
+
+void	ft_colorprint(t_color *c)
+{
+	printf("rgb: %.2f, %.2f, %.2f", c->r, c->g, c->b);
+}

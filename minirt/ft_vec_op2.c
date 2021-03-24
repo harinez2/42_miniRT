@@ -58,5 +58,5 @@ t_vec	ft_vecnormalize(t_vec v)
 
 void	ft_vecprint(t_vec *v)
 {
-	printf("[vector] (%f, %f, %f)\n", v->x, v->y, v->z);
+	printf("%.2f, %.2f, %.2f", v->x, v->y, v->z);
 }

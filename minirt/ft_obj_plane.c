@@ -56,15 +56,11 @@ t_color ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 
 void	print_plane(t_plane *tp)
 {
-	printf("Plane");
-	printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / rgb:%.2f %.2f %.2f\n",
-			tp->normal.x,
-			tp->normal.y,
-			tp->normal.z,
-			tp->position.x,
-			tp->position.y,
-			tp->position.z,
-			tp->rgb.r,
-			tp->rgb.g,
-			tp->rgb.b);
+	printf("Plane: ");
+	ft_vecprint(&tp->normal);
+	printf(" / ");
+	ft_vecprint(&tp->position);
+	printf(" / ");
+	ft_colorprint(&tp->rgb);
+	printf("\n");
 }

@@ -51,10 +51,15 @@ t_color	ray_trace_triangle(t_vec v_w, t_map *m, t_triangle *tt, double t)
 void	print_triangle(t_triangle *tt)
 {
 	printf("Triangle: ");
-	printf("%.2f, %.2f, %.2f / ", tt->first.x, tt->first.y, tt->first.z);
-	printf("%.2f, %.2f, %.2f / ", tt->second.x, tt->second.y, tt->second.z);
-	printf("%.2f, %.2f, %.2f / ", tt->third.x, tt->third.y, tt->third.z);
-	printf("rgb:%.2f %.2f %.2f\n", tt->rgb.r, tt->rgb.g, tt->rgb.b);
+	ft_vecprint(&tt->first);
+	printf(" / ");
+	ft_vecprint(&tt->second);
+	printf(" / ");
+	ft_vecprint(&tt->third);
+	printf(" / ");
+	ft_colorprint(&tt->rgb);
+	printf("\n");
+
 	printf("        ");
 	print_plane(&tt->plane);
 }

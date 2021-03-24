@@ -77,17 +77,11 @@ t_color	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
 
 void	print_cylinder(t_cylinder *tc)
 {
-	printf("Cylinder");
-	printf(": %.2f, %.2f, %.2f / %.2f, %.2f, %.2f / %.2f / %.2f / rgb:%.2f %.2f %.2f\n",
-			tc->center.x,
-			tc->center.y,
-			tc->center.z,
-			tc->orientation.x,
-			tc->orientation.y,
-			tc->orientation.z,
-			tc->diameter,
-			tc->height,
-			tc->rgb.r,
-			tc->rgb.g,
-			tc->rgb.b);
+	printf("Cylinder: ");
+	ft_vecprint(&tc->center);
+	printf(" / ");
+	ft_vecprint(&tc->orientation);
+	printf(" (r: %.2f h: %.2f) / ", tc->diameter, tc->height);
+	ft_colorprint(&tc->rgb);
+	printf("\n");
 }

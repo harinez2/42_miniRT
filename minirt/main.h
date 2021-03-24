@@ -248,6 +248,7 @@ void	print_cylinder(t_cylinder *tc);
 void	ft_showErrorExit(int errNo, t_map *m);
 void	freeX(t_map *m);
 
+void	print_keyname(int key);
 int		key_win1(int key, t_map *m);
 void	close_win();
 int		draw_map_wnd(void *mlx, void *win, t_map *m);
@@ -261,6 +262,7 @@ int		write_bmp(t_map *m);
 int		ft_color(int red, int green, int blue);
 void	set_color(t_color *c, double red, double green, double blue);
 t_color	set_rgb_inrange(t_color c);
+void	ft_colorprint(t_color *c);
 
 double	ft_map(double x, int froma, int fromb, int toa, int tob);
 void	print_m(t_map *m);

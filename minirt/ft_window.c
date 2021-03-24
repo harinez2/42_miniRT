@@ -45,6 +45,8 @@ int	key_win1(int key, t_map *m)
 		m->v_ceye.z = m->v_ceye.z - 1;
 	else if (key == 0x62)//b key
 		m->v_ceye.z = m->v_ceye.z + 1;
+	else
+		return (0);
 	print_keyname(key);
 	printf(" pressed: cameranum = %d ", m->ceye_num);
 	printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
