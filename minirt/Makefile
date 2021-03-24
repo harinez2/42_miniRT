@@ -5,7 +5,8 @@ INCLIB		= /usr/lib
 SRCS		= main.c \
 		  ft_readerFile.c ft_readerNum.c \
 		  ft_vecOp1.c ft_vecOp2.c ft_objInitializer.c \
-		  ft_errorclean.c \
+		  ft_util_color.c ft_errorclean.c \
+		  ft_window.c ft_bitmap.c \
 		  ../gnl/get_next_line.c ../gnl/get_next_line_utils.c
 OBJS		= $(SRCS:.c=.o)
 CCFLAGS_I	= -Wall -Werror -Wextra -I/usr/include -I$(CLONE_DIR)

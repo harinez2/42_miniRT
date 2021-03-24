@@ -189,7 +189,7 @@ typedef struct image_t {
 }	image_t;
 
 double	ft_map(double x, int froma, int fromb, int toa, int tob);
-int	ft_color(int red, int green, int blue);
+t_color	decide_color(t_vec v_w, t_map *m);
 
 int	readCmd1(int *i, char *line, t_map *m);
 int	readCmd2(int *i, char *line, t_map *m);
@@ -223,5 +223,19 @@ void    ft_initSquare(t_square *ts);
 
 void	ft_showErrorExit(int errNo, t_map *m);
 void	freeX(t_map *m);
+
+int		key_win1(int key, void *p);
+void	close_win();
+int		draw_map_wnd(void *mlx, void *win, t_map *m);
+void	display_window(t_map *m);
+
+void	set_bmp_header(uint8_t *header_buffer, int stride, t_map *m);
+int		draw_map_bmp(FILE *fp, uint8_t *buffer, int stride, t_map *m);
+int		write_bmp_simple_stream(FILE *fp, t_map *m);
+int		write_bmp(t_map *m);
+
+int		ft_color(int red, int green, int blue);
+void	set_color(t_color *c, double red, double green, double blue);
+t_color	set_rgb_inrange(t_color c);
 
 #endif
