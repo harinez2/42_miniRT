@@ -257,4 +257,8 @@ int		ft_color(int red, int green, int blue);
 void	set_color(t_color *c, double red, double green, double blue);
 t_color	set_rgb_inrange(t_color c);
 
+double	ft_map(double x, int froma, int fromb, int toa, int tob);
+void	print_m(t_map *m);
+int	decide_endian(void);
+
 #endif
