@@ -16,7 +16,8 @@ int	key_win1(int key, t_map *m)
 			m->ceye_num = 0;
 		m->v_ceye = m->v_eye[m->ceye_num];
 		draw_map_wnd(m->mlx, m->win, m);
-		printf("c key pressed: cameranum = %d\n", m->ceye_num);
+		printf("c key pressed: cameranum = %d ", m->ceye_num);
+		printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
 	}
 	return (0);
 }

@@ -33,7 +33,9 @@
 # define ERR_WND_MLXINIT	-31
 # define ERR_WND_WNDINIT	-32
 
-# define MAX_OBJ_COUNT	200
+# define MAX_OBJ_COUNT		200
+# define MAX_CAMERA_COUNT	30
+# define MAX_LIGHT_COUNT	30
 
 typedef struct		s_vec
 {
@@ -102,14 +104,14 @@ typedef struct		s_map
 	int	eye_count;
 	int	ceye_num;
 	t_vec	v_ceye;
-	t_vec	v_eye[5];
-	t_vec	v_eye_orientation[5];
-	double	eye_fov[5];
+	t_vec	v_eye[MAX_CAMERA_COUNT];
+	t_vec	v_eye_orientation[MAX_CAMERA_COUNT];
+	double	eye_fov[MAX_CAMERA_COUNT];
 
 	int	light_count;
-	t_vec	v_light[5];
-	double	light_brightness[5];
-	t_color	light_rgb[5];
+	t_vec	v_light[MAX_LIGHT_COUNT];
+	double	light_brightness[MAX_LIGHT_COUNT];
+	t_color	light_rgb[MAX_LIGHT_COUNT];
 
 	t_color	kAmb; //ka 環境光反射係数
 	t_color	kDif; //kd 拡散反射係数
@@ -117,7 +119,7 @@ typedef struct		s_map
 
 	double shininess; //alpha 光沢度
 	double ambItsty; //Ialpha 環境光の強度(ambient intensity)
-	double lightItsty[5]; //Ii 光源の光の強度
+	double lightItsty[MAX_LIGHT_COUNT]; //Ii 光源の光の強度
 	
 	int	obj_count;
 	int	obj_type[MAX_OBJ_COUNT];
