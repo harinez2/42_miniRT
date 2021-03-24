@@ -63,14 +63,13 @@ void	set_default_Value(t_map *m)
 
 	ft_vecset(&m->v_ceye, 0, 0, -5);
 	ft_vecset(&m->v_eye[m->eye_count++], 0, 0, -5);
-	ft_vecset(&m->v_eye[m->eye_count++], 0, 1, -4);
-	ft_vecset(&m->v_eye[m->eye_count++], 0, 2, -3);
-	ft_vecset(&m->v_eye[m->eye_count++], 0, 3, -2);
-	ft_vecset(&m->v_eye[m->eye_count++], 0, 4, -1);
-	ft_vecset(&m->v_eye[m->eye_count++], 0, 5, 0);
-	ft_vecset(&m->v_eye[m->eye_count++], 0, 6, 1);
-	ft_vecset(&m->v_eye[m->eye_count++], 0, 7, 2);
-	//ft_vecset(&m->v_eye[m->eye_count++], 0, 1, 2);
+	ft_vecset(&m->v_eye[m->eye_count++], 0, 0, -4);
+	ft_vecset(&m->v_eye[m->eye_count++], 0, 0, -3);
+	ft_vecset(&m->v_eye[m->eye_count++], 0, 0, -2);
+	ft_vecset(&m->v_eye[m->eye_count++], 0, 0, -1);
+	ft_vecset(&m->v_eye[m->eye_count++], 0, 0, 0);
+	ft_vecset(&m->v_eye[m->eye_count++], 0, 0, 1);
+	ft_vecset(&m->v_eye[m->eye_count++], 0, 0, 2);
 
 	ft_vecset(&m->v_light[m->light_count++], -5, 5, -5);
 	ft_vecset(&m->v_light[m->light_count++], -5, 3, -2);
