@@ -44,8 +44,8 @@ t_color	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
 	set_color(&color, m->kAmb.r * m->ambItsty, m->kAmb.g * m->ambItsty, m->kAmb.b * m->ambItsty);
 
 	//(2) diffuse reflection 拡散反射光
-	t_vec v_de = ft_vecsub(v_w, m->v_eye[0]);
-	t_vec v_tpos = ft_vecadd(m->v_eye[0], ft_vecmult(v_de, t));//tpos：視線と球上の交点(pi)
+	t_vec v_de = ft_vecsub(v_w, m->v_ceye);
+	t_vec v_tpos = ft_vecadd(m->v_ceye, ft_vecmult(v_de, t));//tpos：視線と球上の交点(pi)
 	t_vec v_lightDir = ft_vecnormalize(ft_vecsub(m->v_light[0], v_tpos));//入射ベクトル(l)
 	t_vec v_n;//法線ベクトル(n)
 	v_n.x = 2 * (v_tpos.x - tc->center.x);

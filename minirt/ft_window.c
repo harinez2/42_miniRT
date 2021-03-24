@@ -1,19 +1,29 @@
 #include	"main.h"
 
-int	key_win1(int key, void *p)
+int	key_win1(int key, t_map *m)
 {
-	(void)p;
-	printf("Key in Win1 : %d\n", key);
 	//キーコードはxevコマンドで調べる
 	if (key == 0xFF1B)//esc
+	{
+		printf("ESC key pressed.\n");
 		exit(0);
-	else if (key == 0x63)
-		printf("c key pressed.\n");
+	}
+	else if (key == 0x63)//c key
+	{
+
+		m->ceye_num++;
+		if (m->ceye_num == m->eye_count)
+			m->ceye_num = 0;
+		m->v_ceye = m->v_eye[m->ceye_num];
+		draw_map_wnd(m->mlx, m->win, m);
+		printf("c key pressed: cameranum = %d\n", m->ceye_num);
+	}
 	return (0);
 }
 
 void	close_win()
 {
+
 	printf("window close button pressed.\n");
 	exit(0);
 }
@@ -54,6 +64,7 @@ void	display_window(t_map *m)
 		exit(1);
 	}
 	printf("Mlx init OK (use_xshm:%d, pshm_format:%d).\n",((t_xvar *)mlx)->use_xshm,((t_xvar *)mlx)->pshm_format);
+	m->mlx = mlx;
 
 	printf("Window1 creation: %dx%d \"Title 1\" ...", m->window_x, m->window_y);
 	if (!(win1 = mlx_new_window(mlx, m->window_x, m->window_y, "Title1")))
@@ -62,11 +73,12 @@ void	display_window(t_map *m)
 		exit(1);
 	}
 	printf("OK\n");
+	m->win = win1;
 
 	printf("Drawing sphere ...");
 	draw_map_wnd(mlx, win1, m);
 	printf("OK\n");
-	mlx_key_hook(win1, key_win1, 0);
+	mlx_key_hook(win1, key_win1, m);
 	mlx_hook(win1, 33, 0, (void *)close_win, 0);
 	mlx_loop(mlx);
 	//sleep(2);

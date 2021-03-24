@@ -12,15 +12,15 @@ t_color	decide_color(t_vec v_w, t_map *m)
 	{
 		chkt = -1;
 		if (m->obj_type[i] == CMD_SPHERE)
-			chkt = get_nearest_sphere(v_w, m->v_eye[0], (t_sphere *)m->obj[i]);
+			chkt = get_nearest_sphere(v_w, m->v_ceye, (t_sphere *)m->obj[i]);
 		else if (m->obj_type[i] == CMD_PLANE)
-			chkt = get_nearest_plane(v_w, m->v_eye[0], (t_plane *)m->obj[i]);
+			chkt = get_nearest_plane(v_w, m->v_ceye, (t_plane *)m->obj[i]);
 		else if (m->obj_type[i] == CMD_SQUARE)
-			chkt = get_nearest_square(v_w, m->v_eye[0], (t_square *)m->obj[i]);
+			chkt = get_nearest_square(v_w, m->v_ceye, (t_square *)m->obj[i]);
 		else if (m->obj_type[i] == CMD_CYLINDER)
-			chkt = get_nearest_cylinder(v_w, m->v_eye[0], (t_cylinder *)m->obj[i]);
+			chkt = get_nearest_cylinder(v_w, m->v_ceye, (t_cylinder *)m->obj[i]);
 		else if (m->obj_type[i] == CMD_TRIANGLE)
-			chkt = get_nearest_triangle(v_w, m->v_eye[0], (t_triangle *)m->obj[i]);
+			chkt = get_nearest_triangle(v_w, m->v_ceye, (t_triangle *)m->obj[i]);
 		if (chkt >= 0 && (t == -1 || chkt < t))
 		{
 			t = chkt;
@@ -42,6 +42,7 @@ t_color	decide_color(t_vec v_w, t_map *m)
 void	init_m(t_map *m)
 {
 	m->eye_count = 0;
+	m->ceye_num = 0;
 	m->light_count = 0;
 	m->obj_count = 0;
 	
@@ -60,6 +61,7 @@ void	set_default_Value(t_map *m)
 	m->window_x = 242;
 	m->window_y = 242;
 
+	ft_vecset(&m->v_ceye, 0, 0, -5);
 	ft_vecset(&m->v_eye[m->eye_count++], 0, 0, -5);
 	ft_vecset(&m->v_eye[m->eye_count++], 0, 1, 2);
 
@@ -164,12 +166,14 @@ void	set_default_Value(t_map *m)
 	ft_vecset(&((t_triangle *)m->obj[m->obj_count])->first, 1.0, -1.0, 1.0);
 	ft_vecset(&((t_triangle *)m->obj[m->obj_count])->second, -1.0, -1.0, 1.0);
 	ft_vecset(&((t_triangle *)m->obj[m->obj_count])->third, 0.0, -1.0, 8.0);
+
 	// ft_vecset(&((t_triangle *)m->obj[m->obj_count])->first, 0.0, -1.0, 0.0);
 	// ft_vecset(&((t_triangle *)m->obj[m->obj_count])->second, 0.0, 0.0, -1.0);
 	// ft_vecset(&((t_triangle *)m->obj[m->obj_count])->third, 1.0, 0.0, 00.0);
 	// ft_vecset(&((t_triangle *)m->obj[m->obj_count])->first, 10.0, 20.0, 10.0);
 	// ft_vecset(&((t_triangle *)m->obj[m->obj_count])->second, 10.0, 10.0, 20.0);
 	// ft_vecset(&((t_triangle *)m->obj[m->obj_count])->third, 20.0, 10.0, 10.0);
+
 	ft_initTriangle(m->obj[m->obj_count]);
 	m->obj_count++;
 
@@ -177,7 +181,7 @@ void	set_default_Value(t_map *m)
 	m->obj[m->obj_count] = (t_square *)malloc(sizeof(t_square));
 	ft_vecset(&((t_square *)m->obj[m->obj_count])->center, 1.0, -1.0, 1.0);
 	ft_vecset(&((t_square *)m->obj[m->obj_count])->orientation, 0.0, 1.0, 0.0);
-	((t_square *)m->obj[m->obj_count])->sidesize = 10.0;
+	((t_square *)m->obj[m->obj_count])->sidesize = 1.0;
 	ft_initSquare(m->obj[m->obj_count]);
 	m->obj_count++;
 

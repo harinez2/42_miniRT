@@ -36,6 +36,8 @@ int	readCmd1(int *i, char *line, t_map *m)
 		cmd = CMD_CAMERA;
 		(*i)++;
 		m->v_eye[m->eye_count] = readXyz(i, line, m);
+		if (m->eye_count == 0)
+			m->v_ceye = m->v_eye[0];
 		m->v_eye_orientation[m->eye_count] = readXyz(i, line, m);
 		m->eye_fov[m->eye_count++] = readDouble(i, line);
 	}

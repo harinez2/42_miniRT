@@ -27,8 +27,8 @@ t_color ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 	set_color(&color, m->kAmb.r * m->ambItsty, m->kAmb.g * m->ambItsty, m->kAmb.b * m->ambItsty);
 
 	//(2) diffuse reflection 拡散反射光
-	t_vec v_de = ft_vecsub(v_w, m->v_eye[0]);
-	t_vec v_tpos = ft_vecadd(m->v_eye[0], ft_vecmult(v_de, t));
+	t_vec v_de = ft_vecsub(v_w, m->v_ceye);
+	t_vec v_tpos = ft_vecadd(m->v_ceye, ft_vecmult(v_de, t));
 	t_vec v_lightDir = ft_vecnormalize(ft_vecsub(m->v_light[0], v_tpos));
 	double naiseki = ft_vecinnerprod(ft_vecnormalize(tp->normal), v_lightDir);
 	if (naiseki < 0)

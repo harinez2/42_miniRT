@@ -94,10 +94,14 @@ typedef struct		s_square
 
 typedef struct		s_map
 {
+	void	*mlx;
+	void	*win;
 	int	window_x;
 	int	window_y;
 
 	int	eye_count;
+	int	ceye_num;
+	t_vec	v_ceye;
 	t_vec	v_eye[5];
 	t_vec	v_eye_orientation[5];
 	double	eye_fov[5];
@@ -188,7 +192,6 @@ typedef struct image_t {
 	pixcel_t **map;       /**< 画像データ */
 }	image_t;
 
-double	ft_map(double x, int froma, int fromb, int toa, int tob);
 t_color	decide_color(t_vec v_w, t_map *m);
 
 int	readCmd1(int *i, char *line, t_map *m);
@@ -243,7 +246,7 @@ void	print_cylinder(t_cylinder *tc);
 void	ft_showErrorExit(int errNo, t_map *m);
 void	freeX(t_map *m);
 
-int		key_win1(int key, void *p);
+int		key_win1(int key, t_map *m);
 void	close_win();
 int		draw_map_wnd(void *mlx, void *win, t_map *m);
 void	display_window(t_map *m);
