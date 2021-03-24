@@ -1,17 +1,5 @@
 #include	"main.h"
 
-void    ft_initTriangle(t_triangle *tt)
-{
-	t_vec n = ft_veccrossprod(ft_vecsub(tt->second, tt->first), ft_vecsub(tt->third, tt->first));
-	//printf("tri vec: %.2f %.2f %.2f\n", n.x, n.y, n.z);
-	n = ft_vecnormalize(n);
-	//printf("tri vec: %.2f %.2f %.2f\n", n.x, n.y, n.z);
-    tt->plane.normal = n;
-
-    //tt->plane.position = ft_vecnormalize(tt->first);
-	tt->plane.position = tt->first;
-}
-
 void    ft_initSquare(t_square *ts)
 {
     if (ts->orientation.x != 0)
@@ -41,4 +29,35 @@ void    ft_initSquare(t_square *ts)
     {
 
     }
+}
+
+double	get_nearest_square(t_vec v_w, t_vec v_eye, t_square *ts)
+{
+	double t;
+
+	t = get_nearest_plane(v_w, v_eye, &ts->tr_a.plane);
+	if (t >= 0)
+	{
+		;
+	}
+	//printf("%.2f ", t);
+	return (t);
+}
+
+t_color	ray_trace_square(t_vec v_w, t_map *m, t_square *ts, double t)
+{
+	return (ray_trace_plane(v_w, m, &ts->tr_a.plane, t));
+}
+
+void	print_square(t_square *ts)
+{
+	printf("Square: ");
+	printf("%.2f, %.2f, %.2f / ", ts->center.x, ts->center.y, ts->center.z);
+	printf("%.2f, %.2f, %.2f / ", ts->orientation.x, ts->orientation.y, ts->orientation.z);
+	printf("%.2f / ", ts->sidesize);
+	printf("rgb:%.2f %.2f %.2f\n", ts->rgb.r, ts->rgb.g, ts->rgb.b);
+	printf("      ");
+	print_triangle(&ts->tr_a);
+	printf("      ");
+	print_triangle(&ts->tr_b);
 }

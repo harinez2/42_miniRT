@@ -218,8 +218,27 @@ double	ft_vecnormsq(t_vec v);
 t_vec	ft_vecnormalize(t_vec v);
 void	ft_vecprint(t_vec *v);
 
-void    ft_initTriangle(t_triangle *tt);
+double	get_nearest_sphere(t_vec v_w, t_vec v_eye, t_sphere *ts);
+t_color ray_trace_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t);
+void	print_sphere(t_sphere *ts);
+
+double	get_nearest_plane(t_vec v_w, t_vec v_eye, t_plane *tp);
+t_color ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t);
+void	print_plane(t_plane *tp);
+
 void    ft_initSquare(t_square *ts);
+double	get_nearest_square(t_vec v_w, t_vec v_eye, t_square *ts);
+t_color	ray_trace_square(t_vec v_w, t_map *m, t_square *ts, double t);
+void	print_square(t_square *ts);
+
+void    ft_initTriangle(t_triangle *tt);
+double	get_nearest_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt);
+t_color	ray_trace_triangle(t_vec v_w, t_map *m, t_triangle *tt, double t);
+void	print_triangle(t_triangle *tt);
+
+double	get_nearest_cylinder(t_vec v_w, t_vec v_eye, t_cylinder *tc);
+t_color	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t);
+void	print_cylinder(t_cylinder *tc);
 
 void	ft_showErrorExit(int errNo, t_map *m);
 void	freeX(t_map *m);
