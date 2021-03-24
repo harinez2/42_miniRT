@@ -1,5 +1,23 @@
 #include	"main.h"
 
+void	print_keyname(int key)
+{
+	if (key == 0x63)//c key
+		printf("c key");
+	else if (key == 0xff52)//Up key
+		printf("Up key");
+	else if (key == 0xff54)//Down key
+		printf("Down key");
+	else if (key == 0xff51)//Left key
+		printf("Left key");
+	else if (key == 0xff53)//Right key
+		printf("Right key");
+	else if (key == 0x66)//f key
+		printf("f key");
+	else if (key == 0x62)//b key
+		printf("b key");
+}
+
 int	key_win1(int key, t_map *m)
 {
 	//キーコードはxevコマンドで調べる
@@ -8,59 +26,29 @@ int	key_win1(int key, t_map *m)
 		printf("ESC key pressed.\n");
 		exit(0);
 	}
-	else if (key == 0x63)//c key
+	if (key == 0x63)//c key
 	{
-
 		m->ceye_num++;
 		if (m->ceye_num == m->eye_count)
 			m->ceye_num = 0;
 		m->v_ceye = m->v_eye[m->ceye_num];
-		draw_map_wnd(m->mlx, m->win, m);
-		printf("c key pressed: cameranum = %d ", m->ceye_num);
-		printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
 	}
 	else if (key == 0xff52)//Up key
-	{
 		m->v_ceye.y = m->v_ceye.y + 1;
-		draw_map_wnd(m->mlx, m->win, m);
-		printf("Up key pressed: cameranum = %d ", m->ceye_num);
-		printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
-	}
 	else if (key == 0xff54)//Down key
-	{
 		m->v_ceye.y = m->v_ceye.y - 1;
-		draw_map_wnd(m->mlx, m->win, m);
-		printf("Up key pressed: cameranum = %d ", m->ceye_num);
-		printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
-	}
 	else if (key == 0xff51)//Left key
-	{
 		m->v_ceye.x = m->v_ceye.x + 1;
-		draw_map_wnd(m->mlx, m->win, m);
-		printf("Up key pressed: cameranum = %d ", m->ceye_num);
-		printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
-	}
 	else if (key == 0xff53)//Right key
-	{
 		m->v_ceye.x = m->v_ceye.x - 1;
-		draw_map_wnd(m->mlx, m->win, m);
-		printf("Up key pressed: cameranum = %d ", m->ceye_num);
-		printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
-	}
 	else if (key == 0x66)//f key
-	{
 		m->v_ceye.z = m->v_ceye.z - 1;
-		draw_map_wnd(m->mlx, m->win, m);
-		printf("f key pressed: cameranum = %d ", m->ceye_num);
-		printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
-	}
 	else if (key == 0x62)//b key
-	{
 		m->v_ceye.z = m->v_ceye.z + 1;
-		draw_map_wnd(m->mlx, m->win, m);
-		printf("b key pressed: cameranum = %d ", m->ceye_num);
-		printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
-	}
+	print_keyname(key);
+	printf(" pressed: cameranum = %d ", m->ceye_num);
+	printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
+	draw_map_wnd(m->mlx, m->win, m);
 	return (0);
 }
 
