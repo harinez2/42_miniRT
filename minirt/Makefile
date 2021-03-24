@@ -3,8 +3,8 @@ LIBNAME		= libmlx.a
 CLONE_DIR	= ../minilibx-linux
 INCLIB		= /usr/lib
 SRCS		= main.c \
-		  ft_readerFile.c ft_readerNum.c \
-		  ft_vecOp1.c ft_vecOp2.c ft_objInitializer.c \
+		  ft_reader_file.c ft_reader_num.c \
+		  ft_vec_op1.c ft_vec_op2.c ft_obj_initializer.c \
 		  ft_util_color.c ft_errorclean.c \
 		  ft_window.c ft_bitmap.c \
 		  ../gnl/get_next_line.c ../gnl/get_next_line_utils.c
