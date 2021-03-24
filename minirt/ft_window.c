@@ -19,6 +19,48 @@ int	key_win1(int key, t_map *m)
 		printf("c key pressed: cameranum = %d ", m->ceye_num);
 		printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
 	}
+	else if (key == 0xff52)//Up key
+	{
+		m->v_ceye.y = m->v_ceye.y + 1;
+		draw_map_wnd(m->mlx, m->win, m);
+		printf("Up key pressed: cameranum = %d ", m->ceye_num);
+		printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
+	}
+	else if (key == 0xff54)//Down key
+	{
+		m->v_ceye.y = m->v_ceye.y - 1;
+		draw_map_wnd(m->mlx, m->win, m);
+		printf("Up key pressed: cameranum = %d ", m->ceye_num);
+		printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
+	}
+	else if (key == 0xff51)//Left key
+	{
+		m->v_ceye.x = m->v_ceye.x + 1;
+		draw_map_wnd(m->mlx, m->win, m);
+		printf("Up key pressed: cameranum = %d ", m->ceye_num);
+		printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
+	}
+	else if (key == 0xff53)//Right key
+	{
+		m->v_ceye.x = m->v_ceye.x - 1;
+		draw_map_wnd(m->mlx, m->win, m);
+		printf("Up key pressed: cameranum = %d ", m->ceye_num);
+		printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
+	}
+	else if (key == 0x66)//f key
+	{
+		m->v_ceye.z = m->v_ceye.z - 1;
+		draw_map_wnd(m->mlx, m->win, m);
+		printf("f key pressed: cameranum = %d ", m->ceye_num);
+		printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
+	}
+	else if (key == 0x62)//b key
+	{
+		m->v_ceye.z = m->v_ceye.z + 1;
+		draw_map_wnd(m->mlx, m->win, m);
+		printf("b key pressed: cameranum = %d ", m->ceye_num);
+		printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
+	}
 	return (0);
 }
 
