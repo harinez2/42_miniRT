@@ -28,35 +28,45 @@ double	get_nearest_sphere(t_vec v_w, t_vec v_eye, t_sphere *ts)
 t_color ray_trace_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t)
 {
 	t_color color;
+	int		i;
 
 	//(1) ambient light 環境光
-	set_color(&color, m->kAmb.r * m->ambItsty, m->kAmb.g * m->ambItsty, m->kAmb.b * m->ambItsty);
+	set_color(&color, 
+		m->kAmb.r * m->ambItsty * ts->rgb.r,
+		m->kAmb.g * m->ambItsty * ts->rgb.g,
+		m->kAmb.b * m->ambItsty * ts->rgb.b);
 
-	//(2) diffuse reflection 拡散反射光
 	t_vec v_de = ft_vecsub(v_w, m->v_ceye);
 	t_vec v_tpos = ft_vecadd(m->v_ceye, ft_vecmult(v_de, t));//tpos：視線と球上の交点(pi)
-	t_vec v_lightDir = ft_vecnormalize(ft_vecsub(m->v_light[0], v_tpos));//入射ベクトル(l)
-	t_vec v_sphereN = ft_vecnormalize(ft_vecsub(v_tpos, ts->center));//法線ベクトル(n)
-	double naiseki = ft_vecinnerprod(v_sphereN, v_lightDir);
-	if (naiseki < 0)
-		naiseki = 0;
-	double nlDot = ft_map(naiseki, 0, 1, 0, 255);
-	color.r += m->kDif.r * m->lightItsty[0] * nlDot;
-	color.g += m->kDif.g * m->lightItsty[0] * nlDot;
-	color.b += m->kDif.b * m->lightItsty[0] * nlDot;
-
-	//(3) specular reflection 鏡面反射光
-	if (naiseki > 0)
+	i = 0;
+	while (i < m->light_count)
 	{
-		t_vec refDir = ft_vecsub(ft_vecmult(v_sphereN, 2 * naiseki), v_lightDir); 
-		t_vec invEyeDir = ft_vecnormalize(ft_vecmult(v_de, -1));
-		double vrDot = ft_vecinnerprod(invEyeDir, refDir);
-		if (vrDot < 0)
-			vrDot = 0;
-		double vrDotPow = ft_map(pow(vrDot, m->shininess), 0, 1, 0, 255);
-		color.r += m->kSpe.r * m->lightItsty[0] * vrDotPow;
-		color.g += m->kSpe.g * m->lightItsty[0] * vrDotPow;
-		color.b += m->kSpe.b * m->lightItsty[0] * vrDotPow;
+		//(2) diffuse reflection 拡散反射光
+		t_vec v_lightDir = ft_vecnormalize(ft_vecsub(m->v_light[i], v_tpos));//入射ベクトル(l)
+		t_vec v_sphereN = ft_vecnormalize(ft_vecsub(v_tpos, ts->center));//法線ベクトル(n)
+		double naiseki = ft_vecinnerprod(v_sphereN, v_lightDir);
+		if (naiseki < 0)
+			naiseki = 0;
+		double nlDot = ft_map(naiseki, 0, 1, 0, 255);
+		color.r += m->kDif.r * m->lightItsty[i] * m->light_rgb[i].r * nlDot * ts->rgb.r;
+		color.g += m->kDif.g * m->lightItsty[i] * m->light_rgb[i].g * nlDot * ts->rgb.g;
+		color.b += m->kDif.b * m->lightItsty[i] * m->light_rgb[i].b * nlDot * ts->rgb.b;
+
+		//(3) specular reflection 鏡面反射光
+		if (naiseki > 0)
+		{
+			t_vec v_lightDir = ft_vecnormalize(ft_vecsub(m->v_light[i], v_tpos));//入射ベクトル(l)
+			t_vec refDir = ft_vecsub(ft_vecmult(v_sphereN, 2 * naiseki), v_lightDir); 
+			t_vec invEyeDir = ft_vecnormalize(ft_vecmult(v_de, -1));
+			double vrDot = ft_vecinnerprod(invEyeDir, refDir);
+			if (vrDot < 0)
+				vrDot = 0;
+			double vrDotPow = ft_map(pow(vrDot, m->shininess), 0, 1, 0, 255);
+			color.r += m->kSpe.r * m->lightItsty[i] * m->light_rgb[i].r * vrDotPow * ts->rgb.r;
+			color.g += m->kSpe.g * m->lightItsty[i] * m->light_rgb[i].g * vrDotPow * ts->rgb.g;
+			color.b += m->kSpe.b * m->lightItsty[i] * m->light_rgb[i].b * vrDotPow * ts->rgb.b;
+		}
+		i++;
 	}
 	return (set_rgb_inrange(color));
 }

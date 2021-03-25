@@ -31,9 +31,11 @@ void    ft_init_square(t_square *ts)
     ts->tr_a.first = a;
     ts->tr_a.second = b;
     ts->tr_a.third = c;
+	ts->tr_a.rgb = ts->rgb;
     ts->tr_b.first = a;
     ts->tr_b.second = c;
     ts->tr_b.third = d;
+	ts->tr_b.rgb = ts->rgb;
     ft_init_triangle(&ts->tr_a);
     ft_init_triangle(&ts->tr_b);
 }

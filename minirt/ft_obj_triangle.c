@@ -4,12 +4,9 @@ void    ft_init_triangle(t_triangle *tt)
 {
 	t_vec n = ft_veccrossprod(ft_vecsub(tt->second, tt->first), ft_vecsub(tt->third, tt->first));
 	//printf("tri vec: %.2f %.2f %.2f\n", n.x, n.y, n.z);
-	n = ft_vecnormalize(n);
-	//printf("tri vec: %.2f %.2f %.2f\n", n.x, n.y, n.z);
-    tt->plane.normal = n;
-
-    //tt->plane.position = ft_vecnormalize(tt->first);
-	tt->plane.position = tt->first;
+    tt->plane.normal = ft_vecnormalize(n);
+	tt->plane.position = tt->first;//ft_vecnormalize(tt->first);
+	tt->plane.rgb = tt->rgb;
 }
 
 double	get_nearest_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt)
