@@ -1,6 +1,6 @@
 #include	"main.h"
 
-void    ft_initSquare(t_square *ts)
+void    ft_init_square(t_square *ts)
 {
     if (ts->orientation.x != 0)
     {
@@ -22,8 +22,8 @@ void    ft_initSquare(t_square *ts)
         ts->tr_b.first = a;
         ts->tr_b.second = c;
         ts->tr_b.third = d;
-        ft_initTriangle(&ts->tr_a);
-        ft_initTriangle(&ts->tr_b);
+        ft_init_triangle(&ts->tr_a);
+        ft_init_triangle(&ts->tr_b);
     }
     else
     {

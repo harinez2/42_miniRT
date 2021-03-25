@@ -231,12 +231,12 @@ double	get_nearest_plane(t_vec v_w, t_vec v_eye, t_plane *tp);
 t_color ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t);
 void	print_plane(t_plane *tp);
 
-void    ft_initSquare(t_square *ts);
+void    ft_init_square(t_square *ts);
 double	get_nearest_square(t_vec v_w, t_vec v_eye, t_square *ts);
 t_color	ray_trace_square(t_vec v_w, t_map *m, t_square *ts, double t);
 void	print_square(t_square *ts);
 
-void    ft_initTriangle(t_triangle *tt);
+void    ft_init_triangle(t_triangle *tt);
 double	get_nearest_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt);
 t_color	ray_trace_triangle(t_vec v_w, t_map *m, t_triangle *tt, double t);
 void	print_triangle(t_triangle *tt);

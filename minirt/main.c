@@ -180,7 +180,7 @@ void	set_default_Value(t_map *m)
 	// ft_vecset(&((t_triangle *)m->obj[m->obj_count])->second, 10.0, 10.0, 20.0);
 	// ft_vecset(&((t_triangle *)m->obj[m->obj_count])->third, 20.0, 10.0, 10.0);
 
-	ft_initTriangle(m->obj[m->obj_count]);
+	ft_init_triangle(m->obj[m->obj_count]);
 	m->obj_count++;
 
 	m->obj_type[m->obj_count] = CMD_SQUARE;
@@ -188,7 +188,7 @@ void	set_default_Value(t_map *m)
 	ft_vecset(&((t_square *)m->obj[m->obj_count])->center, 1.0, -1.0, 1.0);
 	ft_vecset(&((t_square *)m->obj[m->obj_count])->orientation, 0.0, 1.0, 0.0);
 	((t_square *)m->obj[m->obj_count])->sidesize = 1.0;
-	ft_initSquare(m->obj[m->obj_count]);
+	ft_init_square(m->obj[m->obj_count]);
 	m->obj_count++;
 
 }

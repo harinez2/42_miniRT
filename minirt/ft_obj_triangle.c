@@ -1,6 +1,6 @@
 #include	"main.h"
 
-void    ft_initTriangle(t_triangle *tt)
+void    ft_init_triangle(t_triangle *tt)
 {
 	t_vec n = ft_veccrossprod(ft_vecsub(tt->second, tt->first), ft_vecsub(tt->third, tt->first));
 	//printf("tri vec: %.2f %.2f %.2f\n", n.x, n.y, n.z);

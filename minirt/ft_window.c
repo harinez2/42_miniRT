@@ -38,9 +38,9 @@ int	key_win1(int key, t_map *m)
 	else if (key == 0xff54)//Down key
 		m->v_ceye.y = m->v_ceye.y - 1;
 	else if (key == 0xff51)//Left key
-		m->v_ceye.x = m->v_ceye.x + 1;
-	else if (key == 0xff53)//Right key
 		m->v_ceye.x = m->v_ceye.x - 1;
+	else if (key == 0xff53)//Right key
+		m->v_ceye.x = m->v_ceye.x + 1;
 	else if (key == 0x66)//f key
 		m->v_ceye.z = m->v_ceye.z - 1;
 	else if (key == 0x62)//b key
