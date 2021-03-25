@@ -22,8 +22,6 @@
 # define ERR_RD_INCORRECTFORMAT	-15
 # define ERR_CHK_NO_R		-21
 # define ERR_CHK_NO_A		-22
-# define ERR_CHK_NO_C		-23
-# define ERR_CHK_NO_L		-24
 # define ERR_WND_MLXINIT	-31
 # define ERR_WND_WNDINIT	-32
 

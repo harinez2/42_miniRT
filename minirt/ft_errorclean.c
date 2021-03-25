@@ -22,10 +22,6 @@ void	ft_showErrorExit(int errNo, t_map *m)
 		printf("Error\n'R' is not specified.\n");
 	else if (errNo == ERR_CHK_NO_A)
 		printf("Error\n'A' is not specified.\n");
-	else if (errNo == ERR_CHK_NO_C)
-		printf("Error\n'c' is not specified.\n");
-	else if (errNo == ERR_CHK_NO_L)
-		printf("Error\n'l' is not specified.\n");
 	else if (errNo == ERR_WND_MLXINIT)
 		printf("Error\nMlx initialization failed.\n");
 	else if (errNo == ERR_WND_WNDINIT)

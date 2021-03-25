@@ -74,17 +74,16 @@ typedef struct		s_map
 
 	int	light_count;
 	t_vec	v_light[MAX_LIGHT_COUNT];
-	double	light_brightness[MAX_LIGHT_COUNT];
+	double	lightItsty[MAX_LIGHT_COUNT]; //Ii 光源の光の強度
 	t_color	light_rgb[MAX_LIGHT_COUNT];
 
+	double	ambItsty; //Ialpha 環境光の強度(ambient intensity)
 	t_color	kAmb; //ka 環境光反射係数
+
 	t_color	kDif; //kd 拡散反射係数
 	t_color	kSpe; //ks 鏡面反射係数
-
 	double shininess; //alpha 光沢度
-	double ambItsty; //Ialpha 環境光の強度(ambient intensity)
-	double lightItsty[MAX_LIGHT_COUNT]; //Ii 光源の光の強度
-	
+
 	int	obj_count;
 	int	obj_type[MAX_OBJ_COUNT];
 	void	*obj[MAX_OBJ_COUNT];

@@ -1,6 +1,14 @@
 #include	"main.h"
 
-int	readCmd1(int *i, char *line, t_map *m)
+void	check_is_allparam_specified(t_map *m)
+{
+	if (m->window_x == -1)
+		ft_showErrorExit(ERR_CHK_NO_R, m);
+	if (m->ambItsty == -1)
+		ft_showErrorExit(ERR_CHK_NO_A, m);
+}
+
+int		readCmd1(int *i, char *line, t_map *m)
 {
 	int	cmd;
 	
@@ -63,7 +71,7 @@ int	readCmd1(int *i, char *line, t_map *m)
 	return (cmd);
 }
 
-int	readCmd2(int *i, char *line, t_map *m)
+int		readCmd2(int *i, char *line, t_map *m)
 {
 	int	cmd;
 	
@@ -121,7 +129,7 @@ int	readCmd2(int *i, char *line, t_map *m)
 	return (cmd);
 }
 
-int	readLine(char *line, t_map *m)
+int		readLine(char *line, t_map *m)
 {
 	int	i;
 	int	ret;
@@ -167,6 +175,7 @@ void	readFromFile(char *filename, t_map *m)
 			break;
 	}
 	close(fd);
+	check_is_allparam_specified(m);
 }
 
 /*

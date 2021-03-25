@@ -49,11 +49,10 @@ void	init_m(t_map *m)
 	m->window_x = -1;
 	m->window_y = -1;
 
+	m->ambItsty = -1;
 	m->kAmb.r = -1;
 	m->kAmb.g = -1;
 	m->kAmb.b = -1;
-	
-	m->ambItsty = -1;
 }
 
 void	set_default_Value(t_map *m)
@@ -74,22 +73,14 @@ void	set_default_Value(t_map *m)
 	ft_vecset(&m->v_light[m->light_count++], -5, 5, -5);
 	ft_vecset(&m->v_light[m->light_count++], -5, 3, -2);
 
-	m->kAmb.r = 0.01;
+	m->ambItsty = 0.1;
+	m->kAmb.r = 0.1;
 	m->kAmb.g = 0.01;
 	m->kAmb.b = 0.01;
-
-	m->kDif.r = 0.69;
-	m->kDif.g = 0.0;
-	m->kDif.b = 0.0;
-
-	m->kSpe.r = 0.3;
-	m->kSpe.g = 0.3;
-	m->kSpe.b = 0.3;
 
 	m->shininess = 8;
 
 	m->lightItsty[0] = 1.0;
-	m->ambItsty = 0.1;
 
 	m->obj_type[m->obj_count] = CMD_SPHERE;
 	m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
@@ -193,7 +184,20 @@ void	set_default_Value(t_map *m)
 
 }
 
-int	main(int argc, char **argv)
+void	init_values(t_map *m)
+{
+	m->kDif.r = 2 * (1 - m->kAmb.r) / 3;
+	m->kDif.g = 2 * (1 - m->kAmb.g) / 3;
+	m->kDif.b = 2 * (1 - m->kAmb.b) / 3;
+
+	m->kSpe.r = (1 - m->kAmb.r) / 3;
+	m->kSpe.g = (1 - m->kAmb.g) / 3;
+	m->kSpe.b = (1 - m->kAmb.b) / 3;
+
+	decide_endian();
+}
+
+int		main(int argc, char **argv)
 {
 	t_map	m;
 
@@ -203,9 +207,9 @@ int	main(int argc, char **argv)
 	else
 		set_default_Value(&m);
 	//set_default_Value(&m);
+	init_values(&m);
 	print_m(&m);
 
-	decide_endian();
 	if (argc >= 3 && strcmp(argv[2], "--save") == 0)
 		write_bmp(&m);
 	else
