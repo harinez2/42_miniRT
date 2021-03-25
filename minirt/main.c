@@ -1,26 +1,36 @@
 #include	"main.h"
 
+double	judge_cross(t_vec v_w, t_vec vstart, int i, t_map *m)
+{
+	double	chkt;
+
+	chkt = -1;
+	if (m->obj_type[i] == CMD_SPHERE)
+		chkt = get_nearest_sphere(v_w, vstart, (t_sphere *)m->obj[i]);
+	else if (m->obj_type[i] == CMD_PLANE)
+		chkt = get_nearest_plane(v_w, vstart, (t_plane *)m->obj[i]);
+	else if (m->obj_type[i] == CMD_SQUARE)
+		chkt = get_nearest_square(v_w, vstart, (t_square *)m->obj[i]);
+	else if (m->obj_type[i] == CMD_CYLINDER)
+		chkt = get_nearest_cylinder(v_w, vstart, (t_cylinder *)m->obj[i]);
+	else if (m->obj_type[i] == CMD_TRIANGLE)
+		chkt = get_nearest_triangle(v_w, vstart, (t_triangle *)m->obj[i]);
+	return (chkt);
+}
+
 t_color	decide_color(t_vec v_w, t_map *m)
 {
-	double	t;
 	t_color		color;
-	double 	chkt;
+	double		t;
+	double 		chkt;
+	int			i;
 
 	t = -1;
 	set_color(&color, 92, 151, 243);
-	for (int i = 0; i < m->obj_count; i++)
+	i = 0;
+	while (i < m->obj_count)
 	{
-		chkt = -1;
-		if (m->obj_type[i] == CMD_SPHERE)
-			chkt = get_nearest_sphere(v_w, m->v_ceye, (t_sphere *)m->obj[i]);
-		else if (m->obj_type[i] == CMD_PLANE)
-			chkt = get_nearest_plane(v_w, m->v_ceye, (t_plane *)m->obj[i]);
-		else if (m->obj_type[i] == CMD_SQUARE)
-			chkt = get_nearest_square(v_w, m->v_ceye, (t_square *)m->obj[i]);
-		else if (m->obj_type[i] == CMD_CYLINDER)
-			chkt = get_nearest_cylinder(v_w, m->v_ceye, (t_cylinder *)m->obj[i]);
-		else if (m->obj_type[i] == CMD_TRIANGLE)
-			chkt = get_nearest_triangle(v_w, m->v_ceye, (t_triangle *)m->obj[i]);
+		chkt = judge_cross(v_w, m->v_ceye, i, m);
 		if (chkt >= 0 && (t == -1 || chkt < t))
 		{
 			t = chkt;
@@ -35,6 +45,7 @@ t_color	decide_color(t_vec v_w, t_map *m)
 			else if (m->obj_type[i] == CMD_TRIANGLE)
 				color = ray_trace_triangle(v_w, m, (t_triangle *)m->obj[i], chkt);
 		}
+		i++;
 	}
 	return (color);
 }
