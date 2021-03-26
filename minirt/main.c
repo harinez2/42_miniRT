@@ -1,6 +1,6 @@
 #include	"main.h"
 
-double	judge_cross(t_vec v_w, t_vec vstart, int i, t_map *m)
+double	get_nearest_obj(t_vec v_w, t_vec vstart, int i, t_map *m)
 {
 	double	chkt;
 
@@ -18,36 +18,46 @@ double	judge_cross(t_vec v_w, t_vec vstart, int i, t_map *m)
 	return (chkt);
 }
 
+t_color	ray_trace_obj(t_vec v_w, t_map *m, int i, double chkt)
+{
+	t_color color;
+
+	if (i == -1)
+		set_color(&color, 92, 151, 243);
+	else if (m->obj_type[i] == CMD_SPHERE)
+		color = ray_trace_sphere(v_w, m, (t_sphere *)m->obj[i], chkt);
+	else if (m->obj_type[i] == CMD_PLANE)
+		color = ray_trace_plane(v_w, m, (t_plane *)m->obj[i], chkt);
+	else if (m->obj_type[i] == CMD_SQUARE)
+		color = ray_trace_square(v_w, m, (t_square *)m->obj[i], chkt);
+	else if (m->obj_type[i] == CMD_CYLINDER)
+		color = ray_trace_cylinder(v_w, m, (t_cylinder *)m->obj[i], chkt);
+	else if (m->obj_type[i] == CMD_TRIANGLE)
+		color = ray_trace_triangle(v_w, m, (t_triangle *)m->obj[i], chkt);
+	return (color);
+}
+
 t_color	decide_color(t_vec v_w, t_map *m)
 {
-	t_color		color;
-	double		t;
 	double 		chkt;
+	double		hitt;
 	int			i;
+	int			hiti;
 
-	t = -1;
-	set_color(&color, 92, 151, 243);
+	hitt = -1;
+	hiti = -1;
 	i = 0;
 	while (i < m->obj_count)
 	{
-		chkt = judge_cross(v_w, m->v_ceye, i, m);
-		if (chkt >= 0 && (t == -1 || chkt < t))
+		chkt = get_nearest_obj(v_w, m->v_ceye, i, m);
+		if (chkt >= 0 && (hitt == -1 || chkt < hitt))
 		{
-			t = chkt;
-			if (m->obj_type[i] == CMD_SPHERE)
-				color = ray_trace_sphere(v_w, m, (t_sphere *)m->obj[i], chkt);
-			else if (m->obj_type[i] == CMD_PLANE)
-				color = ray_trace_plane(v_w, m, (t_plane *)m->obj[i], chkt);
-			else if (m->obj_type[i] == CMD_SQUARE)
-				color = ray_trace_square(v_w, m, (t_square *)m->obj[i], chkt);
-			else if (m->obj_type[i] == CMD_CYLINDER)
-				color = ray_trace_cylinder(v_w, m, (t_cylinder *)m->obj[i], chkt);
-			else if (m->obj_type[i] == CMD_TRIANGLE)
-				color = ray_trace_triangle(v_w, m, (t_triangle *)m->obj[i], chkt);
+			hitt = chkt;
+			hiti = i;
 		}
 		i++;
 	}
-	return (color);
+	return (ray_trace_obj(v_w, m, hiti, hitt));
 }
 
 void	init_m(t_map *m)
