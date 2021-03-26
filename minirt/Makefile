@@ -6,6 +6,7 @@ SRCS		= main.c \
 		  ft_reader_file.c ft_reader_num.c \
 		  ft_vec_op1.c ft_vec_op2.c \
 		  ft_util_color.c ft_util_render.c \
+		  ft_raytracer.c \
 		  ft_obj_cylinder.c ft_obj_plane.c  ft_obj_sphere.c \
 		  ft_obj_square.c  ft_obj_triangle.c \
 		  ft_window.c ft_bitmap.c ft_errorclean.c \

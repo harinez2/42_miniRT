@@ -41,6 +41,15 @@ t_color ray_trace_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t)
 	i = 0;
 	while (i < m->light_count)
 	{
+		//影の判定
+		double		hit_t;
+		get_minimum_t(m->v_light[i], v_tpos, m, &hit_t);
+		if (hit_t != -1)
+		{
+			i++;
+			continue;
+		}
+		
 		//(2) diffuse reflection 拡散反射光
 		t_vec v_lightDir = ft_vecnormalize(ft_vecsub(m->v_light[i], v_tpos));//入射ベクトル(l)
 		t_vec v_sphereN = ft_vecnormalize(ft_vecsub(v_tpos, ts->center));//法線ベクトル(n)
