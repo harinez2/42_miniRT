@@ -18,46 +18,46 @@ double	get_nearest_obj(t_vec v_w, t_vec vstart, int i, t_map *m)
 	return (chkt);
 }
 
-t_color	ray_trace_obj(t_vec v_w, t_map *m, int i, double chkt)
+t_color	ray_trace_obj(t_vec v_w, t_map *m, int i, double t)
 {
 	t_color color;
 
 	if (i == -1)
 		set_color(&color, 92, 151, 243);
 	else if (m->obj_type[i] == CMD_SPHERE)
-		color = ray_trace_sphere(v_w, m, (t_sphere *)m->obj[i], chkt);
+		color = ray_trace_sphere(v_w, m, (t_sphere *)m->obj[i], t);
 	else if (m->obj_type[i] == CMD_PLANE)
-		color = ray_trace_plane(v_w, m, (t_plane *)m->obj[i], chkt);
+		color = ray_trace_plane(v_w, m, (t_plane *)m->obj[i], t);
 	else if (m->obj_type[i] == CMD_SQUARE)
-		color = ray_trace_square(v_w, m, (t_square *)m->obj[i], chkt);
+		color = ray_trace_square(v_w, m, (t_square *)m->obj[i], t);
 	else if (m->obj_type[i] == CMD_CYLINDER)
-		color = ray_trace_cylinder(v_w, m, (t_cylinder *)m->obj[i], chkt);
+		color = ray_trace_cylinder(v_w, m, (t_cylinder *)m->obj[i], t);
 	else if (m->obj_type[i] == CMD_TRIANGLE)
-		color = ray_trace_triangle(v_w, m, (t_triangle *)m->obj[i], chkt);
+		color = ray_trace_triangle(v_w, m, (t_triangle *)m->obj[i], t);
 	return (color);
 }
 
 t_color	decide_color(t_vec v_w, t_map *m)
 {
-	double 		chkt;
-	double		hitt;
+	double 		t;
+	double		hit_t;
 	int			i;
-	int			hiti;
+	int			hit_i;
 
-	hitt = -1;
-	hiti = -1;
+	hit_t = -1;
+	hit_i = -1;
 	i = 0;
 	while (i < m->obj_count)
 	{
-		chkt = get_nearest_obj(v_w, m->v_ceye, i, m);
-		if (chkt >= 0 && (hitt == -1 || chkt < hitt))
+		t = get_nearest_obj(v_w, m->v_ceye, i, m);
+		if (t >= 0 && (hit_t == -1 || t < hit_t))
 		{
-			hitt = chkt;
-			hiti = i;
+			hit_t = t;
+			hit_i = i;
 		}
 		i++;
 	}
-	return (ray_trace_obj(v_w, m, hiti, hitt));
+	return (ray_trace_obj(v_w, m, hit_i, hit_t));
 }
 
 void	init_m(t_map *m)
