@@ -2,8 +2,11 @@
 
 double	ft_map(double x, int froma, int fromb, int toa, int tob)
 {
-	double pos = (x - (double)froma) / ((double)fromb - (double)froma);
-	double ret = pos * ((double)tob - (double)toa) + (double)toa;
+	double	pos;
+	double	ret;
+
+	pos = (x - (double)froma) / ((double)fromb - (double)froma);
+	ret = pos * ((double)tob - (double)toa) + (double)toa;
 	return (ret);
 }
 
@@ -15,9 +18,7 @@ void	print_m(t_map *m)
 	printf("kAmb     : %.2f, %.2f, %.2f\n", m->kAmb.r, m->kAmb.g, m->kAmb.b);
 	printf("kDif     : %.2f, %.2f, %.2f\n", m->kDif.r, m->kDif.g, m->kDif.b);
 	printf("kSpe     : %.2f, %.2f, %.2f\n", m->kSpe.r, m->kSpe.g, m->kSpe.b);
-
 	printf("shininess: %.2f\n", m->shininess);
-
 	for (int i = 0; i < m->eye_count; i++)
 		printf("Eye[%d]   : %.2f, %.2f, %.2f\n", i,
 			m->v_eye[i].x, m->v_eye[i].y, m->v_eye[i].z);

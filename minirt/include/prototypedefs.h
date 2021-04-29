@@ -61,7 +61,7 @@ void	freeX(t_map *m);
 
 void	print_keyname(int key);
 int		key_win1(int key, t_map *m);
-void	close_win();
+void	close_win(void);
 int		draw_map_wnd(void *mlx, void *win, t_map *m);
 void	display_window(t_map *m);
 

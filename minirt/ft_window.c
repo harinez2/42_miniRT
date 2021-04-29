@@ -1,32 +1,41 @@
 #include	"main.h"
 
+// 0x63		c key
+// 0xff52	Up key
+// 0xff54	Down key
+// 0xff51	Left key
+// 0xff53	Right key
+// 0x66		f key
+// 0x62		b key
 void	print_keyname(int key)
 {
-	if (key == 0x63)//c key
+	if (key == 0x63)
 		printf("c key");
-	else if (key == 0xff52)//Up key
+	else if (key == 0xff52)
 		printf("Up key");
-	else if (key == 0xff54)//Down key
+	else if (key == 0xff54)
 		printf("Down key");
-	else if (key == 0xff51)//Left key
+	else if (key == 0xff51)
 		printf("Left key");
-	else if (key == 0xff53)//Right key
+	else if (key == 0xff53)
 		printf("Right key");
-	else if (key == 0x66)//f key
+	else if (key == 0x66)
 		printf("f key");
-	else if (key == 0x62)//b key
+	else if (key == 0x62)
 		printf("b key");
 }
 
+// key code can be searched with xev command
+// 0xFF1B		esc
+// 0x63		c key
 int	key_win1(int key, t_map *m)
 {
-	//キーコードはxevコマンドで調べる
-	if (key == 0xFF1B)//esc
+	if (key == 0xFF1B)
 	{
 		printf("ESC key pressed.\n");
 		exit(0);
 	}
-	if (key == 0x63)//c key
+	if (key == 0x63)
 	{
 		m->ceye_num++;
 		if (m->ceye_num == m->eye_count)
@@ -34,17 +43,17 @@ int	key_win1(int key, t_map *m)
 		m->v_ceye = m->v_eye[m->ceye_num];
 		m->v_corientation = m->v_eye_orientation[m->ceye_num];
 	}
-	else if (key == 0xff52)//Up key
+	else if (key == 0xff52)
 		m->v_ceye.y = m->v_ceye.y + 1;
-	else if (key == 0xff54)//Down key
+	else if (key == 0xff54)
 		m->v_ceye.y = m->v_ceye.y - 1;
-	else if (key == 0xff51)//Left key
+	else if (key == 0xff51)
 		m->v_ceye.x = m->v_ceye.x - 1;
-	else if (key == 0xff53)//Right key
+	else if (key == 0xff53)
 		m->v_ceye.x = m->v_ceye.x + 1;
-	else if (key == 0x66)//f key
+	else if (key == 0x66)
 		m->v_ceye.z = m->v_ceye.z - 1;
-	else if (key == 0x62)//b key
+	else if (key == 0x62)
 		m->v_ceye.z = m->v_ceye.z + 1;
 	else
 		return (0);
@@ -55,7 +64,7 @@ int	key_win1(int key, t_map *m)
 	return (0);
 }
 
-void	close_win()
+void	close_win(void)
 {
 	printf("window close button pressed.\n");
 	exit(0);
@@ -207,16 +216,18 @@ void	display_window(t_map *m)
 	void	*mlx;
 	void	*win1;
 
-	if (!(mlx = mlx_init()))
+	mlx = mlx_init();
+	if (!mlx)
 	{
 		write(1, "Error\nInitialization failed.\n", 29);
-		exit(1);
+		exit (1);
 	}
 	printf("Mlx init OK (use_xshm:%d, pshm_format:%d).\n",((t_xvar *)mlx)->use_xshm,((t_xvar *)mlx)->pshm_format);
 	m->mlx = mlx;
 
 	printf("Window1 creation: %dx%d \"Title 1\" ...", m->window_x, m->window_y);
-	if (!(win1 = mlx_new_window(mlx, m->window_x, m->window_y, "Title1")))
+	win1 = mlx_new_window(mlx, m->window_x, m->window_y, "Title1");
+	if (!win1)
 	{
 		printf(" !! KO !!\n");
 		exit(1);

@@ -11,7 +11,7 @@ void	check_is_allparam_specified(t_map *m)
 int		readCmd1(int *i, char *line, t_map *m)
 {
 	int	cmd;
-	
+
 	cmd = CMD_NONE;
 	if (line[*i] == 'R')
 	{

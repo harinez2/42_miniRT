@@ -1,24 +1,25 @@
 #include	"main.h"
 
-void    ft_init_triangle(t_triangle *tt)
+void	ft_init_triangle(t_triangle *tt)
 {
-	t_vec n = ft_veccrossprod(ft_vecsub(tt->second, tt->first), ft_vecsub(tt->third, tt->first));
+	t_vec	n;
+
+	n = ft_veccrossprod(ft_vecsub(tt->second, tt->first), ft_vecsub(tt->third, tt->first));
 	//printf("tri vec: %.2f %.2f %.2f\n", n.x, n.y, n.z);
-    tt->plane.normal = ft_vecnormalize(n);
+	tt->plane.normal = ft_vecnormalize(n);
 	tt->plane.position = tt->first;//ft_vecnormalize(tt->first);
 	tt->plane.rgb = tt->rgb;
 }
 
 double	get_nearest_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt)
 {
-	double t;
+	double	t;
 
 	t = get_nearest_plane(v_w, v_eye, &tt->plane);
 	if (t >= 0)
 	{
 		t_vec v_de = ft_vecsub(v_w, v_eye);
 		t_vec v_tpos = ft_vecadd(v_eye, ft_vecmult(v_de, t));//tpos：視線と面上の交点(pi)
-
 		double a, b, c;
 		if (tt->first.x == tt->second.x && tt->first.x == tt->third.x)
 		{

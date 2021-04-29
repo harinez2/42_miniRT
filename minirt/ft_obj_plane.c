@@ -3,7 +3,7 @@
 double	get_nearest_plane(t_vec v_w, t_vec v_eye, t_plane *tp)
 {
 	double	wn_dot;
-	double t;
+	double	t;
 
 	wn_dot = ft_vecinnerprod(v_w, tp->normal);
 	if (wn_dot != 0)
@@ -19,9 +19,9 @@ double	get_nearest_plane(t_vec v_w, t_vec v_eye, t_plane *tp)
 	return (-1);
 }
 
-t_color ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
+t_color	ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 {
-	t_color color;
+	t_color	color;
 	int		i;
 
 	//(1) ambient light 環境光

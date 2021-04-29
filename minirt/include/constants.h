@@ -37,9 +37,9 @@
 # define INFO_HEADER_SIZE	40 /**< Windowsヘッダサイズ */
 # define DEFAULT_HEADER_SIZE	(FILE_HEADER_SIZE + INFO_HEADER_SIZE)
 
-#define COLOR_TYPE_INDEX 0   /**< インデックスカラー方式 */
-#define COLOR_TYPE_GRAY  1   /**< グレースケール方式 */
-#define COLOR_TYPE_RGB   2   /**< RGB方式 */
-#define COLOR_TYPE_RGBA  3   /**< RGBA方式 */
+# define COLOR_TYPE_INDEX 0   /**< インデックスカラー方式 */
+# define COLOR_TYPE_GRAY  1   /**< グレースケール方式 */
+# define COLOR_TYPE_RGB   2   /**< RGB方式 */
+# define COLOR_TYPE_RGBA  3   /**< RGBA方式 */
 
 #endif

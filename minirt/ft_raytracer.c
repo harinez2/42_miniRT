@@ -20,7 +20,7 @@ double	get_nearest_obj(t_vec v_w, t_vec vstart, int i, t_map *m)
 
 t_color	ray_trace_obj(t_vec v_w, t_map *m, int i, double t)
 {
-	t_color color;
+	t_color	color;
 
 	if (i == -1)
 		set_color(&color, 92, 151, 243);
@@ -39,8 +39,8 @@ t_color	ray_trace_obj(t_vec v_w, t_map *m, int i, double t)
 
 int	get_minimum_t(t_vec v_w, t_vec vstart, t_map *m, double *hit_t)
 {
-	double 		t;
-	int		    hit_i;
+	double		t;
+	int			hit_i;
 	int			i;
 
 	*hit_t = -1;
@@ -56,14 +56,14 @@ int	get_minimum_t(t_vec v_w, t_vec vstart, t_map *m, double *hit_t)
 		}
 		i++;
 	}
-    return (hit_i);
+	return (hit_i);
 }
 
 t_color	decide_color(t_vec v_w, t_map *m)
 {
-	double 	hit_t;
-    int     hit_i;
-    
-    hit_i = get_minimum_t(v_w, m->v_ceye, m, &hit_t);
+	double	hit_t;
+	int		hit_i;
+
+	hit_i = get_minimum_t(v_w, m->v_ceye, m, &hit_t);
 	return (ray_trace_obj(v_w, m, hit_i, hit_t));
 }
