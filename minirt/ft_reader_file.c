@@ -47,6 +47,8 @@ int		readCmd1(int *i, char *line, t_map *m)
 		if (m->eye_count == 0)
 			m->v_ceye = m->v_eye[0];
 		m->v_eye_orientation[m->eye_count] = readXyz(i, line, m);
+		if (m->eye_count == 0)
+			m->v_corientation = m->v_eye_orientation[0];
 		m->eye_fov[m->eye_count++] = readDouble(i, line);
 	}
 	else if (line[*i] == 'l')

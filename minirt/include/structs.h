@@ -68,6 +68,7 @@ typedef struct		s_map
 	int	eye_count;
 	int	ceye_num;
 	t_vec	v_ceye;
+	t_vec	v_corientation;
 	t_vec	v_eye[MAX_CAMERA_COUNT];
 	t_vec	v_eye_orientation[MAX_CAMERA_COUNT];
 	double	eye_fov[MAX_CAMERA_COUNT];

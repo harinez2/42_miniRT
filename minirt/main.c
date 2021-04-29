@@ -28,15 +28,44 @@ void	set_default_Value(t_map *m)
 	m->kAmb.g = 0.01;
 	m->kAmb.b = 0.01;
 
-	ft_vecset(&m->v_ceye, 0, 0, -5);
-	ft_vecset(&m->v_eye[m->eye_count++], 0, 0, -5);
-	ft_vecset(&m->v_eye[m->eye_count++], 0, 0, -4);
-	ft_vecset(&m->v_eye[m->eye_count++], 0, 0, -3);
-	ft_vecset(&m->v_eye[m->eye_count++], 0, 0, -2);
-	ft_vecset(&m->v_eye[m->eye_count++], 0, 0, -1);
-	ft_vecset(&m->v_eye[m->eye_count++], 0, 0, 0);
-	ft_vecset(&m->v_eye[m->eye_count++], 0, 0, 1);
-	ft_vecset(&m->v_eye[m->eye_count++], 0, 0, 2);
+	ft_vecset(&m->v_ceye, 0.05, 0.05, -5);
+	//ft_vecset(&m->v_corientation, 0.01, 0.01, 1);
+	ft_vecset(&m->v_corientation, 0.01, 0, 1);
+
+	ft_vecset(&m->v_eye[m->eye_count], 0, 0, -5);
+	ft_vecset(&m->v_eye_orientation[m->eye_count], 0, 0, -1);
+	m->eye_fov[m->eye_count] = 22.6;
+	m->eye_count++;
+
+	ft_vecset(&m->v_eye[m->eye_count], 0, 0, -4);
+	ft_vecset(&m->v_eye_orientation[m->eye_count], 0, 0, -1);
+	m->eye_fov[m->eye_count] = 120;
+	m->eye_count++;
+
+	ft_vecset(&m->v_eye[m->eye_count], 0, 0, -3);
+	ft_vecset(&m->v_eye_orientation[m->eye_count], 0, 0, -1);
+	m->eye_fov[m->eye_count] = 120;
+	m->eye_count++;
+
+	ft_vecset(&m->v_eye[m->eye_count], 0, 0, -2);
+	ft_vecset(&m->v_eye_orientation[m->eye_count], 0, 0, -1);
+	m->eye_fov[m->eye_count] = 120;
+	m->eye_count++;
+
+	ft_vecset(&m->v_eye[m->eye_count], 0, 0, -1);
+	ft_vecset(&m->v_eye_orientation[m->eye_count], 0, 0, -1);
+	m->eye_fov[m->eye_count] = 120;
+	m->eye_count++;
+
+	ft_vecset(&m->v_eye[m->eye_count], 0, 0, 0);
+	ft_vecset(&m->v_eye_orientation[m->eye_count], 0, 0, -1);
+	m->eye_fov[m->eye_count] = 120;
+	m->eye_count++;
+
+	ft_vecset(&m->v_eye[m->eye_count], 0, 0, 1);
+	ft_vecset(&m->v_eye_orientation[m->eye_count], 0, 0, -1);
+	m->eye_fov[m->eye_count] = 120;
+	m->eye_count++;
 
 	ft_vecset(&m->v_light[m->light_count], -5, 5, -5);
 	m->lightItsty[m->light_count] = 1.0;

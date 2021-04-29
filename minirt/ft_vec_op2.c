@@ -1,7 +1,6 @@
 #include	"main.h"
 
-/* Inner product
-*/
+// Inner product
 double	ft_vecinnerprod(t_vec v, t_vec w)
 {
 	double	ret;
@@ -12,6 +11,7 @@ double	ft_vecinnerprod(t_vec v, t_vec w)
 	return (ret);
 }
 
+// Cross product
 t_vec	ft_veccrossprod(t_vec v, t_vec w)
 {
 	t_vec	ret;
@@ -22,13 +22,12 @@ t_vec	ft_veccrossprod(t_vec v, t_vec w)
 	return (ret);
 }
 
-double ft_veccrossprod_sign(t_vec v1, t_vec v2, t_vec v3)
+double	ft_veccrossprod_sign(t_vec v1, t_vec v2, t_vec v3)
 {
-    return ((v1.x - v3.x) * (v2.y - v3.y) - (v2.x - v3.x) * (v1.y - v3.y));
+	return ((v1.x - v3.x) * (v2.y - v3.y) - (v2.x - v3.x) * (v1.y - v3.y));
 }
 
-/* Norm (length of the vec)
-*/
+// Norm (length of the vec)
 double	ft_vecnorm(t_vec v)
 {
 	double	ret;
@@ -39,8 +38,7 @@ double	ft_vecnorm(t_vec v)
 	return (sqrt(ret));
 }
 
-/* Norm square (norm is the length of the vec)
-*/
+// Norm square (norm is the length of the vec)
 double	ft_vecnormsq(t_vec v)
 {
 	double	ret;

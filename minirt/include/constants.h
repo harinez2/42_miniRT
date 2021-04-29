@@ -1,6 +1,7 @@
 #ifndef CONSTANTS_H
 # define CONSTANTS_H
 
+# define PI     3.14159265359
 # define CMD_RESOLUTION	1
 # define CMD_AMBIENT	2
 # define CMD_CAMERA	3
