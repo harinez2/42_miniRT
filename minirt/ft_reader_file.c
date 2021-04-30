@@ -8,7 +8,7 @@ void	check_is_allparam_specified(t_map *m)
 		ft_showErrorExit(ERR_CHK_NO_A, m);
 }
 
-int		readCmd1(int *i, char *line, t_map *m)
+int	readCmd1(int *i, char *line, t_map *m)
 {
 	int	cmd;
 
@@ -73,10 +73,10 @@ int		readCmd1(int *i, char *line, t_map *m)
 	return (cmd);
 }
 
-int		readCmd2(int *i, char *line, t_map *m)
+int	readCmd2(int *i, char *line, t_map *m)
 {
 	int	cmd;
-	
+
 	cmd = CMD_NONE;
 	if (line[*i] == 'p' && line[*i + 1] == 'l')
 	{
@@ -131,7 +131,7 @@ int		readCmd2(int *i, char *line, t_map *m)
 	return (cmd);
 }
 
-int		readLine(char *line, t_map *m)
+int	readLine(char *line, t_map *m)
 {
 	int	i;
 	int	ret;
@@ -151,10 +151,10 @@ int		readLine(char *line, t_map *m)
 
 void	readFromFile(char *filename, t_map *m)
 {
-	int	fd;
+	int		fd;
 	char	*line;
-	int	i;
-	int	ret;
+	int		i;
+	int		ret;
 
 	ret = 0;
 	fd = open(filename, O_RDONLY);
@@ -164,17 +164,17 @@ void	readFromFile(char *filename, t_map *m)
 		exit(-1);
 	}
 	write(1, "===== Config from File =====\n", 29);
-	while (1)	
+	while (1)
 	{
 		i = get_next_line(fd, &line);
 		if (i < 0)
-			break;
+			break ;
 		ret = readLine(line, m);
 		free(line);
 		if (ret < 0)
 			ft_showErrorExit(ERR_RD_INCORRECTFORMAT, m);
 		if (i == 0)
-			break;
+			break ;
 	}
 	close(fd);
 	check_is_allparam_specified(m);

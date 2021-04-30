@@ -15,7 +15,6 @@ typedef struct s_color
 	double	b;
 }			t_color;
 
-/*objects*/
 typedef struct s_sphere
 {
 	t_vec		center;
@@ -23,8 +22,8 @@ typedef struct s_sphere
 	t_color		rgb;
 }			t_sphere;
 
-// normal	法線ベクトル
-// position	面が通る点の位置ベクトル
+// normal		normal(housen) vector
+// position		position vector which across the plane
 typedef struct s_plane
 {
 	t_vec		normal;
@@ -60,6 +59,11 @@ typedef struct s_square
 	t_triangle	tr_b;
 }			t_square;
 
+// ambItsty		Ialpha / ambient(environment) intensity
+// kAmb			reflection coefficient of environment light
+// kDif			reflection coefficient of spreading light
+// kSpe			reflection coefficient of mirroring light
+// shininess	alpha lightness
 typedef struct s_map
 {
 	void	*mlx;
@@ -77,75 +81,83 @@ typedef struct s_map
 
 	int		light_count;
 	t_vec	v_light[MAX_LIGHT_COUNT];
-	double	lightItsty[MAX_LIGHT_COUNT]; //Ii 光源の光の強度
+	double	lightItsty[MAX_LIGHT_COUNT];
 	t_color	light_rgb[MAX_LIGHT_COUNT];
 
-	double	ambItsty; //Ialpha 環境光の強度(ambient intensity)
-	t_color	kAmb; //ka 環境光反射係数
+	double	ambItsty;
+	t_color	kAmb;
 
-	t_color	kDif; //kd 拡散反射係数
-	t_color	kSpe; //ks 鏡面反射係数
-	double	shininess; //alpha 光沢度
+	t_color	kDif;
+	t_color	kSpe;
+	double	shininess;
 
 	int		obj_count;
 	int		obj_type[MAX_OBJ_COUNT];
 	void	*obj[MAX_OBJ_COUNT];
 }			t_map;
 
-#pragma pack(2)
-typedef struct s_bitmapfileheader {
-	uint16_t	bfType;      /**< ファイルタイプ、必ず"BM" */
-	uint32_t	bfSize;      /**< ファイルサイズ */
-	uint16_t	bfReserved1; /**< リザーブ */
-	uint16_t	bfReserved2; /**< リサーブ */
-	uint32_t	bfOffBits;   /**< 先頭から画像情報までのオフセット */
-}		BITMAPFILEHEADER;
+# pragma pack(2)
+//	bfType		file type (must be "BM")
+//	bfOffBits	offset between the beginning of the file and image info
+typedef struct s_bmp_file_header {
+	uint16_t	bfType;
+	uint32_t	bfSize;
+	uint16_t	bfReserved1;
+	uint16_t	bfReserved2;
+	uint32_t	bfOffBits;
+}		t_bmp_file_header;
 
-#pragma pack()
-typedef struct s_bitmapinfoheader {
-	uint32_t	biSize;         /**< この構造体のサイズ */
-	int32_t		biWidth;         /**< 画像の幅 */
-	int32_t		biHeight;        /**< 画像の高さ */
-	uint16_t	biPlanes;       /**< 画像の枚数、通常1 */
-	uint16_t	biBitCount;     /**< 一色のビット数 */
-	uint32_t	biCompression;  /**< 圧縮形式 */
-	uint32_t	biSizeImage;    /**< 画像領域のサイズ */
-	int32_t		biXPelsPerMeter; /**< 画像の横方向解像度情報 */
-	int32_t		biYPelsPerMeter; /**< 画像の縦方向解像度情報*/
-	uint32_t	biClrUsed;      /**< カラーパレットのうち実際に使っている色の個数 */
-	uint32_t	biClrImportant; /**< カラーパレットのうち重要な色の数 */
-}		BITMAPINFOHEADER;
+# pragma pack()
+// biPlanes				num of pic(usually 1)
+// biXPelsPerMeter		width resolution
+// biYPelsPerMeter		height resolution
+// biClrUsed			used color num in color palette
+// biClrImportant		important color num in color palette
+typedef struct s_bmp_info_header {
+	uint32_t	biSize;
+	int32_t		biWidth;
+	int32_t		biHeight;
+	uint16_t	biPlanes;
+	uint16_t	biBitCount;
+	uint32_t	biCompression;
+	uint32_t	biSizeImage;
+	int32_t		biXPelsPerMeter;
+	int32_t		biYPelsPerMeter;
+	uint32_t	biClrUsed;
+	uint32_t	biClrImportant;
+}		t_bmp_info_header;
 
 /**
- * @brief 色情報
- * RGBAの色情報を保持する構造体
+ * @brief color information of RGBA
  */
-typedef struct s_color {
+typedef struct s_color_rgba {
 	uint8_t	r;
 	uint8_t	g;
 	uint8_t	b;
 	uint8_t	a;
-}		color_t;
+}		t_color_rgba;
 
 /**
- * @brief 画素情報
- * 共用体になっており、
- * RGBA値、グレースケール、カラーインデックス、のいずれかを表現する。
- * 単体ではどの表現形式になっているかを判断することはできない。
+ * @brief pixcel information(union)
+ * Show either RGBA, gray scale, or color index.
+ * It's impossible to define which expression format is used by itself.
+ * c	RGBA
+ * g	gray scale
+ * i	color index
  */
-typedef union s_pixcel {
-	color_t c; /**< RGBA */
-	uint8_t g; /**< グレースケール */
-	uint8_t i; /**< カラーインデックス */
-}		pixcel_t;
+typedef union u_pixcel {
+	t_color_rgba	c;
+	uint8_t			g;
+	uint8_t			i;
+}		t_pixcel;
 
 typedef struct s_image {
-	uint32_t width;       /**< 幅 */
-	uint32_t height;      /**< 高さ */
-	uint16_t color_type;  /**< 色表現の種別 */
-	uint16_t palette_num; /**< カラーパレットの数 */
-	color_t *palette;     /**< カラーパレットへのポインタ */
-	pixcel_t **map;       /**< 画像データ */
-}	image_t;
+	uint32_t		width;
+	uint32_t		height;
+	uint16_t		color_type;
+	uint16_t		palette_num;
+	t_color_rgba	*palette;
+	t_pixcel		**map;
+}	t_image;
 
 #endif

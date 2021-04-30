@@ -2,9 +2,11 @@
 
 void	set_bmp_header(uint8_t *header_buffer, int stride, t_map *m)
 {
-	BITMAPFILEHEADER *file = (BITMAPFILEHEADER*)header_buffer;
-	BITMAPINFOHEADER *info = (BITMAPINFOHEADER*)(header_buffer + FILE_HEADER_SIZE);
+	t_bmp_file_header	*file;
+	t_bmp_info_header	*info;
 
+	file = (t_bmp_file_header *)header_buffer;
+	info = (t_bmp_info_header *)(header_buffer + FILE_HEADER_SIZE);
 	file->bfType = FILE_TYPE;
 	file->bfSize = DEFAULT_HEADER_SIZE + stride * m->window_y;
 	file->bfReserved1 = 0;
@@ -25,10 +27,12 @@ void	set_bmp_header(uint8_t *header_buffer, int stride, t_map *m)
 
 int	draw_map_bmp(FILE *fp, uint8_t *buffer, int stride, t_map *m)
 {
-	int		x, y;
+	int		x;
+	int		y;
 	uint8_t	*row;
 	t_vec	v_w;
-	
+	t_color	c;
+
 	v_w.z = 0;
 	y = 0;
 	while (y < m->window_y)
@@ -39,7 +43,7 @@ int	draw_map_bmp(FILE *fp, uint8_t *buffer, int stride, t_map *m)
 		while (x < m->window_x)
 		{
 			v_w.x = ft_map(x, 0, m->window_x - 1, -1, 1);
-			t_color c = decide_color(v_w, m);
+			c = decide_color(v_w, m);
 			*row++ = c.b;
 			*row++ = c.g;
 			*row++ = c.r;
@@ -62,10 +66,9 @@ int	write_bmp_simple_stream(FILE *fp, t_map *m)
 	uint8_t		*buffer;
 
 	stride = (m->window_x * 3 + 3) / 4 * 4;
-	if ((buffer = malloc(stride)) == NULL)
-	{
-		return -1;
-	}
+	buffer = malloc(stride);
+	if (!buffer)
+		return (-1);
 	set_bmp_header(header_buffer, stride, m);
 	if (fwrite(header_buffer, DEFAULT_HEADER_SIZE, 1, fp) != 1)
 	{
@@ -81,17 +84,18 @@ int	write_bmp_simple_stream(FILE *fp, t_map *m)
 int	write_bmp(t_map *m)
 {
 	int		ret;
-	char	*filename = "out.bmp";
+	char	*filename;
 	FILE	*fp;
 
+	filename = "out.bmp";
 	ret = -1;
 	fp = fopen(filename, "wb");
 	if (fp == NULL)
 	{
 		perror(filename);
-		return ret;
+		return (ret);
 	}
 	ret = write_bmp_simple_stream(fp, m);
 	fclose(fp);
-	return ret;
+	return (ret);
 }

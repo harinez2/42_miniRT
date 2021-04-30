@@ -22,7 +22,7 @@ double	readDouble(int *i, char *s)
 {
 	double	ret;
 	double	dot;
-	int	minus;
+	int		minus;
 
 	skipSep(i, s);
 	ret = 0;
@@ -38,6 +38,7 @@ double	readDouble(int *i, char *s)
 		if (s[*i] == '.')
 			dot = 10;
 		else if ('0' <= s[*i] && s[*i] <= '9')
+		{
 			if (dot)
 			{
 				ret = ret + (s[*i] - '0') / dot;
@@ -45,8 +46,9 @@ double	readDouble(int *i, char *s)
 			}
 			else
 				ret = ret * 10 + s[*i] - '0';
+		}
 		else
-			break;
+			break ;
 		(*i)++;
 	}
 	return (minus * ret);
