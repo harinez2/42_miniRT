@@ -31,7 +31,7 @@ void	ft_vecprint(t_vec *v);
 
 double	get_nearest_obj(t_vec v_w, t_vec vstart, int i, t_map *m);
 t_color	ray_trace_obj(t_vec v_w, t_map *m, int i, double t);
-int		get_minimum_t(t_vec v_w, t_vec vstart, t_map *m, double *hit_t);
+int		get_minimum_t_for_shadow(t_vec v_w, t_vec vstart, t_map *m, double *hit_t);
 t_color	decide_color(t_vec v_w, t_map *m);
 
 double	get_nearest_sphere(t_vec v_w, t_vec v_eye, t_sphere *ts);

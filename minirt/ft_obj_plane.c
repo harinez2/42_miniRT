@@ -46,8 +46,7 @@ t_color	ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 	i = 0;
 	while (i < m->light_count)
 	{
-		//影の判定
-		get_minimum_t(m->v_light[i], v_tpos, m, &hit_t);
+		get_minimum_t_for_shadow(m->v_light[i], v_tpos, m, &hit_t);
 		if (hit_t != -1)
 		{
 			i++;
@@ -60,9 +59,9 @@ t_color	ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 		if (naiseki < 0)
 			naiseki = 0;
 		nlDot = ft_map(naiseki, 0, 1, 0, 255);
-		color.r += m->kDif.r * m->lightItsty[i] * m->light_rgb[i].r * nlDot * tp->rgb.r;
-		color.g += m->kDif.g * m->lightItsty[i] * m->light_rgb[i].g * nlDot * tp->rgb.g;
-		color.b += m->kDif.b * m->lightItsty[i] * m->light_rgb[i].b * nlDot * tp->rgb.b;
+		color.r += m->kDif.r * m->litItsty[i] * m->light_rgb[i].r * nlDot * tp->rgb.r;
+		color.g += m->kDif.g * m->litItsty[i] * m->light_rgb[i].g * nlDot * tp->rgb.g;
+		color.b += m->kDif.b * m->litItsty[i] * m->light_rgb[i].b * nlDot * tp->rgb.b;
 
 		//(3) specular reflection 鏡面反射光
 		if (naiseki > 0)
@@ -73,9 +72,9 @@ t_color	ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 			if (vrDot < 0)
 				vrDot = 0;
 			vrDotPow = ft_map(pow(vrDot, m->shininess), 0, 1, 0, 255);
-			color.r += m->kSpe.r * m->lightItsty[i] * m->light_rgb[i].r * vrDotPow * tp->rgb.r;
-			color.g += m->kSpe.g * m->lightItsty[i] * m->light_rgb[i].g * vrDotPow * tp->rgb.g;
-			color.b += m->kSpe.b * m->lightItsty[i] * m->light_rgb[i].b * vrDotPow * tp->rgb.b;
+			color.r += m->kSpe.r * m->litItsty[i] * m->light_rgb[i].r * vrDotPow * tp->rgb.r;
+			color.g += m->kSpe.g * m->litItsty[i] * m->light_rgb[i].g * vrDotPow * tp->rgb.g;
+			color.b += m->kSpe.b * m->litItsty[i] * m->light_rgb[i].b * vrDotPow * tp->rgb.b;
 		}
 		i++;
 	}

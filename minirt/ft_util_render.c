@@ -35,7 +35,7 @@ void	print_m(t_map *m)
 		ft_vecprint(&m->v_light[i]);
 		printf(" / ");
 		ft_colorprint(&m->light_rgb[i]);
-		printf(" (itsty:%.2f)\n", m->lightItsty[i]);
+		printf(" (itsty:%.2f)\n", m->litItsty[i]);
 		i++;
 	}
 	printf("obj_count: %d\n", m->obj_count);

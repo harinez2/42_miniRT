@@ -56,7 +56,7 @@ int	readCmd1(int *i, char *line, t_map *m)
 		cmd = CMD_LIGHT;
 		(*i)++;
 		m->v_light[m->light_count] = readXyz(i, line, m);
-		m->lightItsty[m->light_count] = readDouble(i, line);
+		m->litItsty[m->light_count] = readDouble(i, line);
 		m->light_rgb[m->light_count++] = readRgb(i, line, m);
 	}
 	else if (line[*i] == 's' && line[*i + 1] == 'p')

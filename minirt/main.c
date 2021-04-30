@@ -68,12 +68,12 @@ void	set_default_Value(t_map *m)
 	m->eye_count++;
 
 	ft_vecset(&m->v_light[m->light_count], -5, 5, -5);
-	m->lightItsty[m->light_count] = 1.0;
+	m->litItsty[m->light_count] = 1.0;
 	set_color(&m->light_rgb[m->light_count], 1, 1, 1);
 	m->light_count++;
 
 	ft_vecset(&m->v_light[m->light_count], 5, 2, -5);
-	m->lightItsty[m->light_count] = 1.0;
+	m->litItsty[m->light_count] = 1.0;
 	set_color(&m->light_rgb[m->light_count], 0.9, 0.9, 0);
 	m->light_count++;
 

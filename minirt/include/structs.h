@@ -81,7 +81,7 @@ typedef struct s_map
 
 	int		light_count;
 	t_vec	v_light[MAX_LIGHT_COUNT];
-	double	lightItsty[MAX_LIGHT_COUNT];
+	double	litItsty[MAX_LIGHT_COUNT];
 	t_color	light_rgb[MAX_LIGHT_COUNT];
 
 	double	ambItsty;
