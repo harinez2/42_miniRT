@@ -30,6 +30,16 @@
 # define MAX_CAMERA_COUNT	30
 # define MAX_LIGHT_COUNT	30
 
+// key map
+# define KEY_C		0x63
+# define KEY_UP		0xff52
+# define KEY_DOWN	0xff54
+# define KEY_LEFT	0xff51
+# define KEY_RIGHT	0xff53
+# define KEY_F		0x66
+# define KEY_B		0x62
+# define KEY_ESC	0xFF1B
+
 // for bmp file
 # define FILE_TYPE				0x4D42	// value of "BM" in little endian
 # define FILE_HEADER_SIZE		14

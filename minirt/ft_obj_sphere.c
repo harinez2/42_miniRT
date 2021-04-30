@@ -44,7 +44,6 @@ t_color	ray_trace_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t)
 	t_vec	v_sphereN;
 	double	naiseki;
 	double	nlDot;
-	t_vec	v_lightDir;
 	t_vec	refDir;
 	t_vec	invEyeDir;
 	double	vrDot;
