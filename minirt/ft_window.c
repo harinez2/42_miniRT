@@ -18,7 +18,7 @@ void	print_keyname(int key)
 		printf("b key");
 }
 
-// key code can be searched with xev command
+// memo: key code can be searched with xev command
 int	key_win1(int key, t_map *m)
 {
 	if (key == KEY_ESC)
@@ -73,11 +73,10 @@ int	draw_map_wnd(void *mlx, void *win, t_map *m)
 	t_vec	U;
 	t_vec	V;
 
-	printf("\n");
 	scr_width = 2;
 	scr_height = scr_width * m->window_y / m->window_x;
-	printf("scr_height: %.2f\n", scr_height);
-	printf("45deg: %.2f\n", tan(PI/4.0));
+	printf("\nscr_height: %.2f\n", scr_height);
+	printf("45deg: %.2f\n", tan(PI / 4.0));
 	printf("tan: %.2f\n", (double)tan(PI * m->eye_fov[m->ceye_num] / 2 / 180));
 	printf("d: %.2f\n", scr_width / (double)tan(PI * m->eye_fov[m->ceye_num] / 2 / 180) / 2);
 	//double d = m->window_x / tan(PI * m->eye_fov[m->ceye_num] / 180 / 2) / 2;
@@ -91,7 +90,7 @@ int	draw_map_wnd(void *mlx, void *win, t_map *m)
 	printf("C: ");
 	ft_vecprint(&C);
 	printf("\n");
-	
+
 	double cxcy = (double)sqrtl(C.x * C.x + C.y * C.y);
 	printf("cxcy: %.2f\n", cxcy);
 
@@ -210,24 +209,19 @@ void	display_window(t_map *m)
 		write(1, "Error\nInitialization failed.\n", 29);
 		exit (1);
 	}
-	printf("Mlx init OK (use_xshm:%d, pshm_format:%d).\n",((t_xvar *)mlx)->use_xshm,((t_xvar *)mlx)->pshm_format);
+	printf("Mlx init OK (use_xshm:%d, pshm_format:%d).\n",
+		((t_xvar *)mlx)->use_xshm, ((t_xvar *)mlx)->pshm_format);
 	m->mlx = mlx;
-
-	printf("Window1 creation: %dx%d \"Title 1\" ...", m->window_x, m->window_y);
-	win1 = mlx_new_window(mlx, m->window_x, m->window_y, "Title1");
+	win1 = mlx_new_window(mlx, m->window_x, m->window_y, "miniRT");
 	if (!win1)
 	{
 		printf(" !! KO !!\n");
 		exit(1);
 	}
-	printf("OK\n");
 	m->win = win1;
-
 	printf("Drawing sphere ...");
 	draw_map_wnd(mlx, win1, m);
-	printf("OK\n");
 	mlx_key_hook(win1, key_win1, m);
 	mlx_hook(win1, 33, 0, (void *)close_win, 0);
 	mlx_loop(mlx);
-	//sleep(2);
 }
