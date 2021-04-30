@@ -48,8 +48,10 @@ double	get_nearest_square(t_vec v_w, t_vec v_eye, t_square *ts)
 
 	t1 = get_nearest_triangle(v_w, v_eye, &ts->tr_a);
 	t2 = get_nearest_triangle(v_w, v_eye, &ts->tr_b);
-	t = t1 > 0 && t2 > 0 ? fmin(t1, t2) : fmax(t1, t2);
-	//printf("%.2f ", t);
+	if (t1 > 0 && t2 > 0)
+		t = fmin(t1, t2);
+	else
+		t = fmax(t1, t2);
 	return (t);
 }
 
@@ -67,7 +69,6 @@ void	print_square(t_square *ts)
 	printf(" (ss:%.2f) / ", ts->sidesize);
 	ft_colorprint(&ts->rgb);
 	printf("\n");
-
 	printf("      ");
 	print_triangle(&ts->tr_a);
 	printf("      ");

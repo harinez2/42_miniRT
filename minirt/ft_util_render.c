@@ -12,6 +12,8 @@ double	ft_map(double x, int froma, int fromb, int toa, int tob)
 
 void	print_m(t_map *m)
 {
+	int	i;
+
 	printf("===== current config begin =====\n");
 	printf("R        : %d x %d\n", m->window_x, m->window_y);
 	printf("ambItsty : %.2f\n", m->ambItsty);
@@ -19,20 +21,26 @@ void	print_m(t_map *m)
 	printf("kDif     : %.2f, %.2f, %.2f\n", m->kDif.r, m->kDif.g, m->kDif.b);
 	printf("kSpe     : %.2f, %.2f, %.2f\n", m->kSpe.r, m->kSpe.g, m->kSpe.b);
 	printf("shininess: %.2f\n", m->shininess);
-	for (int i = 0; i < m->eye_count; i++)
+	i = 0;
+	while (i < m->eye_count)
+	{
 		printf("Eye[%d]   : %.2f, %.2f, %.2f\n", i,
 			m->v_eye[i].x, m->v_eye[i].y, m->v_eye[i].z);
-	for (int i = 0; i < m->light_count; i++)
+		i++;
+	}
+	i = 0;
+	while (i < m->light_count)
 	{
 		printf("Light[%d] : ", i);
 		ft_vecprint(&m->v_light[i]);
 		printf(" / ");
 		ft_colorprint(&m->light_rgb[i]);
 		printf(" (itsty:%.2f)\n", m->lightItsty[i]);
+		i++;
 	}
-
 	printf("obj_count: %d\n", m->obj_count);
-	for (int i = 0; i < m->obj_count; i++)
+	i = 0;
+	while (i < m->obj_count)
 	{
 		printf("[%d] ", i);
 		if (m->obj_type[i] == CMD_SPHERE)
@@ -45,6 +53,7 @@ void	print_m(t_map *m)
 			print_cylinder(m->obj[i]);
 		else if (m->obj_type[i] == CMD_TRIANGLE)
 			print_triangle(m->obj[i]);
+		i++;
 	}
 	printf("===== current config end =====\n\n");
 }
