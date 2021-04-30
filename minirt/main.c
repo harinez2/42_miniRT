@@ -18,7 +18,7 @@ void	init_m(t_map *m)
 	m->shininess = 8;
 }
 
-void	set_default_Value(t_map *m)
+void	set_default_value(t_map *m)
 {
 	m->window_x = 242;
 	m->window_y = 242;
@@ -30,7 +30,7 @@ void	set_default_Value(t_map *m)
 
 	ft_vecset(&m->v_ceye, 0.05, 0.05, -5);
 	//ft_vecset(&m->v_corientation, 0.01, 0.01, 1);
-	ft_vecset(&m->v_corientation, 0.01, 0, 1);
+	ft_vecset(&m->v_corientation, -0.01, 0, 1);
 
 	ft_vecset(&m->v_eye[m->eye_count], 0, 0, -5);
 	ft_vecset(&m->v_eye_orientation[m->eye_count], 0, 0, -1);
@@ -212,8 +212,8 @@ int		main(int argc, char **argv)
 	if (argc >= 2)
 		readFromFile(argv[1], &m);
 	else
-		set_default_Value(&m);
-	//set_default_Value(&m);
+		set_default_value(&m);
+	//set_default_value(&m);
 	init_values(&m);
 	print_m(&m);
 

@@ -61,10 +61,13 @@ void	close_win(void)
 	exit(0);
 }
 
+// 45deg = PI / 4.0
+// tan(PI / 4.0) == 1
 int	draw_map_wnd(void *mlx, void *win, t_map *m)
 {
 	double	scr_width;
-	double	scr_height;
+	//double	scr_height;
+	double	distance_cam_scr;
 	int		x;
 	int		y;
 	t_vec	v_w;
@@ -73,43 +76,44 @@ int	draw_map_wnd(void *mlx, void *win, t_map *m)
 	t_vec	U;
 	t_vec	V;
 
-	scr_width = 2;
-	scr_height = scr_width * m->window_y / m->window_x;
-	printf("\nscr_height: %.2f\n", scr_height);
-	printf("45deg: %.2f\n", tan(PI / 4.0));
-	printf("tan: %.2f\n", (double)tan(PI * m->eye_fov[m->ceye_num] / 2 / 180));
-	printf("d: %.2f\n", scr_width / (double)tan(PI * m->eye_fov[m->ceye_num] / 2 / 180) / 2);
-	//double d = m->window_x / tan(PI * m->eye_fov[m->ceye_num] / 180 / 2) / 2;
-	double d = scr_width / (double)tan(PI * m->eye_fov[m->ceye_num] / 180 / 2) / 2;
-	printf("d: %.2f\n", d);
+	printf("\n");
 
-	printf("m->v_corientation: ");
+	scr_width = 2;
+	// scr_height = scr_width * m->window_y / m->window_x;
+
+	//printf("  tan: %.2f\n", (double)tan(PI * m->eye_fov[m->ceye_num] / 2 / 180));
+	// printf("  d: %.2f\n", scr_width / (double)tan(PI * m->eye_fov[m->ceye_num] / 2 / 180) / 2);
+	distance_cam_scr = scr_width / (double)tan(PI * m->eye_fov[m->ceye_num] / 180 / 2) / 2;
+	printf("  d: %.2f\n", distance_cam_scr);
+
+	printf("  m->v_corientation: ");
 	ft_vecprint(&m->v_corientation);
 	printf("\n");
-	C = ft_vecmult(m->v_corientation, d);
-	printf("C: ");
+
+	C = ft_vecmult(m->v_corientation, distance_cam_scr);
+	printf("  C: ");
 	ft_vecprint(&C);
 	printf("\n");
 
-	double cxcy = (double)sqrtl(C.x * C.x + C.y * C.y);
-	printf("cxcy: %.2f\n", cxcy);
+	// double cxcy = (double)sqrtl(C.x * C.x + C.y * C.y);
+	// printf("cxcy: %.2f\n", cxcy);
 
-	if (C.x == 0 && C.y >= 0)
+	if (C.x == 0 && C.z >= 0)
 	{
 		U = ft_vec(1, 0, 0);
 		printf("pattern a\n");
 	}
-	else if (C.x == 0 && C.y < 0)
+	else if (C.x == 0 && C.z < 0)
 	{
 		U = ft_vec(-1, 0, 0);
 		printf("pattern b\n");
 	}
-	else if (C.y == 0 && C.x > 0)
+	else if (C.z == 0 && C.x > 0)
 	{
 		U = ft_vec(0, -1, 0);
 		printf("pattern c\n");
 	}
-	else if (C.y == 0 && C.x < 0)
+	else if (C.z == 0 && C.x < 0)
 	{
 		U = ft_vec(0, 1, 0);
 		printf("pattern d\n");
@@ -121,7 +125,7 @@ int	draw_map_wnd(void *mlx, void *win, t_map *m)
 		U.z = -1 * (C.x * U.x) / C.z;
 	}
 	//ft_vecset(&U, -1 * C.y / cxcy, C.x / cxcy, 0);
-	printf("U: ");
+	printf("  U: ");
 	ft_vecprint(&U);
 	printf("\n");
 
@@ -134,7 +138,7 @@ int	draw_map_wnd(void *mlx, void *win, t_map *m)
 	//V = ft_veccrossprod(U, C);
 	V = ft_veccrossprod(C, U);
 	V = ft_vecnormalize(V);
-	printf("V: ");
+	printf("  V: ");
 	ft_vecprint(&V);
 	printf("\n");
 
