@@ -16,6 +16,9 @@ void	init_m(t_map *m)
 	m->kAmb.b = -1;
 
 	m->shininess = 8;
+
+	m->bmp = 0;
+	m->dsp = 0;
 }
 
 void	set_default_value(t_map *m)
@@ -201,23 +204,30 @@ void	init_values(t_map *m)
 	m->kSpe.g = (1 - m->kAmb.g) / 3;
 	m->kSpe.b = (1 - m->kAmb.b) / 3;
 
-	decide_endian();
+	decide_endian(m);
 }
 
 int		main(int argc, char **argv)
 {
 	t_map	m;
+	int		i;
 
 	init_m(&m);
-	if (argc >= 2)
-		readFromFile(argv[1], &m);
-	else
-		set_default_value(&m);
-	//set_default_value(&m);
+	set_default_value(&m);
+	i = 0;
+	while (++i < argc)
+	{
+		if (strcmp(argv[i], "--save") == 0)
+			m.bmp = 1;
+		else if (strcmp(argv[i], "-v") == 0)
+			m.dsp = 1;
+		else
+			readFromFile(argv[1], &m);
+	}
 	init_values(&m);
-	print_m(&m);
-
-	if (argc >= 3 && strcmp(argv[2], "--save") == 0)
+	if (m.dsp == 1)
+		print_m(&m);
+	if (m.bmp == 1)
 		write_bmp(&m);
 	else
 		display_window(&m);

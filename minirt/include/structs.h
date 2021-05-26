@@ -94,6 +94,9 @@ typedef struct s_map
 	int		obj_count;
 	int		obj_type[MAX_OBJ_COUNT];
 	void	*obj[MAX_OBJ_COUNT];
+
+	int		bmp;
+	int		dsp;
 }			t_map;
 
 # pragma pack(2)

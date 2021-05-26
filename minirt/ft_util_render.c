@@ -58,7 +58,7 @@ void	print_m(t_map *m)
 	printf("===== current config end =====\n\n");
 }
 
-int	decide_endian(void)
+int	decide_endian(t_map *m)
 {
 	int		a;
 	int		local_endian;
@@ -68,6 +68,7 @@ int	decide_endian(void)
 		local_endian = 1;
 	else
 		local_endian = 0;
-	printf("Local Endian : %d.\n", local_endian);
+	if (m->dsp == 1)
+		printf("Local Endian : %d.\n", local_endian);
 	return (local_endian);
 }

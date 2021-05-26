@@ -23,7 +23,8 @@ int	key_win1(int key, t_map *m)
 {
 	if (key == KEY_ESC)
 	{
-		printf("ESC key pressed.\n");
+		if (m->dsp == 1)
+			printf("ESC key pressed.\n");
 		exit(0);
 	}
 	if (key == KEY_C)
@@ -48,9 +49,12 @@ int	key_win1(int key, t_map *m)
 		m->v_ceye.z = m->v_ceye.z + 1;
 	else
 		return (0);
-	print_keyname(key);
-	printf(" pressed: cameranum = %d ", m->ceye_num);
-	printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
+	if (m->dsp == 1)
+	{
+		print_keyname(key);
+		printf(" pressed: cameranum = %d ", m->ceye_num);
+		printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
+	}
 	draw_map_wnd(m->mlx, m->win, m);
 	return (0);
 }
@@ -213,8 +217,9 @@ void	display_window(t_map *m)
 		write(1, "Error\nInitialization failed.\n", 29);
 		exit (1);
 	}
-	printf("Mlx init OK (use_xshm:%d, pshm_format:%d).\n",
-		((t_xvar *)mlx)->use_xshm, ((t_xvar *)mlx)->pshm_format);
+	if (m->dsp == 1)
+		printf("Mlx init OK (use_xshm:%d, pshm_format:%d).\n",
+			((t_xvar *)mlx)->use_xshm, ((t_xvar *)mlx)->pshm_format);
 	m->mlx = mlx;
 	win1 = mlx_new_window(mlx, m->window_x, m->window_y, "miniRT");
 	if (!win1)
@@ -223,7 +228,8 @@ void	display_window(t_map *m)
 		exit(1);
 	}
 	m->win = win1;
-	printf("Drawing sphere ...");
+	if (m->dsp == 1)
+		printf("Drawing sphere ...");
 	draw_map_wnd(mlx, win1, m);
 	mlx_key_hook(win1, key_win1, m);
 	mlx_hook(win1, 33, 0, (void *)close_win, 0);
