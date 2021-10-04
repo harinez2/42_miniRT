@@ -9,6 +9,6 @@
 
 # include	"constants.h"
 # include	"structs.h"
-# include	"prototypedefs.h"
+# include	"prototypes.h"
 
 #endif
