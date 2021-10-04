@@ -7,8 +7,8 @@
 # include	"mlx_int.h"
 # include	"../gnl/get_next_line.h"
 
-# include	"include/constants.h"
-# include	"include/structs.h"
-# include	"include/prototypedefs.h"
+# include	"constants.h"
+# include	"structs.h"
+# include	"prototypedefs.h"
 
 #endif
