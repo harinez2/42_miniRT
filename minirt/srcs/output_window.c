@@ -208,30 +208,24 @@ int	draw_map_wnd(void *mlx, void *win, t_map *m)
 
 void	display_window(t_map *m)
 {
-	void	*mlx;
-	void	*win1;
-
-	mlx = mlx_init();
-	if (!mlx)
-	{
-		write(1, "Error\nInitialization failed.\n", 29);
-		exit (1);
-	}
-	if (m->dsp == 1)
+	m->mlx = mlx_init();
+	if (!(m->mlx))
+		print_error_exit(ERR_WND_MLXINIT, m);
+	if (m->dsp)
+		printf(">>>>> Displaying window...\n");
+	if (m->dsp)
 		printf("Mlx init OK (use_xshm:%d, pshm_format:%d).\n",
-			((t_xvar *)mlx)->use_xshm, ((t_xvar *)mlx)->pshm_format);
-	m->mlx = mlx;
-	win1 = mlx_new_window(mlx, m->window_x, m->window_y, "miniRT");
-	if (!win1)
+			((t_xvar *)m->mlx)->use_xshm, ((t_xvar *)m->mlx)->pshm_format);
+	m->win = mlx_new_window(m->mlx, m->window_x, m->window_y, "miniRT");
+	if (!(m->win))
 	{
 		printf(" !! KO !!\n");
 		exit(1);
 	}
-	m->win = win1;
 	if (m->dsp == 1)
 		printf("Drawing sphere ...");
-	draw_map_wnd(mlx, win1, m);
-	mlx_key_hook(win1, key_win1, m);
-	mlx_hook(win1, 33, 0, (void *)close_win, 0);
-	mlx_loop(mlx);
+	draw_map_wnd(m->mlx, m->win, m);
+	mlx_key_hook(m->win, key_win1, m);
+	mlx_hook(m->win, 33, 0, (void *)close_win, 0);
+	mlx_loop(m->mlx);
 }

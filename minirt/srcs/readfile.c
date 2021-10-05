@@ -2,8 +2,6 @@
 
 static void	check_params_specified(t_map *m)
 {
-	if (m->window_x == -1)
-		print_error_exit(ERR_CHK_NO_R, m);
 	if (m->ambItsty == -1)
 		print_error_exit(ERR_CHK_NO_A, m);
 }

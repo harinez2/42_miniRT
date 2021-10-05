@@ -20,7 +20,7 @@ int	read_file_ambient(int *i, char *line, t_map *m)
 	(*i)++;
 	if (m->ambItsty == -1)
 	{
-		m->ambItsty = read_double(i, line);
+		m->ambItsty = read_double(i, line, m);
 		m->kAmb = read_rgb(i, line, m);
 	}
 	else
@@ -37,7 +37,7 @@ int	read_file_camera(int *i, char *line, t_map *m)
 	m->v_eye_orientation[m->eye_count] = read_xyz(i, line, m);
 	if (m->eye_count == 0)
 		m->v_corientation = m->v_eye_orientation[0];
-	m->eye_fov[m->eye_count++] = read_double(i, line);
+	m->eye_fov[m->eye_count++] = read_double(i, line, m);
 	return (CMD_CAMERA);
 }
 
@@ -45,7 +45,7 @@ int	read_file_light(int *i, char *line, t_map *m)
 {
 	(*i)++;
 	m->v_light[m->light_count] = read_xyz(i, line, m);
-	m->litItsty[m->light_count] = read_double(i, line);
+	m->litItsty[m->light_count] = read_double(i, line, m);
 	m->light_rgb[m->light_count++] = read_rgb(i, line, m);
 	return (CMD_LIGHT);
 }
