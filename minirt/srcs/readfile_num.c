@@ -18,54 +18,41 @@ int	read_int(int *i, char *s)
 	return (minus * ret);
 }
 
-double	read_double(int *i, char *s)
+double	read_double(int *i, char *s, t_map *m)
 {
-	double	ret;
-	double	dot;
-	int		minus;
+	long long	int_part;
+	long long	deci_part;
+	int			ret;
 
 	skip_separater(i, s);
+	ret = ft_atoll(&s[*i], &int_part);
+	if (ret == 0)
+		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
+	*i += ret;
+	deci_part = 0;
 	ret = 0;
-	dot = 0;
-	minus = 1;
-	if (s[*i] == '-')
+	if (s[*i] == '.')
 	{
-		minus = -1;
 		(*i)++;
+		ret = ft_atoll(&s[*i], &deci_part);
+		*i += ret;
 	}
-	while (s[*i])
-	{
-		if (s[*i] == '.')
-			dot = 10;
-		else if ('0' <= s[*i] && s[*i] <= '9')
-		{
-			if (dot)
-			{
-				ret = ret + (s[*i] - '0') / dot;
-				dot *= 10;
-			}
-			else
-				ret = ret * 10 + s[*i] - '0';
-		}
-		else
-			break ;
-		(*i)++;
-	}
-	return (minus * ret);
+	if (!is_whitespace(s[*i]) && s[*i] != '\0' && s[*i] != ',')
+		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
+	return (int_part + deci_part * 0.1 * ret);
 }
 
 t_vec	read_xyz(int *i, char *s, t_map *m)
 {
 	t_vec	v;
 
-	v.x = read_double(i, s);
+	v.x = read_double(i, s, m);
 	if (s[(*i)++] != ',')
 		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
-	v.y = read_double(i, s);
+	v.y = read_double(i, s, m);
 	if (s[(*i)++] != ',')
 		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
-	v.z = read_double(i, s);
-//printf("<xyz:%.2f, %.2f, %.2f>", v.x,v.y,v.z);
+	v.z = read_double(i, s, m);
 	return (v);
 }
 
@@ -89,8 +76,6 @@ t_color	read_rgb(int *i, char *s, t_map *m)
 	c.r = ft_map(c.r, 0, 255, 0, 1);
 	c.g = ft_map(c.g, 0, 255, 0, 1);
 	c.b = ft_map(c.b, 0, 255, 0, 1);
-//printf("<rgb:%d,%d,%d>", r, g, b);
-	//return (ft_color(c.r, c.g, c.b));
 	return (c);
 }
 

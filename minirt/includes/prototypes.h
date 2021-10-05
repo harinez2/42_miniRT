@@ -6,6 +6,8 @@ void		print_error_exit(int errNo, t_map *m);
 void		free_map(t_map *m);
 // lib_ft.c
 int			ft_strncmp(char *s1, char *s2, unsigned int n);
+int			is_whitespace(const char c);
+int			ft_atoll(char *s, long long *retnum);
 // main.c
 void		init_m(t_map *m);
 void		set_default_value(t_map *m);
@@ -61,7 +63,7 @@ int			read_file_camera(int *i, char *line, t_map *m);
 int			read_file_light(int *i, char *line, t_map *m);
 // readfile_num.c
 int			read_int(int *i, char *s);
-double		read_double(int *i, char *s);
+double		read_double(int *i, char *s, t_map *m);
 t_vec		read_xyz(int *i, char *s, t_map *m);
 t_color		read_rgb(int *i, char *s, t_map *m);
 void		skip_separater(int *i, char *line);

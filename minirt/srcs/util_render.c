@@ -37,7 +37,7 @@ void	print_m(t_map *m)
 {
 	int	i;
 
-	printf(">>>>> Current config\n");
+	printf("\n>>>>> Current config\n");
 	printf("  R        : %d x %d\n", m->window_x, m->window_y);
 	printf("  ambItsty : %.2f\n", m->ambItsty);
 	printf("  kAmb     : %.2f, %.2f, %.2f\n", m->kAmb.r, m->kAmb.g, m->kAmb.b);
