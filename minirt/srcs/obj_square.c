@@ -62,15 +62,15 @@ t_color	ray_trace_square(t_vec v_w, t_map *m, t_square *ts, double t)
 
 void	print_square(t_square *ts)
 {
-	printf("Square: ");
+	printf("Square  : ");
 	ft_vecprint(&ts->center);
 	printf(" / ");
 	ft_vecprint(&ts->orientation);
 	printf(" (ss:%.2f) / ", ts->sidesize);
 	ft_colorprint(&ts->rgb);
 	printf("\n");
-	printf("      ");
+	printf("        ");
 	print_triangle(&ts->tr_a);
-	printf("      ");
+	printf("        ");
 	print_triangle(&ts->tr_b);
 }

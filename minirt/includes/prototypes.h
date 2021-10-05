@@ -79,7 +79,7 @@ void		ft_colorprint(t_color *c);
 // util_render.c
 double		ft_map(double x, int froma, int fromb, int toa, int tob);
 void		print_m(t_map *m);
-int			decide_endian(t_map *m);
+int			get_endian(void);
 // util_vec_op1.c
 t_vec		ft_vecinit(double x, double y, double z);
 void		ft_vecset(t_vec *v, double x, double y, double z);

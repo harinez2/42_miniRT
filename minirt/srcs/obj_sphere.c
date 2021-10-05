@@ -115,7 +115,7 @@ t_color	ray_trace_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t)
 
 void	print_sphere(t_sphere *ts)
 {
-	printf("Sphere: ");
+	printf("Sphere  : ");
 	ft_vecprint(&ts->center);
 	printf(" (r:%.2f) / ", ts->diameter);
 	ft_colorprint(&ts->rgb);

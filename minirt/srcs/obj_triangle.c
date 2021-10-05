@@ -58,6 +58,6 @@ void	print_triangle(t_triangle *tt)
 	ft_colorprint(&tt->rgb);
 	printf("\n");
 
-	printf("        ");
+	printf("          ");
 	print_plane(&tt->plane);
 }
