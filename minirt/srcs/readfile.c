@@ -17,9 +17,9 @@ static int	read_cmd(int *i, char *line, t_map *m)
 		cmd = read_file_resolution(i, line, m);
 	else if (line[*i] == 'A')
 		cmd = read_file_ambient(i, line, m);
-	else if (line[*i] == 'c' && line[*i + 1] != 'y')
+	else if (line[*i] == 'C')
 		cmd = read_file_camera(i, line, m);
-	else if (line[*i] == 'l')
+	else if (line[*i] == 'L')
 		cmd = read_file_light(i, line, m);
 	else if (ft_strncmp(&line[*i], "sp", 2) == 0)
 		cmd = read_file_sphere(i, line, m);
