@@ -1,0 +1,67 @@
+#include	"main.h"
+
+int	read_file_sphere(int *i, char *line, t_map *m)
+{
+	(*i) += 2;
+	m->obj_type[m->obj_count] = CMD_SPHERE;
+	m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
+	((t_sphere *)m->obj[m->obj_count])->center = read_xyz(i, line, m);
+	((t_sphere *)m->obj[m->obj_count])->diameter = read_double(i, line);
+	((t_sphere *)m->obj[m->obj_count])->rgb = read_rgb(i, line, m);
+	m->obj_count++;
+	return (CMD_SPHERE);
+}
+
+int	read_file_plane(int *i, char *line, t_map *m)
+{
+	(*i) += 2;
+	m->obj_type[m->obj_count] = CMD_PLANE;
+	m->obj[m->obj_count] = (t_plane *)malloc(sizeof(t_plane));
+	((t_plane *)m->obj[m->obj_count])->normal = read_xyz(i, line, m);
+	((t_plane *)m->obj[m->obj_count])->position = read_xyz(i, line, m);
+	((t_plane *)m->obj[m->obj_count])->rgb = read_rgb(i, line, m);
+	m->obj_count++;
+	return (CMD_PLANE);
+}
+
+int	read_file_square(int *i, char *line, t_map *m)
+{
+	(*i) += 2;
+	m->obj_type[m->obj_count] = CMD_SQUARE;
+	m->obj[m->obj_count] = (t_square *)malloc(sizeof(t_square));
+	((t_square *)m->obj[m->obj_count])->center = read_xyz(i, line, m);
+	((t_square *)m->obj[m->obj_count])->orientation = read_xyz(i, line, m);
+	((t_square *)m->obj[m->obj_count])->sidesize = read_double(i, line);
+	((t_sphere *)m->obj[m->obj_count])->rgb = read_rgb(i, line, m);
+	ft_init_square(m->obj[m->obj_count]);
+	m->obj_count++;
+	return (CMD_SQUARE);
+}
+
+int	read_file_cylinder(int *i, char *line, t_map *m)
+{
+	(*i) += 2;
+	m->obj_type[m->obj_count] = CMD_CYLINDER;
+	m->obj[m->obj_count] = (t_cylinder *)malloc(sizeof(t_cylinder));
+	((t_cylinder *)m->obj[m->obj_count])->center = read_xyz(i, line, m);
+	((t_cylinder *)m->obj[m->obj_count])->orientation = read_xyz(i, line, m);
+	((t_cylinder *)m->obj[m->obj_count])->diameter = read_double(i, line);
+	((t_cylinder *)m->obj[m->obj_count])->height = read_double(i, line);
+	((t_cylinder *)m->obj[m->obj_count])->rgb = read_rgb(i, line, m);
+	m->obj_count++;
+	return (CMD_CYLINDER);
+}
+
+int	read_file_triangle(int *i, char *line, t_map *m)
+{
+	(*i) += 2;
+	m->obj_type[m->obj_count] = CMD_TRIANGLE;
+	m->obj[m->obj_count] = (t_triangle *)malloc(sizeof(t_triangle));
+	((t_triangle *)m->obj[m->obj_count])->first = read_xyz(i, line, m);
+	((t_triangle *)m->obj[m->obj_count])->second = read_xyz(i, line, m);
+	((t_triangle *)m->obj[m->obj_count])->third = read_xyz(i, line, m);
+	((t_triangle *)m->obj[m->obj_count])->rgb = read_rgb(i, line, m);
+	ft_init_triangle(m->obj[m->obj_count]);
+	m->obj_count++;
+	return (CMD_TRIANGLE);
+}

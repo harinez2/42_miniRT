@@ -1,6 +1,6 @@
 #include	"main.h"
 
-int	readInt(int *i, char *s)
+int	read_int(int *i, char *s)
 {
 	int	ret;
 	int	minus;
@@ -18,7 +18,7 @@ int	readInt(int *i, char *s)
 	return (minus * ret);
 }
 
-double	readDouble(int *i, char *s)
+double	read_double(int *i, char *s)
 {
 	double	ret;
 	double	dot;
@@ -54,36 +54,36 @@ double	readDouble(int *i, char *s)
 	return (minus * ret);
 }
 
-t_vec	readXyz(int *i, char *s, t_map *m)
+t_vec	read_xyz(int *i, char *s, t_map *m)
 {
 	t_vec	v;
 
-	v.x = readDouble(i, s);
+	v.x = read_double(i, s);
 	if (s[(*i)++] != ',')
 		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
-	v.y = readDouble(i, s);
+	v.y = read_double(i, s);
 	if (s[(*i)++] != ',')
 		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
-	v.z = readDouble(i, s);
+	v.z = read_double(i, s);
 //printf("<xyz:%.2f, %.2f, %.2f>", v.x,v.y,v.z);
 	return (v);
 }
 
-t_color	readRgb(int *i, char *s, t_map *m)
+t_color	read_rgb(int *i, char *s, t_map *m)
 {
 	t_color		c;
 
-	c.r = readInt(i, s);
+	c.r = read_int(i, s);
 	if (s[(*i)++] != ',')
 		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
 	else if (c.r < 0 || c.r > 255)
 		print_error_exit(ERR_RD_OUTOFRANGE_RGB, m);
-	c.g = readInt(i, s);
+	c.g = read_int(i, s);
 	if (s[(*i)++] != ',')
 		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
 	else if (c.g < 0 || c.g > 255)
 		print_error_exit(ERR_RD_OUTOFRANGE_RGB, m);
-	c.b = readInt(i, s);
+	c.b = read_int(i, s);
 	if (c.b < 0 || c.b > 255)
 		print_error_exit(ERR_RD_OUTOFRANGE_RGB, m);
 	c.r = ft_map(c.r, 0, 255, 0, 1);

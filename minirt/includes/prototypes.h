@@ -55,13 +55,22 @@ t_color		decide_color(t_vec v_w, t_map *m);
 // readfile.c
 void		read_config_file(char *filename, t_map *m);
 // readfile_config.c
+int			read_file_resolution(int *i, char *line, t_map *m);
+int			read_file_ambient(int *i, char *line, t_map *m);
+int			read_file_camera(int *i, char *line, t_map *m);
+int			read_file_light(int *i, char *line, t_map *m);
 // readfile_num.c
-int			readInt(int *i, char *s);
-double		readDouble(int *i, char *s);
-t_vec		readXyz(int *i, char *s, t_map *m);
-t_color		readRgb(int *i, char *s, t_map *m);
+int			read_int(int *i, char *s);
+double		read_double(int *i, char *s);
+t_vec		read_xyz(int *i, char *s, t_map *m);
+t_color		read_rgb(int *i, char *s, t_map *m);
 void		skip_separater(int *i, char *line);
 // readfile_objs.c
+int			read_file_sphere(int *i, char *line, t_map *m);
+int			read_file_plane(int *i, char *line, t_map *m);
+int			read_file_square(int *i, char *line, t_map *m);
+int			read_file_cylinder(int *i, char *line, t_map *m);
+int			read_file_triangle(int *i, char *line, t_map *m);
 // util_color.c
 int 	ft_color(int red, int green, int blue);
 void		set_color(t_color *c, double red, double green, double blue);
