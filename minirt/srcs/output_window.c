@@ -208,21 +208,18 @@ int	draw_map_wnd(void *mlx, void *win, t_map *m)
 
 void	display_window(t_map *m)
 {
+	if (m->dsp)
+		printf(">>>>> Displaying window...\n");
 	m->mlx = mlx_init();
 	if (!(m->mlx))
 		print_error_exit(ERR_WND_MLXINIT, m);
-	if (m->dsp)
-		printf(">>>>> Displaying window...\n");
 	if (m->dsp)
 		printf("Mlx init OK (use_xshm:%d, pshm_format:%d).\n",
 			((t_xvar *)m->mlx)->use_xshm, ((t_xvar *)m->mlx)->pshm_format);
 	m->win = mlx_new_window(m->mlx, m->window_x, m->window_y, "miniRT");
 	if (!(m->win))
-	{
-		printf(" !! KO !!\n");
-		exit(1);
-	}
-	if (m->dsp == 1)
+		print_error_exit(ERR_WND_WNDINIT, m);
+	if (m->dsp)
 		printf("Drawing sphere ...");
 	draw_map_wnd(m->mlx, m->win, m);
 	mlx_key_hook(m->win, key_win1, m);
