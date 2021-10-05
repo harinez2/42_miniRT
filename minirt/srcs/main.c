@@ -2,21 +2,17 @@
 
 void	init_m(t_map *m)
 {
+	m->window_x = 242;
+	m->window_y = 242;
 	m->eye_count = 0;
 	m->ceye_num = 0;
 	m->light_count = 0;
-	m->obj_count = 0;
-	
-	m->window_x = -1;
-	m->window_y = -1;
-
 	m->ambItsty = -1;
 	m->kAmb.r = -1;
 	m->kAmb.g = -1;
 	m->kAmb.b = -1;
-
 	m->shininess = 8;
-
+	m->obj_count = 0;
 	m->bmp = 0;
 	m->dsp = 0;
 	m->endian = get_endian();
@@ -24,8 +20,6 @@ void	init_m(t_map *m)
 
 void	set_default_value(t_map *m)
 {
-	m->window_x = 242;
-	m->window_y = 242;
 
 	m->ambItsty = 0.1;
 	m->kAmb.r = 0.01;
@@ -200,7 +194,6 @@ static void	arrange_constant_values(t_map *m)
 	m->kDif.r = 2 * (1 - m->kAmb.r) / 3;
 	m->kDif.g = 2 * (1 - m->kAmb.g) / 3;
 	m->kDif.b = 2 * (1 - m->kAmb.b) / 3;
-
 	m->kSpe.r = (1 - m->kAmb.r) / 3;
 	m->kSpe.g = (1 - m->kAmb.g) / 3;
 	m->kSpe.b = (1 - m->kAmb.b) / 3;
