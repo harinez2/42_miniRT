@@ -19,6 +19,7 @@ void	init_m(t_map *m)
 
 	m->bmp = 0;
 	m->dsp = 0;
+	m->endian = get_endian();
 }
 
 void	set_default_value(t_map *m)
@@ -203,8 +204,6 @@ static void	arrange_constant_values(t_map *m)
 	m->kSpe.r = (1 - m->kAmb.r) / 3;
 	m->kSpe.g = (1 - m->kAmb.g) / 3;
 	m->kSpe.b = (1 - m->kAmb.b) / 3;
-
-	decide_endian(m);
 }
 
 int		main(int argc, char **argv)
@@ -225,7 +224,7 @@ int		main(int argc, char **argv)
 			read_config_file(argv[i], &m);
 	}
 	arrange_constant_values(&m);
-	if (m.dsp == 1)
+	if (m.dsp)
 		print_m(&m);
 	if (m.bmp == 1)
 		write_bmp(&m);

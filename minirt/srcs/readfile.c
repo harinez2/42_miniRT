@@ -78,4 +78,6 @@ void	read_config_file(char *filename, t_map *m)
 	}
 	close(fd);
 	check_params_specified(m);
+	if (m->dsp)
+		printf("\n");
 }

@@ -14,7 +14,7 @@ void	print_m(t_map *m)
 {
 	int	i;
 
-	printf("===== current config begin =====\n");
+	printf(">>>>> Current config\n");
 	printf("R        : %d x %d\n", m->window_x, m->window_y);
 	printf("ambItsty : %.2f\n", m->ambItsty);
 	printf("kAmb     : %.2f, %.2f, %.2f\n", m->kAmb.r, m->kAmb.g, m->kAmb.b);
@@ -55,10 +55,10 @@ void	print_m(t_map *m)
 			print_triangle(m->obj[i]);
 		i++;
 	}
-	printf("===== current config end =====\n\n");
+	printf("  Local Endian : %d\n\n", m->endian);
 }
 
-int	decide_endian(t_map *m)
+int	get_endian(void)
 {
 	int		a;
 	int		local_endian;
@@ -68,7 +68,5 @@ int	decide_endian(t_map *m)
 		local_endian = 1;
 	else
 		local_endian = 0;
-	if (m->dsp == 1)
-		printf("Local Endian : %d.\n", local_endian);
 	return (local_endian);
 }

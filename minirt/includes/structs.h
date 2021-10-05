@@ -97,6 +97,7 @@ typedef struct s_map
 
 	int		bmp;
 	int		dsp;
+	int		endian;
 }			t_map;
 
 # pragma pack(2)
