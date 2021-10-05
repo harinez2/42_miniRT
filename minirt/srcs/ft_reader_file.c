@@ -163,7 +163,8 @@ void	readFromFile(char *filename, t_map *m)
 		write(1, "Failed to open file.\n", 21);
 		exit(-1);
 	}
-	write(1, "===== Config from File =====\n", 29);
+	if (m->dsp == 1)
+		write(1, "===== Config from File =====\n", 29);
 	while (1)
 	{
 		i = get_next_line(fd, &line);
@@ -179,37 +180,3 @@ void	readFromFile(char *filename, t_map *m)
 	close(fd);
 	check_is_allparam_specified(m);
 }
-
-/*
-void	readFromFile2(char *filename, t_map *m)
-{
-	int fd;
-	char buf[20] = {};
-	int i;
-
-	init_m(m);
-
-	fd = open(filename, O_RDONLY);
-	if (fd < 0)
-	{
-		write(1, "Failed to open file.\n", 21);
-		exit(-1);
-	}
-	while (1)	
-	{
-		i = read(fd, &buf, 1);
-		if (i <= 0)
-			break;
-		if (buf[0] == ' ' || buf[0] == '\n')
-			continue;
-		else if (buf[0] == 'R')
-		{
-			;
-		}
-		printf("%s", buf);
-	}
-	//read(fd, buf, 199);
-	//printf("readed:%s\n", buf);
-	close(fd);
-}
-*/
