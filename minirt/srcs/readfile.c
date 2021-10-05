@@ -21,15 +21,15 @@ static int	read_cmd(int *i, char *line, t_map *m)
 		cmd = read_file_camera(i, line, m);
 	else if (line[*i] == 'l')
 		cmd = read_file_light(i, line, m);
-	else if (line[*i] == 's' && line[*i + 1] == 'p')
+	else if (ft_strncmp(&line[*i], "sp", 2) == 0)
 		cmd = read_file_sphere(i, line, m);
-	if (line[*i] == 'p' && line[*i + 1] == 'l')
+	else if (ft_strncmp(&line[*i], "pl", 2) == 0)
 		cmd = read_file_plane(i, line, m);
-	else if (line[*i] == 's' && line[*i + 1] == 'q')
+	else if (ft_strncmp(&line[*i], "sq", 2) == 0)
 		cmd = read_file_square(i, line, m);
-	else if (line[*i] == 'c' && line[*i + 1] == 'y')
+	else if (ft_strncmp(&line[*i], "cy", 2) == 0)
 		cmd = read_file_cylinder(i, line, m);
-	else if (line[*i] == 't' && line[*i + 1] == 'r')
+	else if (ft_strncmp(&line[*i], "tr", 2) == 0)
 		cmd = read_file_triangle(i, line, m);
 	return (cmd);
 }
@@ -47,7 +47,7 @@ static int	read_line(char *line, t_map *m)
 	if (ret < 0)
 		return (ret);
 	if (m->dsp)
-		printf("read: %s\n", line);
+		printf("  read: %s\n", line);
 	return (0);
 }
 
@@ -63,7 +63,7 @@ void	read_config_file(char *filename, t_map *m)
 	if (fd < 0)
 		print_error_exit(ERR_SYS_FILEOPEN, m);
 	if (m->dsp)
-		ft_putstr(">>>>> Reading config file...\n");
+		printf(">>>>> Reading config file...\n");
 	while (1)
 	{
 		i = get_next_line(fd, &line);

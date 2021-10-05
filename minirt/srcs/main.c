@@ -213,16 +213,16 @@ int		main(int argc, char **argv)
 	int		i;
 
 	init_m(&m);
-	set_default_value(&m);
+	// set_default_value(&m);
 	i = 0;
 	while (++i < argc)
 	{
-		if (strcmp(argv[i], "--save") == 0)
+		if (ft_strncmp(argv[i], "--save", 7) == 0)
 			m.bmp = 1;
-		else if (strcmp(argv[i], "-v") == 0)
+		else if (ft_strncmp(argv[i], "-v", 3) == 0)
 			m.dsp = 1;
 		else
-			read_config_file(argv[1], &m);
+			read_config_file(argv[i], &m);
 	}
 	arrange_constant_values(&m);
 	if (m.dsp == 1)

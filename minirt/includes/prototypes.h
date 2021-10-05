@@ -5,7 +5,7 @@
 void		print_error_exit(int errNo, t_map *m);
 void		free_map(t_map *m);
 // lib_ft.c
-void		ft_putstr(const char *s);
+int			ft_strncmp(char *s1, char *s2, unsigned int n);
 // main.c
 void		init_m(t_map *m);
 void		set_default_value(t_map *m);

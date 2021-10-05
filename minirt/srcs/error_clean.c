@@ -9,13 +9,13 @@ void	print_error_exit(int errNo, t_map *m)
 	else if (errNo == ERR_SYS_FILEWRITE)
 		printf("Error\nFailed to write file.\n");
 	else if (errNo == ERR_RD_REDEFINED_R)
-		printf("Error\nIncorrect file format.\n'R' is duplicate.");
+		printf("Error\nIncorrect file format: 'R' is duplicate.\n");
 	else if (errNo == ERR_RD_REDEFINED_A)
-		printf("Error\nIncorrect file format.\n'A' is duplicate.");
+		printf("Error\nIncorrect file format: 'A' is duplicate.\n");
 	else if (errNo == ERR_RD_OUTOFRANGE_SCREEN)
-		printf("Error\nSpecified resolution value out of range.");
+		printf("Error\nSpecified resolution value out of range.\n");
 	else if (errNo == ERR_RD_OUTOFRANGE_RGB)
-		printf("Error\nSpecified rgb value out of range.");
+		printf("Error\nSpecified rgb value out of range.\n");
 	else if (errNo == ERR_RD_INCORRECTFORMAT)
 		printf("Error\nIncorrect format.\n");
 	else if (errNo == ERR_CHK_NO_R)
@@ -27,7 +27,7 @@ void	print_error_exit(int errNo, t_map *m)
 	else if (errNo == ERR_WND_WNDINIT)
 		printf("Error\nWindow creation failed.\n");
 	else
-		printf("Error\nUnexpected error.");
+		printf("Error\nUnexpected error.\n");
 	free_map(m);
 	exit(errNo);
 }
