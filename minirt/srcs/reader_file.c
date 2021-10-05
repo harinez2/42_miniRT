@@ -1,6 +1,6 @@
 #include	"main.h"
 
-void	check_is_allparam_specified(t_map *m)
+static void	check_params_specified(t_map *m)
 {
 	if (m->window_x == -1)
 		print_error_exit(ERR_CHK_NO_R, m);
@@ -8,7 +8,7 @@ void	check_is_allparam_specified(t_map *m)
 		print_error_exit(ERR_CHK_NO_A, m);
 }
 
-int	readCmd1(int *i, char *line, t_map *m)
+static int	readCmd1(int *i, char *line, t_map *m)
 {
 	int	cmd;
 
@@ -73,7 +73,7 @@ int	readCmd1(int *i, char *line, t_map *m)
 	return (cmd);
 }
 
-int	readCmd2(int *i, char *line, t_map *m)
+static int	readCmd2(int *i, char *line, t_map *m)
 {
 	int	cmd;
 
@@ -131,13 +131,13 @@ int	readCmd2(int *i, char *line, t_map *m)
 	return (cmd);
 }
 
-int	readLine(char *line, t_map *m)
+static int	read_line(char *line, t_map *m)
 {
 	int	i;
 	int	ret;
 
 	i = 0;
-	skipSep(&i, line);
+	skip_separater(&i, line);
 	if (line[i] == '#' || line[i] == '\0')
 		return (0);
 	ret = readCmd1(&i, line, m);
@@ -145,11 +145,12 @@ int	readLine(char *line, t_map *m)
 		ret = readCmd2(&i, line, m);
 	if (ret < 0)
 		return (ret);
-	printf("%s\n", line);
+	if (m->dsp)
+		printf("read: %s\n", line);
 	return (0);
 }
 
-void	readFromFile(char *filename, t_map *m)
+void	read_config_file(char *filename, t_map *m)
 {
 	int		fd;
 	char	*line;
@@ -161,13 +162,13 @@ void	readFromFile(char *filename, t_map *m)
 	if (fd < 0)
 		print_error_exit(ERR_SYS_FILEOPEN, m);
 	if (m->dsp)
-		write(1, "===== Config from File =====\n", 29);
+		ft_putstr(">>>>> Reading config file...\n");
 	while (1)
 	{
 		i = get_next_line(fd, &line);
 		if (i < 0)
 			break ;
-		ret = readLine(line, m);
+		ret = read_line(line, m);
 		free(line);
 		if (ret < 0)
 			print_error_exit(ERR_RD_INCORRECTFORMAT, m);
@@ -175,5 +176,5 @@ void	readFromFile(char *filename, t_map *m)
 			break ;
 	}
 	close(fd);
-	check_is_allparam_specified(m);
+	check_params_specified(m);
 }

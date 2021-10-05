@@ -5,7 +5,7 @@ int	readInt(int *i, char *s)
 	int	ret;
 	int	minus;
 
-	skipSep(i, s);
+	skip_separater(i, s);
 	ret = 0;
 	minus = 1;
 	if (s[*i] == '-')
@@ -24,7 +24,7 @@ double	readDouble(int *i, char *s)
 	double	dot;
 	int		minus;
 
-	skipSep(i, s);
+	skip_separater(i, s);
 	ret = 0;
 	dot = 0;
 	minus = 1;
@@ -94,7 +94,7 @@ t_color	readRgb(int *i, char *s, t_map *m)
 	return (c);
 }
 
-void	skipSep(int *i, char *line)
+void	skip_separater(int *i, char *line)
 {
 	while (line[*i] != '\0' && (line[*i] == ' ' || line[*i] == '\t'))
 		(*i)++;

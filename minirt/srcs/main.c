@@ -222,7 +222,7 @@ int		main(int argc, char **argv)
 		else if (strcmp(argv[i], "-v") == 0)
 			m.dsp = 1;
 		else
-			readFromFile(argv[1], &m);
+			read_config_file(argv[1], &m);
 	}
 	arrange_constant_values(&m);
 	if (m.dsp == 1)

@@ -5,6 +5,7 @@
 void		print_error_exit(int errNo, t_map *m);
 void		free_map(t_map *m);
 // lib_ft.c
+void		ft_putstr(const char *s);
 // main.c
 void		init_m(t_map *m);
 void		set_default_value(t_map *m);
@@ -52,17 +53,13 @@ t_color		ray_trace_obj(t_vec v_w, t_map *m, int i, double t);
 int			get_minimum_t_for_shadow(t_vec v_w, t_vec vstart, t_map *m, double *hit_t);
 t_color		decide_color(t_vec v_w, t_map *m);
 // reader_file.c
-void		check_is_allparam_specified(t_map *m);
-int			readCmd1(int *i, char *line, t_map *m);
-int			readCmd2(int *i, char *line, t_map *m);
-int			readLine(char *line, t_map *m);
-void		readFromFile(char *filename, t_map *m);
+void		read_config_file(char *filename, t_map *m);
 // reader_num.c
 int			readInt(int *i, char *s);
 double		readDouble(int *i, char *s);
 t_vec		readXyz(int *i, char *s, t_map *m);
 t_color		readRgb(int *i, char *s, t_map *m);
-void		skipSep(int *i, char *line);
+void		skip_separater(int *i, char *line);
 // util_color.c
 int 	ft_color(int red, int green, int blue);
 void		set_color(t_color *c, double red, double green, double blue);
