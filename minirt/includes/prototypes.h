@@ -52,14 +52,16 @@ double		get_nearest_obj(t_vec v_w, t_vec vstart, int i, t_map *m);
 t_color		ray_trace_obj(t_vec v_w, t_map *m, int i, double t);
 int			get_minimum_t_for_shadow(t_vec v_w, t_vec vstart, t_map *m, double *hit_t);
 t_color		decide_color(t_vec v_w, t_map *m);
-// reader_file.c
+// readfile.c
 void		read_config_file(char *filename, t_map *m);
-// reader_num.c
+// readfile_config.c
+// readfile_num.c
 int			readInt(int *i, char *s);
 double		readDouble(int *i, char *s);
 t_vec		readXyz(int *i, char *s, t_map *m);
 t_color		readRgb(int *i, char *s, t_map *m);
 void		skip_separater(int *i, char *line);
+// readfile_objs.c
 // util_color.c
 int 	ft_color(int red, int green, int blue);
 void		set_color(t_color *c, double red, double green, double blue);

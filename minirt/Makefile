@@ -18,8 +18,10 @@ SRCS		= \
 				$(SRC_DIR)/output_bitmap.c \
 				$(SRC_DIR)/output_window.c \
 				$(SRC_DIR)/raytracer.c \
-				$(SRC_DIR)/reader_file.c \
-				$(SRC_DIR)/reader_num.c \
+				$(SRC_DIR)/readfile.c \
+				$(SRC_DIR)/readfile_config.c \
+				$(SRC_DIR)/readfile_num.c \
+				$(SRC_DIR)/readfile_objs.c \
 				$(SRC_DIR)/util_color.c \
 				$(SRC_DIR)/util_render.c \
 				$(SRC_DIR)/util_vec_op1.c \
