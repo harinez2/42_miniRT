@@ -194,7 +194,7 @@ void	set_default_value(t_map *m)
 
 }
 
-static void	calc_constant_values(t_map *m)
+static void	arrange_constant_values(t_map *m)
 {
 	m->kDif.r = 2 * (1 - m->kAmb.r) / 3;
 	m->kDif.g = 2 * (1 - m->kAmb.g) / 3;
@@ -224,7 +224,7 @@ int		main(int argc, char **argv)
 		else
 			readFromFile(argv[1], &m);
 	}
-	calc_constant_values(&m);
+	arrange_constant_values(&m);
 	if (m.dsp == 1)
 		print_m(&m);
 	if (m.bmp == 1)
