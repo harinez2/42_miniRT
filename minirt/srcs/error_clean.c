@@ -1,6 +1,6 @@
 #include "main.h"
 
-void	ft_showErrorExit(int errNo, t_map *m)
+void	print_error_exit(int errNo, t_map *m)
 {
 	if (errNo == ERR_SYS_MALLOC)
 		printf("Error\nFailed to allocate memory.\n");
@@ -28,11 +28,11 @@ void	ft_showErrorExit(int errNo, t_map *m)
 		printf("Error\nWindow creation failed.\n");
 	else
 		printf("Error\nUnexpected error.");
-	freeX(m);
+	free_map(m);
 	exit(errNo);
 }
 
-void	freeX(t_map *m)
+void	free_map(t_map *m)
 {
 	int		i;
 

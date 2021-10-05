@@ -3,9 +3,9 @@
 void	check_is_allparam_specified(t_map *m)
 {
 	if (m->window_x == -1)
-		ft_showErrorExit(ERR_CHK_NO_R, m);
+		print_error_exit(ERR_CHK_NO_R, m);
 	if (m->ambItsty == -1)
-		ft_showErrorExit(ERR_CHK_NO_A, m);
+		print_error_exit(ERR_CHK_NO_A, m);
 }
 
 int	readCmd1(int *i, char *line, t_map *m)
@@ -22,10 +22,10 @@ int	readCmd1(int *i, char *line, t_map *m)
 			m->window_x = readInt(i, line);
 			m->window_y = readInt(i, line);
 			if (m->window_x <= 0 || m->window_y <= 0)
-				ft_showErrorExit(ERR_RD_OUTOFRANGE_SCREEN, m);
+				print_error_exit(ERR_RD_OUTOFRANGE_SCREEN, m);
 		}
 		else
-			ft_showErrorExit(ERR_RD_REDEFINED_R, m);
+			print_error_exit(ERR_RD_REDEFINED_R, m);
 	}
 	else if (line[*i] == 'A')
 	{
@@ -37,7 +37,7 @@ int	readCmd1(int *i, char *line, t_map *m)
 			m->kAmb = readRgb(i, line, m);
 		}
 		else
-			ft_showErrorExit(ERR_RD_REDEFINED_A, m);
+			print_error_exit(ERR_RD_REDEFINED_A, m);
 	}
 	else if (line[*i] == 'c' && line[*i + 1] != 'y')
 	{
@@ -159,11 +159,8 @@ void	readFromFile(char *filename, t_map *m)
 	ret = 0;
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
-	{
-		write(1, "Failed to open file.\n", 21);
-		exit(-1);
-	}
-	if (m->dsp == 1)
+		print_error_exit(ERR_SYS_FILEOPEN, m);
+	if (m->dsp)
 		write(1, "===== Config from File =====\n", 29);
 	while (1)
 	{
@@ -173,7 +170,7 @@ void	readFromFile(char *filename, t_map *m)
 		ret = readLine(line, m);
 		free(line);
 		if (ret < 0)
-			ft_showErrorExit(ERR_RD_INCORRECTFORMAT, m);
+			print_error_exit(ERR_RD_INCORRECTFORMAT, m);
 		if (i == 0)
 			break ;
 	}

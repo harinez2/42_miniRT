@@ -231,6 +231,6 @@ int		main(int argc, char **argv)
 		write_bmp(&m);
 	else
 		display_window(&m);
-	freeX(&m);
+	free_map(&m);
 	return (0);
 }
