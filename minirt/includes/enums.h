@@ -1,5 +1,5 @@
 #ifndef ENUMS_H
-#define ENUMS_H
+# define ENUMS_H
 
 enum e_cmds
 {
@@ -26,7 +26,6 @@ enum e_errors
 	ERR_RD_OUTOFRANGE_SCREEN,
 	ERR_RD_OUTOFRANGE_RGB,
 	ERR_RD_INCORRECTFORMAT,
-	ERR_CHK_NO_R,
 	ERR_CHK_NO_A,
 	ERR_WND_MLXINIT,
 	ERR_WND_WNDINIT

@@ -28,7 +28,7 @@ static void	arrange_constant_values(t_map *m)
 	m->kSpe.b = (1 - m->kAmb.b) / 3;
 }
 
-int		main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_map	m;
 	int		i;

@@ -1,6 +1,6 @@
 #include "main.h"
 
-void	print_error_exit(int errNo, t_map *m)
+static void	print_error_msg(int errNo)
 {
 	if (errNo == ERR_SYS_MALLOC)
 		printf("Error\nFailed to allocate memory.\n");
@@ -18,8 +18,6 @@ void	print_error_exit(int errNo, t_map *m)
 		printf("Error\nSpecified rgb value out of range.\n");
 	else if (errNo == ERR_RD_INCORRECTFORMAT)
 		printf("Error\nIncorrect format.\n");
-	else if (errNo == ERR_CHK_NO_R)
-		printf("Error\n'R' is not specified.\n");
 	else if (errNo == ERR_CHK_NO_A)
 		printf("Error\n'A' is not specified.\n");
 	else if (errNo == ERR_WND_MLXINIT)
@@ -28,6 +26,11 @@ void	print_error_exit(int errNo, t_map *m)
 		printf("Error\nWindow creation failed.\n");
 	else
 		printf("Error\nUnexpected error.\n");
+}
+
+void	print_error_exit(int errNo, t_map *m)
+{
+	print_error_msg(errNo);
 	free_map(m);
 	exit(errNo);
 }

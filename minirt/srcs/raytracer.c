@@ -37,7 +37,8 @@ t_color	ray_trace_obj(t_vec v_w, t_map *m, int i, double t)
 	return (color);
 }
 
-int	get_minimum_t_for_shadow(t_vec v_w, t_vec vstart, t_map *m, double *hit_t)
+int	get_minimum_t_for_shadow(
+	t_vec v_w, t_vec vstart, t_map *m, double *hit_t)
 {
 	double		t;
 	int			hit_i;

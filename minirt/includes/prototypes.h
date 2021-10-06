@@ -21,7 +21,8 @@ t_color		ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t);
 void		print_plane(t_plane *tp);
 // obj_sphere.c
 double		get_nearest_sphere(t_vec v_w, t_vec v_eye, t_sphere *ts);
-double		calc_sphere_diffuse_reflection(t_map *m, t_color *color, t_vec v_tpos, int i, t_sphere *ts);
+double		calc_sphere_diffuse_reflection(
+				t_map *m, t_color *color, t_vec v_tpos, int i, t_sphere *ts);
 void		calc_specular_reflection(t_map *m, t_color *color, t_vec v_tpos, int i,
 				t_sphere *ts, t_vec v_de);
 t_color		ray_trace_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t);
@@ -53,7 +54,8 @@ void		close_win_hanlder(t_map *m, int called_by);
 // raytracer.c
 double		get_nearest_obj(t_vec v_w, t_vec vstart, int i, t_map *m);
 t_color		ray_trace_obj(t_vec v_w, t_map *m, int i, double t);
-int			get_minimum_t_for_shadow(t_vec v_w, t_vec vstart, t_map *m, double *hit_t);
+int			get_minimum_t_for_shadow(
+				t_vec v_w, t_vec vstart, t_map *m, double *hit_t);
 t_color		decide_color(t_vec v_w, t_map *m);
 // readfile.c
 void		read_config_file(char *filename, t_map *m);
@@ -75,7 +77,7 @@ int			read_file_square(int *i, char *line, t_map *m);
 int			read_file_cylinder(int *i, char *line, t_map *m);
 int			read_file_triangle(int *i, char *line, t_map *m);
 // util_color.c
-int 	ft_color(int red, int green, int blue);
+int			ft_color(int red, int green, int blue);
 void		set_color(t_color *c, double red, double green, double blue);
 t_color		set_rgb_inrange(t_color c);
 void		ft_colorprint(t_color *c);

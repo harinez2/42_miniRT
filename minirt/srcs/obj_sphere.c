@@ -34,7 +34,8 @@ double	get_nearest_sphere(t_vec v_w, t_vec v_eye, t_sphere *ts)
 }
 
 // (2) calc diffuse reflection (kakusan hansya kou)
-double	calc_sphere_diffuse_reflection(t_map *m, t_color *color, t_vec v_tpos, int i, t_sphere *ts)
+double	calc_sphere_diffuse_reflection(
+	t_map *m, t_color *color, t_vec v_tpos, int i, t_sphere *ts)
 {
 	t_vec	v_lightDir;
 	t_vec	v_sphereN;

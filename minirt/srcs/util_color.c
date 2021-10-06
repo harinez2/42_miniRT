@@ -1,9 +1,8 @@
 #include	"main.h"
 
-/* color
- * specify color value between 0-255 for each params
- */
-int 	ft_color(int red, int green, int blue)
+// color
+//   specify color value between 0-255 for each params
+int	ft_color(int red, int green, int blue)
 {
 	int	c;
 
