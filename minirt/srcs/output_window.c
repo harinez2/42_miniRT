@@ -1,7 +1,7 @@
 #include	"main.h"
 
-// 45deg = PI / 4.0
-// tan(PI / 4.0) == 1
+// memo: 45deg = PI / 4.0
+//       tan(PI / 4.0) == 1
 int	draw_map_on_window(void *mlx, void *win, t_map *m)
 {
 	double	scr_width;
@@ -155,7 +155,7 @@ void	display_window(t_map *m)
 	if (!(m->win))
 		print_error_exit(ERR_WND_WNDINIT, m);
 	if (m->dsp)
-		printf("Drawing sphere ...");
+		printf("Window creation OK.\nDrawing objects ...");
 	draw_map_on_window(m->mlx, m->win, m);
 	mlx_key_hook(m->win, keypress_handler, m);
 	mlx_hook(m->win, 33, 0, (void *)close_win_hanlder, m);
