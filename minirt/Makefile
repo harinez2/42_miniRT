@@ -23,6 +23,7 @@ SRCS		= \
 				$(SRC_DIR)/readfile_num.c \
 				$(SRC_DIR)/readfile_objs.c \
 				$(SRC_DIR)/util_color.c \
+				$(SRC_DIR)/util_print_m.c \
 				$(SRC_DIR)/util_render.c \
 				$(SRC_DIR)/util_vec_op1.c \
 				$(SRC_DIR)/util_vec_op2.c

@@ -10,7 +10,6 @@ int			is_whitespace(const char c);
 int			ft_atoll(char *s, long long *retnum);
 // main.c
 void		init_m(t_map *m);
-void		set_default_value(t_map *m);
 int			main(int argc, char **argv);
 // obj_cylinder.c
 double		get_nearest_cylinder(t_vec v_w, t_vec v_eye, t_cylinder *tc);
@@ -78,9 +77,10 @@ int 	ft_color(int red, int green, int blue);
 void		set_color(t_color *c, double red, double green, double blue);
 t_color		set_rgb_inrange(t_color c);
 void		ft_colorprint(t_color *c);
+// util_print_m.c
+void		print_m(t_map *m);
 // util_render.c
 double		ft_map(double x, int froma, int fromb, int toa, int tob);
-void		print_m(t_map *m);
 int			get_endian(void);
 // util_vec_op1.c
 t_vec		ft_vecinit(double x, double y, double z);
