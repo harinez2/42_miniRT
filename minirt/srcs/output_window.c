@@ -2,7 +2,7 @@
 
 // memo: 45deg = PI / 4.0
 //       tan(PI / 4.0) == 1
-int	draw_map_on_window(void *mlx, void *win, t_map *m)
+int	draw_map_on_window(t_map *m)
 {
 	double	scr_width;
 	//double	scr_height;
@@ -14,8 +14,6 @@ int	draw_map_on_window(void *mlx, void *win, t_map *m)
 	t_vec	C;
 	t_vec	U;
 	t_vec	V;
-
-	printf("\n");
 
 	scr_width = 2;
 	// scr_height = scr_width * m->window_y / m->window_x;
@@ -106,7 +104,7 @@ int	draw_map_on_window(void *mlx, void *win, t_map *m)
 	// printf("\n");
 
 			color = decide_color(v_w, m);
-			mlx_pixel_put(mlx, win, x, y, ft_color(color.r, color.g, color.b));
+			mlx_pixel_put(m->mlx, m->win, x, y, ft_color(color.r, color.g, color.b));
 			x++;
 		}
 		y++;
@@ -155,7 +153,7 @@ void	display_window(t_map *m)
 	if (!(m->win))
 		print_error_exit(ERR_WND_WNDINIT, m);
 	if (m->dsp)
-		printf("Window creation OK.\nDrawing objects ...");
+		printf("Window creation OK.\nDrawing objects ...\n");
 	draw_map_on_window(m->mlx, m->win, m);
 	mlx_key_hook(m->win, keypress_handler, m);
 	mlx_hook(m->win, 33, 0, (void *)close_win_hanlder, m);
