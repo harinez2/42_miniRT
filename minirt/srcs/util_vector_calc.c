@@ -1,32 +1,5 @@
 #include	"main.h"
 
-t_vec	ft_vecinit(double x, double y, double z)
-{
-	t_vec	v;
-
-	v.x = x;
-	v.y = y;
-	v.z = z;
-	return (v);
-}
-
-void	ft_vecset(t_vec *v, double x, double y, double z)
-{
-	v->x = x;
-	v->y = y;
-	v->z = z;
-}
-
-t_vec	ft_vec(double x, double y, double z)
-{
-	t_vec	v;
-
-	v.x = x;
-	v.y = y;
-	v.z = z;
-	return (v);
-}
-
 t_vec	ft_vecadd(t_vec v, t_vec w)
 {
 	t_vec	ret;
@@ -47,8 +20,7 @@ t_vec	ft_vecsub(t_vec v, t_vec w)
 	return (ret);
 }
 
-/* Multiply of scalar
-*/
+// Multiply of scalar
 t_vec	ft_vecmult(t_vec v, double k)
 {
 	t_vec	ret;
@@ -59,8 +31,7 @@ t_vec	ft_vecmult(t_vec v, double k)
 	return (ret);
 }
 
-/* Divided by scalar
-*/
+// Divided by scalar
 t_vec	ft_vecdiv(t_vec v, double k)
 {
 	t_vec	ret;

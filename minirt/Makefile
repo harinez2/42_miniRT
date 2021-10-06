@@ -15,6 +15,7 @@ SRCS		= \
 				$(SRC_DIR)/obj_sphere.c \
 				$(SRC_DIR)/obj_square.c \
 				$(SRC_DIR)/obj_triangle.c \
+				$(SRC_DIR)/obj_util.c \
 				$(SRC_DIR)/output_bitmap.c \
 				$(SRC_DIR)/output_window.c \
 				$(SRC_DIR)/output_window_handler.c \
@@ -26,8 +27,10 @@ SRCS		= \
 				$(SRC_DIR)/util_color.c \
 				$(SRC_DIR)/util_print_m.c \
 				$(SRC_DIR)/util_render.c \
-				$(SRC_DIR)/util_vec_op1.c \
-				$(SRC_DIR)/util_vec_op2.c
+				$(SRC_DIR)/util_vector.c \
+				$(SRC_DIR)/util_vector_calc.c \
+				$(SRC_DIR)/util_vector_calcprod.c \
+				$(SRC_DIR)/util_vector_normalize.c
 OBJS		= $(SRCS:.c=.o)
 CFLAGS		= -Wall -Werror -Wextra 
 CCFLAGS_L	= -L$(CLONE_DIR) -L$(INCLIB) -lmlx -lXext -lX11 -lm -lbsd

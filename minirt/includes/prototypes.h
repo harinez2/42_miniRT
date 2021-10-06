@@ -36,6 +36,8 @@ void		ft_init_triangle(t_triangle *tt);
 double		get_nearest_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt);
 t_color		ray_trace_triangle(t_vec v_w, t_map *m, t_triangle *tt, double t);
 void		print_triangle(t_triangle *tt);
+// obj_util.c
+double		calc_t(double A, double B, double D);
 // output_bitmap.c
 void		set_bmp_header(uint8_t *header_buffer, int stride, t_map *m);
 int			draw_map_bmp(FILE *fp, uint8_t *buffer, int stride, t_map *m);
@@ -82,21 +84,23 @@ void		print_m(t_map *m);
 // util_render.c
 double		ft_map(double x, int froma, int fromb, int toa, int tob);
 int			get_endian(void);
-// util_vec_op1.c
+// util_vector.c
 t_vec		ft_vecinit(double x, double y, double z);
 void		ft_vecset(t_vec *v, double x, double y, double z);
 t_vec		ft_vec(double x, double y, double z);
+void		ft_vecprint(t_vec *v);
+// util_vector_calc.c
 t_vec		ft_vecadd(t_vec v, t_vec w);
 t_vec		ft_vecsub(t_vec v, t_vec w);
 t_vec		ft_vecmult(t_vec v, double k);
 t_vec		ft_vecdiv(t_vec v, double k);
-// util_vec_op2.c
+// util_vector_calcprod.c
 double		ft_vecinnerprod(t_vec v, t_vec w);
 t_vec		ft_veccrossprod(t_vec v, t_vec w);
 double		ft_veccrossprod_sign(t_vec v1, t_vec v2, t_vec v3);
+// util_vector_normalize.c
 double		ft_vecnorm(t_vec v);
 double		ft_vecnormsq(t_vec v);
 t_vec		ft_vecnormalize(t_vec v);
-void		ft_vecprint(t_vec *v);
 
 #endif

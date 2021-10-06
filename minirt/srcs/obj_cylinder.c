@@ -10,8 +10,6 @@ double	get_nearest_cylinder(t_vec v_w, t_vec v_eye, t_cylinder *tc)
 	double	B;
 	double	C;
 	double	D;
-	double	t1;
-	double	t2;
 	t_vec	v_tpos;
 	double	diff;
 
@@ -22,18 +20,7 @@ double	get_nearest_cylinder(t_vec v_w, t_vec v_eye, t_cylinder *tc)
 	B = 2 * (v_de.x * mx + v_de.z * mz);
 	C = mx * mx + mz * mz - tc->diameter * tc->diameter;
 	D = B * B - 4 * A * C;
-	t = -1;
-	if (D == 0)
-		t = -B / (2 * A);
-	else if (D > 0)
-	{
-		t1 = (-B - sqrt(D)) / (2 * A);
-		t2 = (-B + sqrt(D)) / (2 * A);
-		if (t1 > 0 && t2 > 0)
-			t = fmin(t1, t2);
-		else
-			t = fmax(t1, t2);
-	}
+	t = calc_t(A, B, D);
 	if (t > 0)
 	{
 		v_tpos = ft_vecadd(v_eye, ft_vecmult(v_de, t));//tpos：視線と球上の交点(pi)
