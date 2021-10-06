@@ -45,7 +45,7 @@ int			draw_map_bmp(FILE *fp, uint8_t *buffer, int stride, t_map *m);
 int			write_bmp_simple_stream(FILE *fp, t_map *m);
 int			write_bmp(t_map *m);
 // output_window.c
-int			draw_map_on_window(void *mlx, void *win, t_map *m);
+int			draw_map_on_window(t_map *m);
 int			draw_map_wnd(void *mlx, void *win, t_map *m);
 void		display_window(t_map *m);
 // output_window_handler.c
@@ -86,11 +86,13 @@ void		print_m(t_map *m);
 // util_render.c
 double		ft_map(double x, int froma, int fromb, int toa, int tob);
 int			get_endian(void);
+double		ft_degree_to_rad(double degree);
 // util_vector.c
 t_vec		ft_vecinit(double x, double y, double z);
 void		ft_vecset(t_vec *v, double x, double y, double z);
 t_vec		ft_vec(double x, double y, double z);
 void		ft_vecprint(t_vec *v);
+void		ft_vecprint_with_name(char *vecname, t_vec *v);
 // util_vector_calc.c
 t_vec		ft_vecadd(t_vec v, t_vec w);
 t_vec		ft_vecsub(t_vec v, t_vec w);

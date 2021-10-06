@@ -56,7 +56,7 @@ int	keypress_handler(int key, t_map *m)
 		return (0);
 	if (m->dsp)
 		print_keyname_and_cameracfg(key, m);
-	draw_map_on_window(m->mlx, m->win, m);
+	draw_map_on_window(m);
 	return (0);
 }
 

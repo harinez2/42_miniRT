@@ -31,3 +31,8 @@ void	ft_vecprint(t_vec *v)
 {
 	printf("%.2f, %.2f, %.2f", v->x, v->y, v->z);
 }
+
+void	ft_vecprint_with_name(char *vecname, t_vec *v)
+{
+	printf("%s : %.2f, %.2f, %.2f\n", vecname, v->x, v->y, v->z);
+}

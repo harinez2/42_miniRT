@@ -2,8 +2,8 @@
 
 void	init_m(t_map *m)
 {
-	m->window_x = 242;
-	m->window_y = 242;
+	m->window_x = -1;
+	m->window_y = -1;
 	m->eye_count = 0;
 	m->ceye_num = 0;
 	m->light_count = 0;
@@ -26,6 +26,11 @@ static void	arrange_constant_values(t_map *m)
 	m->kSpe.r = (1 - m->kAmb.r) / 3;
 	m->kSpe.g = (1 - m->kAmb.g) / 3;
 	m->kSpe.b = (1 - m->kAmb.b) / 3;
+	if (m->window_x == -1)
+	{
+		m->window_x = 242;
+		m->window_y = 242;
+	}
 }
 
 int	main(int argc, char **argv)

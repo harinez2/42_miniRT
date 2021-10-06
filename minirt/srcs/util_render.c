@@ -22,3 +22,8 @@ int	get_endian(void)
 		local_endian = 0;
 	return (local_endian);
 }
+
+double	ft_degree_to_rad(double degree)
+{
+	return (degree * PI / 180);
+}
