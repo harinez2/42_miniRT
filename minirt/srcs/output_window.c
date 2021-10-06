@@ -1,73 +1,8 @@
 #include	"main.h"
 
-void	print_keyname(int key)
-{
-	if (key == KEY_C)
-		printf("c key");
-	else if (key == KEY_UP)
-		printf("Up key");
-	else if (key == KEY_DOWN)
-		printf("Down key");
-	else if (key == KEY_LEFT)
-		printf("Left key");
-	else if (key == KEY_RIGHT)
-		printf("Right key");
-	else if (key == KEY_F)
-		printf("f key");
-	else if (key == KEY_B)
-		printf("b key");
-}
-
-// memo: key code can be searched with xev command
-int	key_win1(int key, t_map *m)
-{
-	if (key == KEY_ESC)
-	{
-		if (m->dsp == 1)
-			printf("ESC key pressed.\n");
-		exit(0);
-	}
-	if (key == KEY_C)
-	{
-		m->ceye_num++;
-		if (m->ceye_num == m->eye_count)
-			m->ceye_num = 0;
-		m->v_ceye = m->v_eye[m->ceye_num];
-		m->v_corientation = m->v_eye_orientation[m->ceye_num];
-	}
-	else if (key == KEY_UP)
-		m->v_ceye.y = m->v_ceye.y + 1;
-	else if (key == KEY_DOWN)
-		m->v_ceye.y = m->v_ceye.y - 1;
-	else if (key == KEY_LEFT)
-		m->v_ceye.x = m->v_ceye.x - 1;
-	else if (key == KEY_RIGHT)
-		m->v_ceye.x = m->v_ceye.x + 1;
-	else if (key == KEY_F)
-		m->v_ceye.z = m->v_ceye.z - 1;
-	else if (key == KEY_B)
-		m->v_ceye.z = m->v_ceye.z + 1;
-	else
-		return (0);
-	if (m->dsp == 1)
-	{
-		print_keyname(key);
-		printf(" pressed: cameranum = %d ", m->ceye_num);
-		printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
-	}
-	draw_map_wnd(m->mlx, m->win, m);
-	return (0);
-}
-
-void	close_win(void)
-{
-	printf("window close button pressed.\n");
-	exit(0);
-}
-
 // 45deg = PI / 4.0
 // tan(PI / 4.0) == 1
-int	draw_map_wnd(void *mlx, void *win, t_map *m)
+int	draw_map_on_window(void *mlx, void *win, t_map *m)
 {
 	double	scr_width;
 	//double	scr_height;
@@ -221,8 +156,8 @@ void	display_window(t_map *m)
 		print_error_exit(ERR_WND_WNDINIT, m);
 	if (m->dsp)
 		printf("Drawing sphere ...");
-	draw_map_wnd(m->mlx, m->win, m);
-	mlx_key_hook(m->win, key_win1, m);
-	mlx_hook(m->win, 33, 0, (void *)close_win, 0);
+	draw_map_on_window(m->mlx, m->win, m);
+	mlx_key_hook(m->win, keypress_handler, m);
+	mlx_hook(m->win, 33, 0, (void *)close_win_hanlder, m);
 	mlx_loop(m->mlx);
 }

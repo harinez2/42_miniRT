@@ -17,6 +17,7 @@ SRCS		= \
 				$(SRC_DIR)/obj_triangle.c \
 				$(SRC_DIR)/output_bitmap.c \
 				$(SRC_DIR)/output_window.c \
+				$(SRC_DIR)/output_window_handler.c \
 				$(SRC_DIR)/raytracer.c \
 				$(SRC_DIR)/readfile.c \
 				$(SRC_DIR)/readfile_config.c \

@@ -42,12 +42,12 @@ int			draw_map_bmp(FILE *fp, uint8_t *buffer, int stride, t_map *m);
 int			write_bmp_simple_stream(FILE *fp, t_map *m);
 int			write_bmp(t_map *m);
 // output_window.c
-void		print_keyname(int key);
-int			key_win1(int key, t_map *m);
-void		close_win(void);
-int			draw_map_wnd(void *mlx, void *win, t_map *m);
+int			draw_map_on_window(void *mlx, void *win, t_map *m);
 int			draw_map_wnd(void *mlx, void *win, t_map *m);
 void		display_window(t_map *m);
+// output_window_handler.c
+int			keypress_handler(int key, t_map *m);
+void		close_win_hanlder(t_map *m, int called_by);
 // raytracer.c
 double		get_nearest_obj(t_vec v_w, t_vec vstart, int i, t_map *m);
 t_color		ray_trace_obj(t_vec v_w, t_map *m, int i, double t);
