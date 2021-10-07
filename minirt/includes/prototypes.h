@@ -46,7 +46,6 @@ int			write_bmp_simple_stream(FILE *fp, t_map *m);
 int			write_bmp(t_map *m);
 // output_window.c
 int			draw_map_on_window(t_map *m);
-int			draw_map_wnd(void *mlx, void *win, t_map *m);
 void		display_window(t_map *m);
 // output_window_handler.c
 int			keypress_handler(int key, t_map *m);
@@ -56,7 +55,7 @@ double		get_nearest_obj(t_vec v_w, t_vec vstart, int i, t_map *m);
 t_color		ray_trace_obj(t_vec v_w, t_map *m, int i, double t);
 int			get_minimum_t_for_shadow(
 				t_vec v_w, t_vec vstart, t_map *m, double *hit_t);
-t_color		decide_color(t_vec v_w, t_map *m);
+t_color		decide_color_with_raytracing(t_vec v_w, t_map *m);
 // readfile.c
 void		read_config_file(char *filename, t_map *m);
 // readfile_config.c

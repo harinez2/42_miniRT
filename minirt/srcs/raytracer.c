@@ -60,7 +60,7 @@ int	get_minimum_t_for_shadow(
 	return (hit_i);
 }
 
-t_color	decide_color(t_vec v_w, t_map *m)
+t_color	decide_color_with_raytracing(t_vec v_w, t_map *m)
 {
 	double	hit_t;
 	int		hit_i;

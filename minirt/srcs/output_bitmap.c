@@ -43,7 +43,7 @@ int	draw_map_bmp(FILE *fp, uint8_t *buffer, int stride, t_map *m)
 		while (x < m->window_x)
 		{
 			v_w.x = ft_map(x, 0, m->window_x - 1, -1, 1);
-			c = decide_color(v_w, m);
+			c = decide_color_with_raytracing(v_w, m);
 			*row++ = c.b;
 			*row++ = c.g;
 			*row++ = c.r;
