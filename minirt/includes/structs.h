@@ -6,28 +6,28 @@ typedef struct s_vec
 	double		x;
 	double		y;
 	double		z;
-}			t_vec;
+}	t_vec;
 
 typedef struct s_color
 {
 	double	r;
 	double	g;
 	double	b;
-}			t_color;
+}	t_color;
 
 typedef struct s_camera
 {
 	t_vec	pos;
 	t_vec	orien;
 	double	fov;
-}			t_camera;
+}	t_camera;
 
 typedef struct s_light
 {
 	t_vec	pos;
 	double	itsty;
 	t_color	rgb;
-}			t_light;
+}	t_light;
 
 // ambItsty		Ialpha / ambient(environment) intensity
 // kAmb			reflection coefficient of environment light
@@ -49,25 +49,25 @@ typedef struct s_map
 	double		distance_cam_scr;
 	t_vec		v_basevec_scrx;
 	t_vec		v_basevec_scry;
-	
+
 	int			lit_cnt;
 	t_light		lit[MAX_LIGHT_COUNT];
 
-	double	ambItsty;
-	t_color	kAmb;
+	double		ambItsty;
+	t_color		kAmb;
 
-	t_color	kDif;
-	t_color	kSpe;
-	double	shininess;
+	t_color		kDif;
+	t_color		kSpe;
+	double		shininess;
 
-	int		obj_count;
-	int		obj_type[MAX_OBJ_COUNT];
-	void	*obj[MAX_OBJ_COUNT];
+	int			obj_count;
+	int			obj_type[MAX_OBJ_COUNT];
+	void		*obj[MAX_OBJ_COUNT];
 
-	int		bmp;
-	int		dsp;
-	int		endian;
-}			t_map;
+	int			bmp;
+	int			dsp;
+	int			endian;
+}	t_map;
 
 // Objects ***********************************************************
 
@@ -76,7 +76,7 @@ typedef struct s_sphere
 	t_vec		center;
 	double		diameter;
 	t_color		rgb;
-}			t_sphere;
+}	t_sphere;
 
 // normal		normal(housen) vector
 // position		position vector which across the plane
@@ -85,7 +85,7 @@ typedef struct s_plane
 	t_vec		normal;
 	t_vec		position;
 	t_color		rgb;
-}			t_plane;
+}	t_plane;
 
 typedef struct s_cylinder
 {
@@ -94,7 +94,7 @@ typedef struct s_cylinder
 	double		diameter;
 	double		height;
 	t_color		rgb;
-}			t_cylinder;
+}	t_cylinder;
 
 typedef struct s_triangle
 {
@@ -103,7 +103,7 @@ typedef struct s_triangle
 	t_vec		third;
 	t_color		rgb;
 	t_plane		plane;
-}			t_triangle;
+}	t_triangle;
 
 typedef struct s_square
 {
@@ -113,7 +113,7 @@ typedef struct s_square
 	t_color		rgb;
 	t_triangle	tr_a;
 	t_triangle	tr_b;
-}			t_square;
+}	t_square;
 
 // Bitmap ***********************************************************
 
@@ -127,7 +127,7 @@ typedef struct s_bmp_file_header {
 	uint16_t	bfReserved1;
 	uint16_t	bfReserved2;
 	uint32_t	bfOffBits;
-}		t_bmp_file_header;
+}	t_bmp_file_header;
 
 # pragma pack()
 
@@ -148,17 +148,15 @@ typedef struct s_bmp_info_header {
 	int32_t		biYPelsPerMeter;
 	uint32_t	biClrUsed;
 	uint32_t	biClrImportant;
-}		t_bmp_info_header;
+}	t_bmp_info_header;
 
-/**
- * @brief color information of RGBA
- */
+// color information of RGBA
 typedef struct s_color_rgba {
 	uint8_t	r;
 	uint8_t	g;
 	uint8_t	b;
 	uint8_t	a;
-}		t_color_rgba;
+}	t_color_rgba;
 
 /**
  * @brief pixcel information(union)
@@ -172,7 +170,7 @@ typedef union u_pixcel {
 	t_color_rgba	c;
 	uint8_t			g;
 	uint8_t			i;
-}		t_pixcel;
+}	t_pixcel;
 
 typedef struct s_image {
 	uint32_t		width;
