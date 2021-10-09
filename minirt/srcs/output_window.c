@@ -99,6 +99,20 @@ int	draw_map_on_window(t_map *m)
 	return (0);
 }
 
+static void	shrink_window_max_size(t_map *m)
+{
+	int		screen_x;
+	int		screen_y;
+
+	mlx_get_screen_size(m->mlx, &screen_x, &screen_y);
+	if (m->dsp)
+		printf("  screen_x:%d, screen_y:%d\n", screen_x, screen_y);
+	if (m->window_x > screen_x)
+		m->window_x = screen_x;
+	if (m->window_y > screen_y)
+		m->window_y = screen_y;
+}
+
 void	display_window(t_map *m)
 {
 	if (m->dsp)
@@ -109,6 +123,7 @@ void	display_window(t_map *m)
 	if (m->dsp)
 		printf("  Mlx init OK (use_xshm:%d, pshm_format:%d).\n",
 			((t_xvar *)m->mlx)->use_xshm, ((t_xvar *)m->mlx)->pshm_format);
+	shrink_window_max_size(m);
 	m->win = mlx_new_window(m->mlx, m->window_x, m->window_y, "miniRT");
 	if (!(m->win))
 		print_error_exit(ERR_WND_WNDINIT, m);

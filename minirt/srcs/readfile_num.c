@@ -2,20 +2,31 @@
 
 int	read_int(int *i, char *s)
 {
-	int	ret;
-	int	minus;
+	long	readnum;
+	int		minus;
+	int		startpos;
 
 	skip_separater(i, s);
-	ret = 0;
+	readnum = 0;
 	minus = 1;
 	if (s[*i] == '-')
 	{
 		minus = -1;
 		(*i)++;
 	}
-	while ('0' <= s[*i] && s[*i] <= '9')
-		ret = ret * 10 + s[(*i)++] - '0';
-	return (minus * ret);
+	startpos = *i;
+	while (s[*i] != '\0' && '0' <= s[*i] && s[*i] <= '9')
+	{
+		readnum = readnum * 10 + s[(*i)++] - '0';
+		if (readnum < INT_MIN || INT_MAX < readnum)
+			print_error_exit(ERR_RD_OUTOFRANGE, m);
+	}
+	if (*i - startpos == 0)
+		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
+	readnum *= minus;
+	if (readnum < INT_MIN || INT_MAX < readnum)
+		print_error_exit(ERR_RD_OUTOFRANGE, m);
+	return ((int)readnum);
 }
 
 double	read_double(int *i, char *s, t_map *m)
@@ -64,15 +75,15 @@ t_color	read_rgb(int *i, char *s, t_map *m)
 	if (s[(*i)++] != ',')
 		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
 	else if (c.r < 0 || c.r > 255)
-		print_error_exit(ERR_RD_OUTOFRANGE_RGB, m);
+		print_error_exit(ERR_RD_OUTOFRANGE, m);
 	c.g = read_int(i, s);
 	if (s[(*i)++] != ',')
 		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
 	else if (c.g < 0 || c.g > 255)
-		print_error_exit(ERR_RD_OUTOFRANGE_RGB, m);
+		print_error_exit(ERR_RD_OUTOFRANGE, m);
 	c.b = read_int(i, s);
 	if (c.b < 0 || c.b > 255)
-		print_error_exit(ERR_RD_OUTOFRANGE_RGB, m);
+		print_error_exit(ERR_RD_OUTOFRANGE, m);
 	c.r = ft_map(c.r, 0, 255, 0, 1);
 	c.g = ft_map(c.g, 0, 255, 0, 1);
 	c.b = ft_map(c.b, 0, 255, 0, 1);

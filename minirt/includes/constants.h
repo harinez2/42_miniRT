@@ -18,4 +18,7 @@
 # define COLOR_TYPE_RGB		2
 # define COLOR_TYPE_RGBA	3
 
+# define SUCCESS			0
+# define FAIL				-1
+
 #endif

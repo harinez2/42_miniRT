@@ -3,6 +3,7 @@
 # include	<unistd.h>
 # include	<math.h>
 # include	<stdint.h>
+# include	<limits.h>
 # include	"mlx.h"
 # include	"mlx_int.h"
 # include	"../gnl/get_next_line.h"

@@ -8,7 +8,7 @@ int	read_file_resolution(int *i, char *line, t_map *m)
 		m->window_x = read_int(i, line);
 		m->window_y = read_int(i, line);
 		if (m->window_x <= 0 || m->window_y <= 0)
-			print_error_exit(ERR_RD_OUTOFRANGE_SCREEN, m);
+			print_error_exit(ERR_RD_OUTOFRANGE, m);
 	}
 	else
 		print_error_exit(ERR_RD_REDEFINED_R, m);

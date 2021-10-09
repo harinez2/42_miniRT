@@ -12,10 +12,8 @@ static void	print_error_msg(int errNo)
 		printf("Error\nIncorrect file format: 'R' is duplicate.\n");
 	else if (errNo == ERR_RD_REDEFINED_A)
 		printf("Error\nIncorrect file format: 'A' is duplicate.\n");
-	else if (errNo == ERR_RD_OUTOFRANGE_SCREEN)
-		printf("Error\nSpecified resolution value out of range.\n");
-	else if (errNo == ERR_RD_OUTOFRANGE_RGB)
-		printf("Error\nSpecified rgb value out of range.\n");
+	else if (errNo == ERR_RD_OUTOFRANGE)
+		printf("Error\nSpecified value out of range.\n");
 	else if (errNo == ERR_RD_INCORRECTFORMAT)
 		printf("Error\nIncorrect format.\n");
 	else if (errNo == ERR_CHK_NO_A)

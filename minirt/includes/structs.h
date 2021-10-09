@@ -55,7 +55,6 @@ typedef struct s_map
 
 	double		ambItsty;
 	t_color		kAmb;
-
 	t_color		kDif;
 	t_color		kSpe;
 	double		shininess;
