@@ -43,8 +43,8 @@ int	read_file_camera(int *i, char *line, t_map *m)
 int	read_file_light(int *i, char *line, t_map *m)
 {
 	(*i)++;
-	m->v_light[m->light_count] = read_xyz(i, line, m);
-	m->litItsty[m->light_count] = read_double(i, line, m);
-	m->light_rgb[m->light_count++] = read_rgb(i, line, m);
+	m->lit[m->lit_cnt].pos = read_xyz(i, line, m);
+	m->lit[m->lit_cnt].itsty = read_double(i, line, m);
+	m->lit[m->lit_cnt++].rgb = read_rgb(i, line, m);
 	return (CMD_LIGHT);
 }

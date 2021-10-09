@@ -44,9 +44,9 @@ t_color	ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 	v_de = ft_vecsub(v_w, m->curr_cam.pos);
 	v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(v_de, t));
 	i = 0;
-	while (i < m->light_count)
+	while (i < m->lit_cnt)
 	{
-		get_minimum_t_for_shadow(m->v_light[i], v_tpos, m, &hit_t);
+		get_minimum_t_for_shadow(m->lit[i].pos, v_tpos, m, &hit_t);
 		if (hit_t != -1)
 		{
 			i++;
@@ -54,14 +54,14 @@ t_color	ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 		}
 
 		//(2) diffuse reflection 拡散反射光
-		v_lightDir = ft_vecnormalize(ft_vecsub(m->v_light[i], v_tpos));
+		v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, v_tpos));
 		naiseki = ft_vecinnerprod(ft_vecnormalize(tp->normal), v_lightDir);
 		if (naiseki < 0)
 			naiseki = 0;
 		nlDot = ft_map(naiseki, 0, 1, 0, 255);
-		color.r += m->kDif.r * m->litItsty[i] * m->light_rgb[i].r * nlDot * tp->rgb.r;
-		color.g += m->kDif.g * m->litItsty[i] * m->light_rgb[i].g * nlDot * tp->rgb.g;
-		color.b += m->kDif.b * m->litItsty[i] * m->light_rgb[i].b * nlDot * tp->rgb.b;
+		color.r += m->kDif.r * m->lit[i].itsty * m->lit[i].rgb.r * nlDot * tp->rgb.r;
+		color.g += m->kDif.g * m->lit[i].itsty * m->lit[i].rgb.g * nlDot * tp->rgb.g;
+		color.b += m->kDif.b * m->lit[i].itsty * m->lit[i].rgb.b * nlDot * tp->rgb.b;
 
 		//(3) specular reflection 鏡面反射光
 		if (naiseki > 0)
@@ -72,9 +72,9 @@ t_color	ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 			if (vrDot < 0)
 				vrDot = 0;
 			vrDotPow = ft_map(pow(vrDot, m->shininess), 0, 1, 0, 255);
-			color.r += m->kSpe.r * m->litItsty[i] * m->light_rgb[i].r * vrDotPow * tp->rgb.r;
-			color.g += m->kSpe.g * m->litItsty[i] * m->light_rgb[i].g * vrDotPow * tp->rgb.g;
-			color.b += m->kSpe.b * m->litItsty[i] * m->light_rgb[i].b * vrDotPow * tp->rgb.b;
+			color.r += m->kSpe.r * m->lit[i].itsty * m->lit[i].rgb.r * vrDotPow * tp->rgb.r;
+			color.g += m->kSpe.g * m->lit[i].itsty * m->lit[i].rgb.g * vrDotPow * tp->rgb.g;
+			color.b += m->kSpe.b * m->lit[i].itsty * m->lit[i].rgb.b * vrDotPow * tp->rgb.b;
 		}
 		i++;
 	}

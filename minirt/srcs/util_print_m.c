@@ -36,13 +36,13 @@ static void	print_m_light(t_map *m)
 	int	i;
 
 	i = 0;
-	while (i < m->light_count)
+	while (i < m->lit_cnt)
 	{
 		printf("  Light[%d] : ", i);
-		ft_vecprint(&m->v_light[i]);
+		ft_vecprint(&m->lit[i].pos);
 		printf(" / ");
-		ft_colorprint(&m->light_rgb[i]);
-		printf(" (itsty:%.2f)\n", m->litItsty[i]);
+		ft_colorprint(&m->lit[i].rgb);
+		printf(" (itsty:%.2f)\n", m->lit[i].itsty);
 		i++;
 	}
 }

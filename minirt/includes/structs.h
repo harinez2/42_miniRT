@@ -43,9 +43,6 @@ typedef struct s_map
 
 	int			cam_cnt;
 	t_camera	cam[MAX_CAMERA_COUNT];
-	// t_vec	v_eye[MAX_CAMERA_COUNT];
-	// t_vec	v_eye_orientation[MAX_CAMERA_COUNT];
-	// double	eye_fov[MAX_CAMERA_COUNT];
 
 	int			curr_cam_num;
 	t_camera	curr_cam;
@@ -53,10 +50,8 @@ typedef struct s_map
 	t_vec		v_basevec_scrx;
 	t_vec		v_basevec_scry;
 	
-	int		light_count;
-	t_vec	v_light[MAX_LIGHT_COUNT];
-	double	litItsty[MAX_LIGHT_COUNT];
-	t_color	light_rgb[MAX_LIGHT_COUNT];
+	int			lit_cnt;
+	t_light		lit[MAX_LIGHT_COUNT];
 
 	double	ambItsty;
 	t_color	kAmb;

@@ -42,15 +42,15 @@ double	calc_sphere_diffuse_reflection(
 	double	naiseki;
 	double	nlDot;
 
-	v_lightDir = ft_vecnormalize(ft_vecsub(m->v_light[i], v_tpos));
+	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, v_tpos));
 	v_sphereN = ft_vecnormalize(ft_vecsub(v_tpos, ts->center));
 	naiseki = ft_vecinnerprod(v_sphereN, v_lightDir);
 	if (naiseki < 0)
 		naiseki = 0;
 	nlDot = ft_map(naiseki, 0, 1, 0, 255);
-	color->r += m->kDif.r * m->litItsty[i] * m->light_rgb[i].r * nlDot * ts->rgb.r;
-	color->g += m->kDif.g * m->litItsty[i] * m->light_rgb[i].g * nlDot * ts->rgb.g;
-	color->b += m->kDif.b * m->litItsty[i] * m->light_rgb[i].b * nlDot * ts->rgb.b;
+	color->r += m->kDif.r * m->lit[i].itsty * m->lit[i].rgb.r * nlDot * ts->rgb.r;
+	color->g += m->kDif.g * m->lit[i].itsty * m->lit[i].rgb.g * nlDot * ts->rgb.g;
+	color->b += m->kDif.b * m->lit[i].itsty * m->lit[i].rgb.b * nlDot * ts->rgb.b;
 	return (naiseki);
 }
 
@@ -67,7 +67,7 @@ void	calc_specular_reflection(t_map *m, t_color *color, t_vec v_tpos, int i,
 	double	vrDotPow;
 
 	v_sphereN = ft_vecnormalize(ft_vecsub(v_tpos, ts->center));
-	v_lightDir = ft_vecnormalize(ft_vecsub(m->v_light[i], v_tpos));
+	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, v_tpos));
 	naiseki = ft_vecinnerprod(v_sphereN, v_lightDir);
 	refDir = ft_vecsub(ft_vecmult(v_sphereN, 2 * naiseki), v_lightDir);
 	invEyeDir = ft_vecnormalize(ft_vecmult(v_de, -1));
@@ -75,9 +75,9 @@ void	calc_specular_reflection(t_map *m, t_color *color, t_vec v_tpos, int i,
 	if (vrDot < 0)
 		vrDot = 0;
 	vrDotPow = ft_map(pow(vrDot, m->shininess), 0, 1, 0, 255);
-	color->r += m->kSpe.r * m->litItsty[i] * m->light_rgb[i].r * vrDotPow * ts->rgb.r;
-	color->g += m->kSpe.g * m->litItsty[i] * m->light_rgb[i].g * vrDotPow * ts->rgb.g;
-	color->b += m->kSpe.b * m->litItsty[i] * m->light_rgb[i].b * vrDotPow * ts->rgb.b;
+	color->r += m->kSpe.r * m->lit[i].itsty * m->lit[i].rgb.r * vrDotPow * ts->rgb.r;
+	color->g += m->kSpe.g * m->lit[i].itsty * m->lit[i].rgb.g * vrDotPow * ts->rgb.g;
+	color->b += m->kSpe.b * m->lit[i].itsty * m->lit[i].rgb.b * vrDotPow * ts->rgb.b;
 }
 
 //tpos	across point of eyevec and sphere surface(pi)
@@ -98,9 +98,9 @@ t_color	ray_trace_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t)
 	v_de = ft_vecsub(v_w, m->curr_cam.pos);
 	v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(v_de, t));
 	i = 0;
-	while (i < m->light_count)
+	while (i < m->lit_cnt)
 	{
-		get_minimum_t_for_shadow(m->v_light[i], v_tpos, m, &hit_t);
+		get_minimum_t_for_shadow(m->lit[i].pos, v_tpos, m, &hit_t);
 		if (hit_t != -1)
 		{
 			i++;

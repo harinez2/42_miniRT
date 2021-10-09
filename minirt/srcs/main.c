@@ -6,7 +6,7 @@ void	init_m(t_map *m)
 	m->window_y = -1;
 	m->cam_cnt = 0;
 	m->curr_cam_num = 0;
-	m->light_count = 0;
+	m->lit_cnt = 0;
 	m->ambItsty = -1;
 	m->kAmb.r = -1;
 	m->kAmb.g = -1;
