@@ -1,6 +1,6 @@
 #include	"main.h"
 
-int	read_int(int *i, char *s)
+int	read_int(int *i, char *s, t_map *m)
 {
 	long	readnum;
 	int		minus;
@@ -71,17 +71,17 @@ t_color	read_rgb(int *i, char *s, t_map *m)
 {
 	t_color		c;
 
-	c.r = read_int(i, s);
+	c.r = read_int(i, s, m);
 	if (s[(*i)++] != ',')
 		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
 	else if (c.r < 0 || c.r > 255)
 		print_error_exit(ERR_RD_OUTOFRANGE, m);
-	c.g = read_int(i, s);
+	c.g = read_int(i, s, m);
 	if (s[(*i)++] != ',')
 		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
 	else if (c.g < 0 || c.g > 255)
 		print_error_exit(ERR_RD_OUTOFRANGE, m);
-	c.b = read_int(i, s);
+	c.b = read_int(i, s, m);
 	if (c.b < 0 || c.b > 255)
 		print_error_exit(ERR_RD_OUTOFRANGE, m);
 	c.r = ft_map(c.r, 0, 255, 0, 1);

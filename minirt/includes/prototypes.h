@@ -67,7 +67,7 @@ int			read_file_ambient(int *i, char *line, t_map *m);
 int			read_file_camera(int *i, char *line, t_map *m);
 int			read_file_light(int *i, char *line, t_map *m);
 // readfile_num.c
-int			read_int(int *i, char *s);
+int			read_int(int *i, char *s, t_map *m);
 double		read_double(int *i, char *s, t_map *m);
 t_vec		read_xyz(int *i, char *s, t_map *m);
 t_color		read_rgb(int *i, char *s, t_map *m);
