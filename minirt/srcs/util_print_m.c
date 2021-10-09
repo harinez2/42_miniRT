@@ -15,17 +15,16 @@ static void	print_m_eye(t_map *m)
 	int	i;
 
 	i = 0;
-	while (i < m->eye_count)
+	while (i < m->cam_cnt)
 	{
 		printf("  Camera[%d]: pos: %.2f, %.2f, %.2f / orien: %.2f, %.2f, %.2f / fov:%.2f\n",
-			i, m->v_eye[i].x, m->v_eye[i].y, m->v_eye[i].z,
-			m->v_eye_orientation[i].x, m->v_eye_orientation[i].y,
-			m->v_eye_orientation[i].z, m->eye_fov[i]);
+			i, m->cam[i].pos.x, m->cam[i].pos.y, m->cam[i].pos.z,
+			m->cam[i].orien.x, m->cam[i].orien.y, m->cam[i].orien.z, m->cam[i].fov);
 		i++;
 	}
 	printf("  Current Camera[%d]: pos: %.2f, %.2f, %.2f / orien: %.2f, %.2f, %.2f / distance:%.2f\n",
-		m->ceye_num, m->v_ceye.x, m->v_ceye.y, m->v_ceye.z,
-		m->v_corientation.x, m->v_corientation.y, m->v_corientation.z,
+		m->curr_cam_num, m->curr_cam.pos.x, m->curr_cam.pos.y, m->curr_cam.pos.z,
+		m->curr_cam.orien.x, m->curr_cam.orien.y, m->curr_cam.orien.z,
 		m->distance_cam_scr);
 	printf("                     basex: %.2f, %.2f, %.2f / basey: %.2f, %.2f, %.2f\n\n",
 		m->v_basevec_scrx.x, m->v_basevec_scrx.y, m->v_basevec_scrx.z,

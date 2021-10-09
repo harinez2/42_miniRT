@@ -66,6 +66,6 @@ t_color	decide_color_with_raytracing(t_vec v_w, t_map *m)
 	double	hit_t;
 	int		hit_i;
 
-	hit_i = get_minimum_t_for_shadow(v_w, m->v_ceye, m, &hit_t);
+	hit_i = get_minimum_t_for_shadow(v_w, m->curr_cam.pos, m, &hit_t);
 	return (ray_trace_obj(v_w, m, hit_i, hit_t));
 }

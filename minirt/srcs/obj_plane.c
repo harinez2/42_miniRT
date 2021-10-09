@@ -41,8 +41,8 @@ t_color	ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 		m->kAmb.r * m->ambItsty * tp->rgb.r,
 		m->kAmb.g * m->ambItsty * tp->rgb.g,
 		m->kAmb.b * m->ambItsty * tp->rgb.b);
-	v_de = ft_vecsub(v_w, m->v_ceye);
-	v_tpos = ft_vecadd(m->v_ceye, ft_vecmult(v_de, t));
+	v_de = ft_vecsub(v_w, m->curr_cam.pos);
+	v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(v_de, t));
 	i = 0;
 	while (i < m->light_count)
 	{

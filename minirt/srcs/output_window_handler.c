@@ -19,18 +19,18 @@ static void	print_keyname_and_cameracfg(int key, t_map *m)
 	if (m->dsp)
 	{
 		printf(" pressed.\n");
-		printf("Current camera status: %d ", m->ceye_num);
-		printf("(%.2f, %.2f, %.2f)\n", m->v_ceye.x, m->v_ceye.y, m->v_ceye.z);
+		printf("Current camera status: %d ", m->curr_cam_num);
+		printf("(%.2f, %.2f, %.2f)\n",
+			m->curr_cam.pos.x, m->curr_cam.pos.y, m->curr_cam.pos.z);
 	}
 }
 
 static void	change_current_camera(t_map *m)
 {
-	m->ceye_num++;
-	if (m->ceye_num == m->eye_count)
-		m->ceye_num = 0;
-	m->v_ceye = m->v_eye[m->ceye_num];
-	m->v_corientation = m->v_eye_orientation[m->ceye_num];
+	m->curr_cam_num++;
+	if (m->curr_cam_num == m->cam_cnt)
+		m->curr_cam_num = 0;
+	m->curr_cam = m->cam[m->curr_cam_num];
 }
 
 // memo: key code can be searched with xev command
@@ -41,17 +41,17 @@ int	keypress_handler(int key, t_map *m)
 	if (key == KEY_C)
 		change_current_camera(m);
 	else if (key == KEY_UP)
-		m->v_ceye.y += 1;
+		m->curr_cam.pos.y += 1;
 	else if (key == KEY_DOWN)
-		m->v_ceye.y -= 1;
+		m->curr_cam.pos.y -= 1;
 	else if (key == KEY_LEFT)
-		m->v_ceye.x -= 1;
+		m->curr_cam.pos.x -= 1;
 	else if (key == KEY_RIGHT)
-		m->v_ceye.x += 1;
+		m->curr_cam.pos.x += 1;
 	else if (key == KEY_F)
-		m->v_ceye.z -= 1;
+		m->curr_cam.pos.z -= 1;
 	else if (key == KEY_B)
-		m->v_ceye.z += 1;
+		m->curr_cam.pos.z += 1;
 	else
 		return (0);
 	if (m->dsp)

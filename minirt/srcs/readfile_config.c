@@ -31,13 +31,12 @@ int	read_file_ambient(int *i, char *line, t_map *m)
 int	read_file_camera(int *i, char *line, t_map *m)
 {
 	(*i)++;
-	m->v_eye[m->eye_count] = read_xyz(i, line, m);
-	if (m->eye_count == 0)
-		m->v_ceye = m->v_eye[0];
-	m->v_eye_orientation[m->eye_count] = read_xyz(i, line, m);
-	if (m->eye_count == 0)
-		m->v_corientation = m->v_eye_orientation[0];
-	m->eye_fov[m->eye_count++] = read_double(i, line, m);
+	m->cam[m->cam_cnt].pos = read_xyz(i, line, m);
+	m->cam[m->cam_cnt].orien = read_xyz(i, line, m);
+	m->cam[m->cam_cnt].fov = read_double(i, line, m);
+	if (m->cam_cnt == 0)
+		m->curr_cam = m->cam[m->cam_cnt];
+	m->cam_cnt++;
 	return (CMD_CAMERA);
 }
 

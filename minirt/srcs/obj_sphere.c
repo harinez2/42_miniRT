@@ -95,8 +95,8 @@ t_color	ray_trace_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t)
 		m->kAmb.r * m->ambItsty * ts->rgb.r,
 		m->kAmb.g * m->ambItsty * ts->rgb.g,
 		m->kAmb.b * m->ambItsty * ts->rgb.b);
-	v_de = ft_vecsub(v_w, m->v_ceye);
-	v_tpos = ft_vecadd(m->v_ceye, ft_vecmult(v_de, t));
+	v_de = ft_vecsub(v_w, m->curr_cam.pos);
+	v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(v_de, t));
 	i = 0;
 	while (i < m->light_count)
 	{

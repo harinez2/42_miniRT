@@ -5,8 +5,8 @@ void	calc_distance_cam_scr(t_map *m)
 	double	tan_theta_div_two;
 
 	if (m->dsp)
-		ft_vecprint_with_name("  v_corientation            ", &m->v_corientation);
-	tan_theta_div_two = (double)tan(ft_degree_to_rad(m->eye_fov[m->ceye_num]) / 2);
+		ft_vecprint_with_name("  curr_cam.orien            ", &m->curr_cam.orien);
+	tan_theta_div_two = (double)tan(ft_degree_to_rad(m->curr_cam.fov) / 2);
 	if (m->dsp)
 		printf("  tan_theta_div_two          : %.2f\n", tan_theta_div_two);
 	m->distance_cam_scr = (double)m->window_x / tan_theta_div_two / 2;
@@ -17,19 +17,19 @@ void	calc_distance_cam_scr(t_map *m)
 // basevec x is a unit vector which the z-axis vec is zero.
 void	calc_screen_basevec_x(t_map *m)
 {
-	if (m->v_corientation.x == 0 && m->v_corientation.y >= 0)
+	if (m->curr_cam.orien.x == 0 && m->curr_cam.orien.y >= 0)
 		m->v_basevec_scrx = ft_vec(1, 0, 0);
-	else if (m->v_corientation.x == 0 && m->v_corientation.y < 0)
+	else if (m->curr_cam.orien.x == 0 && m->curr_cam.orien.y < 0)
 		m->v_basevec_scrx = ft_vec(-1, 0, 0);
-	else if (m->v_corientation.y == 0 && m->v_corientation.x > 0)
+	else if (m->curr_cam.orien.y == 0 && m->curr_cam.orien.x > 0)
 		m->v_basevec_scrx = ft_vec(0, -1, 0);
-	else if (m->v_corientation.y == 0 && m->v_corientation.x < 0)
+	else if (m->curr_cam.orien.y == 0 && m->curr_cam.orien.x < 0)
 		m->v_basevec_scrx = ft_vec(0, 1, 0);
 	else
 	{
 		m->v_basevec_scrx.x = 1;
 		m->v_basevec_scrx.y
-			= -1 * (m->v_corientation.x * m->v_basevec_scrx.x) / m->v_corientation.y;
+			= -1 * (m->curr_cam.orien.x * m->v_basevec_scrx.x) / m->curr_cam.orien.y;
 		m->v_basevec_scrx.z = 0;
 	}
 	if (m->dsp)
@@ -42,10 +42,10 @@ void	calc_screen_basevec_x(t_map *m)
 // basevec y is a unit vector which the x-axis vec is zero.
 void	calc_screen_basevec_y(t_map *m)
 {
-	if (m->v_corientation.z == 0)
+	if (m->curr_cam.orien.z == 0)
 		m->v_basevec_scry = ft_vec(0, 0, 1);
 	else
-		m->v_basevec_scry = ft_veccrossprod(m->v_basevec_scrx, m->v_corientation);
+		m->v_basevec_scry = ft_veccrossprod(m->v_basevec_scrx, m->curr_cam.orien);
 	if (m->dsp)
 		ft_vecprint_with_name("  v_basevec_scry            ", &m->v_basevec_scry);
 	m->v_basevec_scry = ft_vecnormalize(m->v_basevec_scry);
@@ -59,13 +59,13 @@ static void	put_pixel_based_on_ray(t_map *m, int  x, int y)
 	t_color		color;
 	const int	print_foreach = 100;
 
-	v_w.x = m->v_corientation.x * m->distance_cam_scr
+	v_w.x = m->curr_cam.orien.x * m->distance_cam_scr
 		+ (x - m->window_x / 2) * m->v_basevec_scrx.x 
 		+ (y - m->window_y / 2) * m->v_basevec_scry.x;
-	v_w.y = m->v_corientation.y * m->distance_cam_scr
+	v_w.y = m->curr_cam.orien.y * m->distance_cam_scr
 		+ (x - m->window_x / 2) * m->v_basevec_scrx.y
 		+ (y - m->window_y / 2) * m->v_basevec_scry.y;
-	v_w.z = m->v_corientation.z * m->distance_cam_scr
+	v_w.z = m->curr_cam.orien.z * m->distance_cam_scr
 		+ (x - m->window_x / 2) * m->v_basevec_scrx.z
 		+ (y - m->window_y / 2) * m->v_basevec_scry.z;
 	color = decide_color_with_raytracing(v_w, m);

@@ -15,6 +15,67 @@ typedef struct s_color
 	double	b;
 }			t_color;
 
+typedef struct s_camera
+{
+	t_vec	pos;
+	t_vec	orien;
+	double	fov;
+}			t_camera;
+
+typedef struct s_light
+{
+	t_vec	pos;
+	double	itsty;
+	t_color	rgb;
+}			t_light;
+
+// ambItsty		Ialpha / ambient(environment) intensity
+// kAmb			reflection coefficient of environment light
+// kDif			reflection coefficient of spreading light
+// kSpe			reflection coefficient of mirroring light
+// shininess	alpha lightness
+typedef struct s_map
+{
+	void		*mlx;
+	void		*win;
+	int			window_x;
+	int			window_y;
+
+	int			cam_cnt;
+	t_camera	cam[MAX_CAMERA_COUNT];
+	// t_vec	v_eye[MAX_CAMERA_COUNT];
+	// t_vec	v_eye_orientation[MAX_CAMERA_COUNT];
+	// double	eye_fov[MAX_CAMERA_COUNT];
+
+	int			curr_cam_num;
+	t_camera	curr_cam;
+	double		distance_cam_scr;
+	t_vec		v_basevec_scrx;
+	t_vec		v_basevec_scry;
+	
+	int		light_count;
+	t_vec	v_light[MAX_LIGHT_COUNT];
+	double	litItsty[MAX_LIGHT_COUNT];
+	t_color	light_rgb[MAX_LIGHT_COUNT];
+
+	double	ambItsty;
+	t_color	kAmb;
+
+	t_color	kDif;
+	t_color	kSpe;
+	double	shininess;
+
+	int		obj_count;
+	int		obj_type[MAX_OBJ_COUNT];
+	void	*obj[MAX_OBJ_COUNT];
+
+	int		bmp;
+	int		dsp;
+	int		endian;
+}			t_map;
+
+// Objects ***********************************************************
+
 typedef struct s_sphere
 {
 	t_vec		center;
@@ -59,50 +120,7 @@ typedef struct s_square
 	t_triangle	tr_b;
 }			t_square;
 
-// ambItsty		Ialpha / ambient(environment) intensity
-// kAmb			reflection coefficient of environment light
-// kDif			reflection coefficient of spreading light
-// kSpe			reflection coefficient of mirroring light
-// shininess	alpha lightness
-typedef struct s_map
-{
-	void	*mlx;
-	void	*win;
-	int		window_x;
-	int		window_y;
-
-	int		eye_count;
-	t_vec	v_eye[MAX_CAMERA_COUNT];
-	t_vec	v_eye_orientation[MAX_CAMERA_COUNT];
-	double	eye_fov[MAX_CAMERA_COUNT];
-
-	int		ceye_num;
-	t_vec	v_ceye;
-	t_vec	v_corientation;
-	double	distance_cam_scr;
-	t_vec	v_basevec_scrx;
-	t_vec	v_basevec_scry;
-	
-	int		light_count;
-	t_vec	v_light[MAX_LIGHT_COUNT];
-	double	litItsty[MAX_LIGHT_COUNT];
-	t_color	light_rgb[MAX_LIGHT_COUNT];
-
-	double	ambItsty;
-	t_color	kAmb;
-
-	t_color	kDif;
-	t_color	kSpe;
-	double	shininess;
-
-	int		obj_count;
-	int		obj_type[MAX_OBJ_COUNT];
-	void	*obj[MAX_OBJ_COUNT];
-
-	int		bmp;
-	int		dsp;
-	int		endian;
-}			t_map;
+// Bitmap ***********************************************************
 
 # pragma pack(2)
 
