@@ -46,8 +46,8 @@ int			write_bmp_simple_stream(FILE *fp, t_map *m);
 int			write_bmp(t_map *m);
 // output_window.c
 void		calc_distance_cam_scr(t_map *m);
-void		calc_screen_basevec_x(t_map *m);
-void		calc_screen_basevec_y(t_map *m);
+void		calc_screen_unitvec_x(t_map *m);
+void		calc_screen_unitvec_y(t_map *m);
 int			draw_map_on_window(t_map *m);
 void		display_window(t_map *m);
 // output_window_handler.c

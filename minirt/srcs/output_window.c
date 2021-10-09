@@ -14,8 +14,8 @@ void	calc_distance_cam_scr(t_map *m)
 		printf("  distance_cam_scr           : %.2f\n", m->distance_cam_scr);
 }
 
-// basevec x is a unit vector which the z-axis vec is zero.
-void	calc_screen_basevec_x(t_map *m)
+// unitvec x is a unit vector which the z-axis vec is zero.
+void	calc_screen_unitvec_x(t_map *m)
 {
 	if (m->curr_cam.orien.x == 0 && m->curr_cam.orien.y >= 0)
 		m->unitvec_scrx = ft_vec(1, 0, 0);
@@ -39,8 +39,8 @@ void	calc_screen_basevec_x(t_map *m)
 		ft_vecprint_with_name("  unitvec_scrx(normalized)  ", &m->unitvec_scrx);
 }
 
-// basevec y is a unit vector which the x-axis vec is zero.
-void	calc_screen_basevec_y(t_map *m)
+// unitvec y is a unit vector which the x-axis vec is zero.
+void	calc_screen_unitvec_y(t_map *m)
 {
 	if (m->curr_cam.orien.z == 0)
 		m->unitvec_scry = ft_vec(0, 0, 1);

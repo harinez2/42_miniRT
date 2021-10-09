@@ -36,8 +36,8 @@ static void	arrange_constant_values(t_map *m)
 	}
 	
 	calc_distance_cam_scr(m);
-	calc_screen_basevec_x(m);
-	calc_screen_basevec_y(m);
+	calc_screen_unitvec_x(m);
+	calc_screen_unitvec_y(m);
 }
 
 int	main(int argc, char **argv)
