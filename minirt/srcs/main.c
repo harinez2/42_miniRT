@@ -20,6 +20,9 @@ void	init_m(t_map *m)
 
 static void	arrange_constant_values(t_map *m)
 {
+	m->kAmb.r = m->kAmb.r * m->ambItsty;
+	m->kAmb.g = m->kAmb.g * m->ambItsty;
+	m->kAmb.b = m->kAmb.b * m->ambItsty;
 	m->kDif.r = 2 * (1 - m->kAmb.r) / 3;
 	m->kDif.g = 2 * (1 - m->kAmb.g) / 3;
 	m->kDif.b = 2 * (1 - m->kAmb.b) / 3;
@@ -31,6 +34,10 @@ static void	arrange_constant_values(t_map *m)
 		m->window_x = 242;
 		m->window_y = 242;
 	}
+	
+	calc_distance_cam_scr(m);
+	calc_screen_basevec_x(m);
+	calc_screen_basevec_y(m);
 }
 
 int	main(int argc, char **argv)

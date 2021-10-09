@@ -23,7 +23,8 @@ t_color	ray_trace_obj(t_vec v_w, t_map *m, int i, double t)
 	t_color	color;
 
 	if (i == -1)
-		set_color(&color, 92, 151, 243);
+		set_color(&color, 30, 60, 60);
+		// set_color(&color, 92, 151, 243);
 	else if (m->obj_type[i] == CMD_SPHERE)
 		color = ray_trace_sphere(v_w, m, (t_sphere *)m->obj[i], t);
 	else if (m->obj_type[i] == CMD_PLANE)

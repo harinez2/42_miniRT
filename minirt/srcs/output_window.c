@@ -1,6 +1,6 @@
 #include	"main.h"
 
-static void	calc_distance_cam_scr(t_map *m)
+void	calc_distance_cam_scr(t_map *m)
 {
 	double	tan_theta_div_two;
 
@@ -15,7 +15,7 @@ static void	calc_distance_cam_scr(t_map *m)
 }
 
 // basevec x is a unit vector which the z-axis vec is zero.
-static void	calc_screen_basevec_x(t_map *m)
+void	calc_screen_basevec_x(t_map *m)
 {
 	if (m->v_corientation.x == 0 && m->v_corientation.y >= 0)
 		m->v_basevec_scrx = ft_vec(1, 0, 0);
@@ -40,7 +40,7 @@ static void	calc_screen_basevec_x(t_map *m)
 }
 
 // basevec y is a unit vector which the x-axis vec is zero.
-static void	calc_screen_basevec_y(t_map *m)
+void	calc_screen_basevec_y(t_map *m)
 {
 	if (m->v_corientation.z == 0)
 		m->v_basevec_scry = ft_vec(0, 0, 1);
@@ -53,7 +53,7 @@ static void	calc_screen_basevec_y(t_map *m)
 		ft_vecprint_with_name("  v_basevec_scry(normalized)", &m->v_basevec_scry);
 }
 
-static void	put_pixel_base_on_ray(t_map *m, int  x, int y)
+static void	put_pixel_based_on_ray(t_map *m, int  x, int y)
 {
 	t_vec		v_w;
 	t_color		color;
@@ -85,16 +85,13 @@ int	draw_map_on_window(t_map *m)
 	int		x;
 	int		y;
 
-	calc_distance_cam_scr(m);
-	calc_screen_basevec_x(m);
-	calc_screen_basevec_y(m);
 	y = 0;
 	while (y < m->window_y)
 	{
 		x = 0;
 		while (x < m->window_x)
 		{
-			put_pixel_base_on_ray(m, x, y);
+			put_pixel_based_on_ray(m, x, y);
 			x++;
 		}
 		y++;
@@ -110,13 +107,13 @@ void	display_window(t_map *m)
 	if (!(m->mlx))
 		print_error_exit(ERR_WND_MLXINIT, m);
 	if (m->dsp)
-		printf("Mlx init OK (use_xshm:%d, pshm_format:%d).\n",
+		printf("  Mlx init OK (use_xshm:%d, pshm_format:%d).\n",
 			((t_xvar *)m->mlx)->use_xshm, ((t_xvar *)m->mlx)->pshm_format);
 	m->win = mlx_new_window(m->mlx, m->window_x, m->window_y, "miniRT");
 	if (!(m->win))
 		print_error_exit(ERR_WND_WNDINIT, m);
 	if (m->dsp)
-		printf("Window creation OK.\nDrawing objects ...\n");
+		printf("  Window creation OK.\n  Drawing objects ...\n");
 	draw_map_on_window(m);
 	mlx_key_hook(m->win, keypress_handler, m);
 	mlx_hook(m->win, 33, 0, (void *)close_win_hanlder, m);

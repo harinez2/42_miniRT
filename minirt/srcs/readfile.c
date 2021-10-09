@@ -1,6 +1,6 @@
 #include	"main.h"
 
-static void	check_params_specified(t_map *m)
+static void	validate_parameters(t_map *m)
 {
 	if (m->ambItsty == -1)
 		print_error_exit(ERR_CHK_NO_A, m);
@@ -75,5 +75,5 @@ void	read_config_file(char *filename, t_map *m)
 			break ;
 	}
 	close(fd);
-	check_params_specified(m);
+	validate_parameters(m);
 }
