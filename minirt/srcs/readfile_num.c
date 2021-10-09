@@ -37,7 +37,7 @@ double	read_double(int *i, char *s, t_map *m)
 
 	skip_separater(i, s);
 	ret = ft_atoll(&s[*i], &int_part);
-	if (ret == 0)
+	if (ret <= 0)
 		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
 	*i += ret;
 	deci_part = 0;

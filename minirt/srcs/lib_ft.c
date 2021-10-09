@@ -31,6 +31,7 @@ int	ft_atoll(char *s, long long *retnum)
 	long long	ret;
 	int			i;
 	int			neg;
+	int			startpos;
 
 	i = 0;
 	while (is_whitespace(s[i]))
@@ -43,10 +44,11 @@ int	ft_atoll(char *s, long long *retnum)
 		neg = -neg;
 		i++;
 	}
+	startpos = i;
 	ret = 0;
 	while (s[i] >= '0' && s[i] <= '9')
 		ret = ret * 10 + s[i++] - '0';
-	if (i == 0)
+	if (i - startpos == 0)
 		return (-1);
 	*retnum = ret * neg;
 	return (i);
