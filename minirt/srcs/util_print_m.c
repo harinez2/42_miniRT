@@ -26,9 +26,9 @@ static void	print_m_eye(t_map *m)
 		m->curr_cam_num, m->curr_cam.pos.x, m->curr_cam.pos.y, m->curr_cam.pos.z,
 		m->curr_cam.orien.x, m->curr_cam.orien.y, m->curr_cam.orien.z,
 		m->distance_cam_scr);
-	printf("                     basex: %.2f, %.2f, %.2f / basey: %.2f, %.2f, %.2f\n\n",
-		m->v_basevec_scrx.x, m->v_basevec_scrx.y, m->v_basevec_scrx.z,
-		m->v_basevec_scry.x, m->v_basevec_scry.y, m->v_basevec_scry.z);
+	printf("                     unitx: %.2f, %.2f, %.2f / unity: %.2f, %.2f, %.2f\n\n",
+		m->unitvec_scrx.x, m->unitvec_scrx.y, m->unitvec_scrx.z,
+		m->unitvec_scry.x, m->unitvec_scry.y, m->unitvec_scry.z);
 }
 
 static void	print_m_light(t_map *m)

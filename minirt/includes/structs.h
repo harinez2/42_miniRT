@@ -47,8 +47,8 @@ typedef struct s_map
 	int			curr_cam_num;
 	t_camera	curr_cam;
 	double		distance_cam_scr;
-	t_vec		v_basevec_scrx;
-	t_vec		v_basevec_scry;
+	t_vec		unitvec_scrx;
+	t_vec		unitvec_scry;
 
 	int			lit_cnt;
 	t_light		lit[MAX_LIGHT_COUNT];
