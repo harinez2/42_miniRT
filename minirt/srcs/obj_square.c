@@ -1,40 +1,42 @@
 #include	"main.h"
 
-void	ft_init_square(t_square *ts)
+static void	set_four_vertex(t_multivec *mv, t_square *ts)
 {
-	t_vec	a;
-	t_vec	b;
-	t_vec	c;
-	t_vec	d;
-
 	if (ts->orientation.x != 0)
 	{
-		a = ft_vec(0, ts->center.y + ts->sidesize, ts->center.z + ts->sidesize);
-		b = ft_vec(0, ts->center.y + ts->sidesize, ts->center.z - ts->sidesize);
-		c = ft_vec(0, ts->center.y - ts->sidesize, ts->center.z - ts->sidesize);
-		d = ft_vec(0, ts->center.y - ts->sidesize, ts->center.z + ts->sidesize);
+		mv->a = ft_vec(0, ts->centr.y + ts->sidesiz, ts->centr.z + ts->sidesiz);
+		mv->b = ft_vec(0, ts->centr.y + ts->sidesiz, ts->centr.z - ts->sidesiz);
+		mv->c = ft_vec(0, ts->centr.y - ts->sidesiz, ts->centr.z - ts->sidesiz);
+		mv->d = ft_vec(0, ts->centr.y - ts->sidesiz, ts->centr.z + ts->sidesiz);
 	}
 	else if (ts->orientation.y != 0)
 	{
-		a = ft_vec(ts->center.x + ts->sidesize, 0, ts->center.z + ts->sidesize);
-		b = ft_vec(ts->center.x + ts->sidesize, 0, ts->center.z - ts->sidesize);
-		c = ft_vec(ts->center.x - ts->sidesize, 0, ts->center.z - ts->sidesize);
-		d = ft_vec(ts->center.x - ts->sidesize, 0, ts->center.z + ts->sidesize);
+		mv->a = ft_vec(ts->centr.x + ts->sidesiz, 0, ts->centr.z + ts->sidesiz);
+		mv->b = ft_vec(ts->centr.x + ts->sidesiz, 0, ts->centr.z - ts->sidesiz);
+		mv->c = ft_vec(ts->centr.x - ts->sidesiz, 0, ts->centr.z - ts->sidesiz);
+		mv->d = ft_vec(ts->centr.x - ts->sidesiz, 0, ts->centr.z + ts->sidesiz);
 	}
 	else
 	{
-		a = ft_vec(ts->center.x + ts->sidesize, ts->center.y + ts->sidesize, 0);
-		b = ft_vec(ts->center.x + ts->sidesize, ts->center.y - ts->sidesize, 0);
-		c = ft_vec(ts->center.x - ts->sidesize, ts->center.y - ts->sidesize, 0);
-		d = ft_vec(ts->center.x - ts->sidesize, ts->center.y + ts->sidesize, 0);
+		mv->a = ft_vec(ts->centr.x + ts->sidesiz, ts->centr.y + ts->sidesiz, 0);
+		mv->b = ft_vec(ts->centr.x + ts->sidesiz, ts->centr.y - ts->sidesiz, 0);
+		mv->c = ft_vec(ts->centr.x - ts->sidesiz, ts->centr.y - ts->sidesiz, 0);
+		mv->d = ft_vec(ts->centr.x - ts->sidesiz, ts->centr.y + ts->sidesiz, 0);
 	}
-	ts->tr_a.first = a;
-	ts->tr_a.second = b;
-	ts->tr_a.third = c;
+}
+
+void	ft_init_square(t_square *ts)
+{
+	t_multivec	mv;
+
+	set_four_vertex(&mv, ts);
+	ts->tr_a.first = mv.a;
+	ts->tr_a.second = mv.b;
+	ts->tr_a.third = mv.c;
 	ts->tr_a.rgb = ts->rgb;
-	ts->tr_b.first = a;
-	ts->tr_b.second = c;
-	ts->tr_b.third = d;
+	ts->tr_b.first = mv.a;
+	ts->tr_b.second = mv.c;
+	ts->tr_b.third = mv.d;
 	ts->tr_b.rgb = ts->rgb;
 	ft_init_triangle(&ts->tr_a);
 	ft_init_triangle(&ts->tr_b);
@@ -63,10 +65,10 @@ t_color	get_color_by_rt_square(t_map *m, t_square *ts)
 void	print_square(t_square *ts)
 {
 	printf("Square  : ");
-	ft_vecprint(&ts->center);
+	ft_vecprint(&ts->centr);
 	printf(" / ");
 	ft_vecprint(&ts->orientation);
-	printf(" (ss:%.2f) / ", ts->sidesize);
+	printf(" (ss:%.2f) / ", ts->sidesiz);
 	ft_colorprint(&ts->rgb);
 	printf("\n");
 	printf("        ");

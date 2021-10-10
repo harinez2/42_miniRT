@@ -108,6 +108,7 @@ typedef struct s_multivec
 	t_vec		a;
 	t_vec		b;
 	t_vec		c;
+	t_vec		d;
 }	t_multivec;
 
 // Objects ***********************************************************
@@ -148,9 +149,9 @@ typedef struct s_triangle
 
 typedef struct s_square
 {
-	t_vec		center;
+	t_vec		centr;
 	t_vec		orientation;
-	double		sidesize;
+	double		sidesiz;
 	t_color		rgb;
 	t_triangle	tr_a;
 	t_triangle	tr_b;

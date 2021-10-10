@@ -29,9 +29,9 @@ int	read_file_square(int *i, char *line, t_map *m)
 	(*i) += 2;
 	m->obj_type[m->obj_count] = CMD_SQUARE;
 	m->obj[m->obj_count] = (t_square *)malloc(sizeof(t_square));
-	((t_square *)m->obj[m->obj_count])->center = read_xyz(i, line, m);
+	((t_square *)m->obj[m->obj_count])->centr = read_xyz(i, line, m);
 	((t_square *)m->obj[m->obj_count])->orientation = read_xyz(i, line, m);
-	((t_square *)m->obj[m->obj_count])->sidesize = read_double(i, line, m);
+	((t_square *)m->obj[m->obj_count])->sidesiz = read_double(i, line, m);
 	((t_sphere *)m->obj[m->obj_count])->rgb = read_rgb(i, line, m);
 	ft_init_square(m->obj[m->obj_count]);
 	m->obj_count++;
