@@ -54,7 +54,6 @@ void		display_window(t_map *m);
 int			keypress_handler(int key, t_map *m);
 void		close_win_hanlder(t_map *m, int called_by);
 // raytracer.c
-double		get_distance_to_obj(t_vec v_w, t_vec vstart, int i, t_map *m);
 int			get_minimum_distance_to_obj(
 				t_vec v_w, t_vec vstart, t_map *m, double *hit_t);
 t_color		ray_trace_obj(t_vec v_w, t_map *m, int i, double t);

@@ -1,6 +1,6 @@
 #include	"main.h"
 
-double	get_distance_to_obj(t_vec v_w, t_vec vstart, int i, t_map *m)
+static double	get_distance_to_obj(t_vec v_w, t_vec vstart, int i, t_map *m)
 {
 	double	chkt;
 
