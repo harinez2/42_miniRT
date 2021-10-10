@@ -1,36 +1,31 @@
 #include	"main.h"
 
-double	get_nearest_cylinder(t_vec v_w, t_vec v_eye, t_cylinder *tc)
+double	get_nearest_cylinder(t_vec v_w, t_vec v_cam, t_cylinder *tc)
 {
-	t_vec	v_de;
-	double	mx;
-	double	mz;
-	double	t;
-	double	A;
-	double	B;
-	double	C;
-	double	D;
-	t_vec	v_tpos;
-	double	diff;
+	t_calcvals	cv;
+	double		mx;
+	double		mz;
+	t_vec		v_tpos;
+	double		diff;
 
-	v_de = ft_vecsub(v_w, v_eye);
-	mx = v_eye.x - tc->center.x;
-	mz = v_eye.z - tc->center.z;
-	A = v_de.x * v_de.x + v_de.z * v_de.z;
-	B = 2 * (v_de.x * mx + v_de.z * mz);
-	C = mx * mx + mz * mz - tc->diameter * tc->diameter;
-	D = B * B - 4 * A * C;
-	t = calc_t(A, B, D);
-	if (t > 0)
+	cv.v_de = ft_vecsub(v_w, v_cam);
+	mx = v_cam.x - tc->center.x;
+	mz = v_cam.z - tc->center.z;
+	cv.A = cv.v_de.x * cv.v_de.x + cv.v_de.z * cv.v_de.z;
+	cv.B = 2 * (cv.v_de.x * mx + cv.v_de.z * mz);
+	cv.C = mx * mx + mz * mz - tc->diameter * tc->diameter;
+	cv.D = cv.B * cv.B - 4 * cv.A * cv.C;
+	cv.t = calc_t(cv.A, cv.B, cv.D);
+	if (cv.t > 0)
 	{
-		v_tpos = ft_vecadd(v_eye, ft_vecmult(v_de, t));//tpos：視線と球上の交点(pi)
+		v_tpos = ft_vecadd(v_cam, ft_vecmult(cv.v_de, cv.t));//tpos：視線と球上の交点(pi)
 		diff = v_tpos.y - tc->center.y;
 		if (diff < 0)
 			diff *= -1;
 		if (diff > tc->height / 2)
-			t = -1;
+			cv.t = -1;
 	}
-	return (t);
+	return (cv.t);
 }
 
 t_color	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)

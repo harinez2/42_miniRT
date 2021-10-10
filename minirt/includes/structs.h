@@ -35,6 +35,16 @@ typedef struct s_minmax
 	double		max;
 }	t_minmax;
 
+typedef struct s_calcvals
+{
+	t_vec		v_de;
+	double		A;
+	double		B;
+	double		C;
+	double		D;
+	double		t;
+}	t_calcvals;
+
 // ambItsty		Ialpha / ambient(environment) intensity
 // kAmb			reflection coefficient of environment light
 // kDif			reflection coefficient of spreading light

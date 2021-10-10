@@ -1,36 +1,18 @@
 #include	"main.h"
 
-double	get_nearest_sphere(t_vec v_w, t_vec v_eye, t_sphere *ts)
+double	get_nearest_sphere(t_vec v_w, t_vec v_cam, t_sphere *ts)
 {
-	t_vec	v_de;
-	t_vec	v_tmp;
-	double	t;
-	double	A;
-	double	B;
-	double	C;
-	double	D;
-	double	t1;
-	double	t2;
+	t_calcvals	cv;
+	t_vec		v_center_cam;
 
-	v_de = ft_vecsub(v_w, v_eye);
-	v_tmp = ft_vecsub(v_eye, ts->center);
-	A = ft_vecnormsq(v_de);
-	B = 2 * ft_vecinnerprod(v_de, v_tmp);
-	C = ft_vecnormsq(v_tmp) - ts->diameter * ts->diameter;
-	D = B * B - 4 * A * C;
-	t = -1;
-	if (D == 0)
-		t = -B / (2 * A);
-	else if (D > 0)
-	{
-		t1 = (-B - sqrt(D)) / (2 * A);
-		t2 = (-B + sqrt(D)) / (2 * A);
-		if (t1 > 0 && t2 > 0)
-			t = fmin(t1, t2);
-		else
-			t = fmax(t1, t2);
-	}
-	return (t);
+	cv.v_de = ft_vecsub(v_w, v_cam);
+	v_center_cam = ft_vecsub(v_cam, ts->center);
+	cv.A = ft_vecnormsq(cv.v_de);
+	cv.B = 2 * ft_vecinnerprod(cv.v_de, v_center_cam);
+	cv.C = ft_vecnormsq(v_center_cam) - ts->diameter * ts->diameter;
+	cv.D = cv.B * cv.B - 4 * cv.A * cv.C;
+	cv.t = calc_t(cv.A, cv.B, cv.D);
+	return (cv.t);
 }
 
 // (2) calc diffuse reflection (kakusan hansya kou)

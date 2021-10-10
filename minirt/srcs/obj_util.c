@@ -6,6 +6,7 @@ double	calc_t(double A, double B, double D)
 	double	t2;
 	double	t;
 
+	t = -1;
 	if (D == 0)
 		t = -B / (2 * A);
 	else if (D > 0)
