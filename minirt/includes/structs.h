@@ -1,6 +1,8 @@
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
+// Primitive values ************************************************
+
 typedef struct s_vec
 {
 	double		x;
@@ -29,21 +31,7 @@ typedef struct s_light
 	t_color	rgb;
 }	t_light;
 
-typedef struct s_minmax
-{
-	double		min;
-	double		max;
-}	t_minmax;
-
-typedef struct s_calcvals
-{
-	t_vec		v_de;
-	double		A;
-	double		B;
-	double		C;
-	double		D;
-	double		t;
-}	t_calcvals;
+// Map data ***************************************************
 
 // ambItsty		Ialpha / ambient(environment) intensity
 // kAmb			reflection coefficient of environment light
@@ -83,6 +71,24 @@ typedef struct s_map
 	int			dsp;
 	int			endian;
 }	t_map;
+
+// Calculation structure ******************************************
+
+typedef struct s_minmax
+{
+	double		min;
+	double		max;
+}	t_minmax;
+
+typedef struct s_calcvals
+{
+	t_vec		v_de;
+	double		A;
+	double		B;
+	double		C;
+	double		D;
+	double		t;
+}	t_calcvals;
 
 // Objects ***********************************************************
 
