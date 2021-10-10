@@ -56,18 +56,3 @@ t_color	get_color_by_rt_triangle(t_map *m, t_triangle *tt)
 {
 	return (get_color_by_rt_plane(m, &tt->plane));
 }
-
-void	print_triangle(t_triangle *tt)
-{
-	printf("Triangle: ");
-	ft_vecprint(&tt->first);
-	printf(" / ");
-	ft_vecprint(&tt->second);
-	printf(" / ");
-	ft_vecprint(&tt->third);
-	printf(" / ");
-	ft_colorprint(&tt->rgb);
-	printf("\n");
-	printf("          ");
-	print_plane(&tt->plane);
-}

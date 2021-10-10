@@ -17,6 +17,7 @@ SRCS		= \
 				$(SRC_DIR)/obj_triangle.c \
 				$(SRC_DIR)/obj_util.c \
 				$(SRC_DIR)/output_bitmap.c \
+				$(SRC_DIR)/output_screen.c \
 				$(SRC_DIR)/output_window.c \
 				$(SRC_DIR)/output_window_handler.c \
 				$(SRC_DIR)/raytracer.c \
@@ -26,6 +27,7 @@ SRCS		= \
 				$(SRC_DIR)/readfile_objs.c \
 				$(SRC_DIR)/util_color.c \
 				$(SRC_DIR)/util_print_m.c \
+				$(SRC_DIR)/util_print_m_objs.c \
 				$(SRC_DIR)/util_render.c \
 				$(SRC_DIR)/util_vector.c \
 				$(SRC_DIR)/util_vector_calc.c \

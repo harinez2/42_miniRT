@@ -20,7 +20,6 @@ double		calc_cylinder_diffuse_reflection(
 void		calc_cylinder_reflection(
 				t_map *m, t_color *color, int i, t_cylinder *tc);
 t_color		get_color_by_rt_cylinder(t_map *m, t_cylinder *tc);
-void		print_cylinder(t_cylinder *tc);
 // obj_plane.c
 double		get_distance_to_plane(t_vec v_w, t_map *m, t_plane *tp);
 void		calc_plane_ambient_reflection(
@@ -30,7 +29,6 @@ double		calc_plane_diffuse_reflection(
 void		calc_plane_specular_reflection(
 				t_map *m, t_color *color, int i, t_plane *tp);
 t_color		get_color_by_rt_plane(t_map *m, t_plane *tp);
-void		print_plane(t_plane *tp);
 // obj_sphere.c
 double		get_distance_to_sphere(t_vec v_w, t_map *m, t_sphere *ts);
 void		calc_sphere_ambient_reflection(
@@ -40,17 +38,14 @@ double		calc_sphere_diffuse_reflection(
 void		calc_sphere_specular_reflection(
 				t_map *m, t_color *color, int i, t_sphere *ts);
 t_color		get_color_by_rt_sphere(t_map *m, t_sphere *ts);
-void		print_sphere(t_sphere *ts);
 // obj_square.c
 void		ft_init_square(t_square *ts);
 double		get_distance_to_square(t_vec v_w, t_map *m, t_square *ts);
 t_color		get_color_by_rt_square(t_map *m, t_square *ts);
-void		print_square(t_square *ts);
 // obj_triangle.c
 void		ft_init_triangle(t_triangle *tt);
 double		get_distance_to_triangle(t_vec v_w, t_map *m, t_triangle *tt);
 t_color		get_color_by_rt_triangle(t_map *m, t_triangle *tt);
-void		print_triangle(t_triangle *tt);
 // obj_util.c
 double		calc_t(double A, double B, double D);
 // output_bitmap.c
@@ -58,10 +53,11 @@ void		set_bmp_header(uint8_t *header_buffer, int stride, t_map *m);
 int			draw_map_bmp(FILE *fp, uint8_t *buffer, int stride, t_map *m);
 int			write_bmp_simple_stream(FILE *fp, t_map *m);
 int			write_bmp(t_map *m);
-// output_window.c
+// output_screen.c
 void		calc_distance_cam_scr(t_map *m);
 void		calc_screen_unitvec_x(t_map *m);
 void		calc_screen_unitvec_y(t_map *m);
+// output_window.c
 int			draw_map_on_window(t_map *m);
 void		display_window(t_map *m);
 // output_window_handler.c
@@ -97,6 +93,12 @@ t_color		set_rgb_inrange(t_color c);
 void		ft_colorprint(t_color *c);
 // util_print_m.c
 void		print_m(t_map *m);
+// util_print_m_objs.c
+void		print_cylinder(t_cylinder *tc);
+void		print_plane(t_plane *tp);
+void		print_sphere(t_sphere *ts);
+void		print_square(t_square *ts);
+void		print_triangle(t_triangle *tt);
 // util_render.c
 double		adjust_range(double x, t_minmax from, t_minmax to);
 int			get_endian(void);

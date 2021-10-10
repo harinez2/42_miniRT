@@ -61,18 +61,3 @@ t_color	get_color_by_rt_square(t_map *m, t_square *ts)
 {
 	return (get_color_by_rt_plane(m, &ts->tr_a.plane));
 }
-
-void	print_square(t_square *ts)
-{
-	printf("Square  : ");
-	ft_vecprint(&ts->centr);
-	printf(" / ");
-	ft_vecprint(&ts->orientation);
-	printf(" (ss:%.2f) / ", ts->sidesiz);
-	ft_colorprint(&ts->rgb);
-	printf("\n");
-	printf("        ");
-	print_triangle(&ts->tr_a);
-	printf("        ");
-	print_triangle(&ts->tr_b);
-}

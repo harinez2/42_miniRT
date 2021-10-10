@@ -102,14 +102,3 @@ t_color	get_color_by_rt_plane(t_map *m, t_plane *tp)
 	}
 	return (set_rgb_inrange(color));
 }
-
-void	print_plane(t_plane *tp)
-{
-	printf("Plane   : ");
-	ft_vecprint(&tp->normal);
-	printf(" / ");
-	ft_vecprint(&tp->position);
-	printf(" / ");
-	ft_colorprint(&tp->rgb);
-	printf("\n");
-}

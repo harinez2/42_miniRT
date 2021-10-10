@@ -120,14 +120,3 @@ t_color	get_color_by_rt_cylinder(t_map *m, t_cylinder *tc)
 	}
 	return (set_rgb_inrange(color));
 }
-
-void	print_cylinder(t_cylinder *tc)
-{
-	printf("Cylinder: ");
-	ft_vecprint(&tc->center);
-	printf(" / ");
-	ft_vecprint(&tc->orientation);
-	printf(" (r: %.2f h: %.2f) / ", tc->diameter, tc->height);
-	ft_colorprint(&tc->rgb);
-	printf("\n");
-}

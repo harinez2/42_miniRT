@@ -100,12 +100,3 @@ t_color	get_color_by_rt_sphere(t_map *m, t_sphere *ts)
 	}
 	return (set_rgb_inrange(color));
 }
-
-void	print_sphere(t_sphere *ts)
-{
-	printf("Sphere  : ");
-	ft_vecprint(&ts->center);
-	printf(" (r:%.2f) / ", ts->diameter);
-	ft_colorprint(&ts->rgb);
-	printf("\n");
-}
