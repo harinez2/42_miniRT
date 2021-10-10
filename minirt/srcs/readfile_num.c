@@ -84,9 +84,12 @@ t_color	read_rgb(int *i, char *s, t_map *m)
 	c.b = read_int(i, s, m);
 	if (c.b < 0 || c.b > 255)
 		print_error_exit(ERR_RD_OUTOFRANGE, m);
-	c.r = ft_map(c.r, 0, 255, 0, 1);
-	c.g = ft_map(c.g, 0, 255, 0, 1);
-	c.b = ft_map(c.b, 0, 255, 0, 1);
+	c.r = adjust_range(c.r,
+		(t_minmax){.min = 0, .max = 255}, (t_minmax){.min = 0, .max = 1});
+	c.g = adjust_range(c.g,
+		(t_minmax){.min = 0, .max = 255}, (t_minmax){.min = 0, .max = 1});
+	c.b = adjust_range(c.b,
+		(t_minmax){.min = 0, .max = 255}, (t_minmax){.min = 0, .max = 1});
 	return (c);
 }
 

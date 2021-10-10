@@ -66,7 +66,8 @@ t_color	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
 		double naiseki = ft_vecinnerprod(ft_vecnormalize(v_n), v_lightDir);
 		if (naiseki < 0)
 			naiseki = 0;
-		double nlDot = ft_map(naiseki, 0, 1, 0, 255);
+		double nlDot = adjust_range(naiseki,
+			(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
 		color.r += m->kDif.r * m->lit[i].itsty * m->lit[i].rgb.r * nlDot * tc->rgb.r;
 		color.g += m->kDif.g * m->lit[i].itsty * m->lit[i].rgb.g * nlDot * tc->rgb.g;
 		color.b += m->kDif.b * m->lit[i].itsty * m->lit[i].rgb.b * nlDot * tc->rgb.b;
@@ -78,7 +79,8 @@ t_color	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
 			double vrDot = ft_vecinnerprod(invEyeDir, refDir);
 			if (vrDot < 0)
 				vrDot = 0;
-			double vrDotPow = ft_map(pow(vrDot, m->shininess), 0, 1, 0, 255);
+			double vrDotPow = adjust_range(pow(vrDot, m->shininess),
+				(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
 			color.r += m->kSpe.r * m->lit[i].itsty * m->lit[i].rgb.r * vrDotPow * tc->rgb.r;
 			color.g += m->kSpe.g * m->lit[i].itsty * m->lit[i].rgb.g * vrDotPow * tc->rgb.g;
 			color.b += m->kSpe.b * m->lit[i].itsty * m->lit[i].rgb.b * vrDotPow * tc->rgb.b;

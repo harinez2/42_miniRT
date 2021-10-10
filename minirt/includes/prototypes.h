@@ -86,7 +86,7 @@ void		ft_colorprint(t_color *c);
 // util_print_m.c
 void		print_m(t_map *m);
 // util_render.c
-double		ft_map(double x, int froma, int fromb, int toa, int tob);
+double		adjust_range(double x, t_minmax from, t_minmax to);
 int			get_endian(void);
 double		ft_degree_to_rad(double degree);
 // util_vector.c

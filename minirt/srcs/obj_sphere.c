@@ -47,7 +47,8 @@ double	calc_sphere_diffuse_reflection(
 	naiseki = ft_vecinnerprod(v_sphereN, v_lightDir);
 	if (naiseki < 0)
 		naiseki = 0;
-	nlDot = ft_map(naiseki, 0, 1, 0, 255);
+	nlDot = adjust_range(naiseki,
+			(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
 	color->r += m->kDif.r * m->lit[i].itsty * m->lit[i].rgb.r * nlDot * ts->rgb.r;
 	color->g += m->kDif.g * m->lit[i].itsty * m->lit[i].rgb.g * nlDot * ts->rgb.g;
 	color->b += m->kDif.b * m->lit[i].itsty * m->lit[i].rgb.b * nlDot * ts->rgb.b;
@@ -74,7 +75,8 @@ void	calc_specular_reflection(t_map *m, t_color *color, t_vec v_tpos, int i,
 	vrDot = ft_vecinnerprod(invEyeDir, refDir);
 	if (vrDot < 0)
 		vrDot = 0;
-	vrDotPow = ft_map(pow(vrDot, m->shininess), 0, 1, 0, 255);
+	vrDotPow = adjust_range(pow(vrDot, m->shininess),
+		(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
 	color->r += m->kSpe.r * m->lit[i].itsty * m->lit[i].rgb.r * vrDotPow * ts->rgb.r;
 	color->g += m->kSpe.g * m->lit[i].itsty * m->lit[i].rgb.g * vrDotPow * ts->rgb.g;
 	color->b += m->kSpe.b * m->lit[i].itsty * m->lit[i].rgb.b * vrDotPow * ts->rgb.b;

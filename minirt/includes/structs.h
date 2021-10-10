@@ -29,6 +29,12 @@ typedef struct s_light
 	t_color	rgb;
 }	t_light;
 
+typedef struct s_minmax
+{
+	double		min;
+	double		max;
+}	t_minmax;
+
 // ambItsty		Ialpha / ambient(environment) intensity
 // kAmb			reflection coefficient of environment light
 // kDif			reflection coefficient of spreading light

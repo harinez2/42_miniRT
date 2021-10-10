@@ -38,11 +38,13 @@ int	draw_map_bmp(FILE *fp, uint8_t *buffer, int stride, t_map *m)
 	while (y < m->window_y)
 	{
 		row = buffer;
-		v_w.y = ft_map(y, 0, m->window_y - 1, -1, 1);
+		v_w.y = adjust_range(y,
+			(t_minmax){.min = 0, .max = m->window_y - 1}, (t_minmax){.min = -1, .max = 1});
 		x = 0;
 		while (x < m->window_x)
 		{
-			v_w.x = ft_map(x, 0, m->window_x - 1, -1, 1);
+			v_w.x = adjust_range(x,
+				(t_minmax){.min = 0, .max = m->window_x - 1}, (t_minmax){.min = -1, .max = 1});
 			c = decide_color_with_raytracing(v_w, m);
 			*row++ = c.b;
 			*row++ = c.g;

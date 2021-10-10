@@ -1,12 +1,12 @@
 #include	"main.h"
 
-double	ft_map(double x, int froma, int fromb, int toa, int tob)
+double	adjust_range(double x, t_minmax from, t_minmax to)
 {
 	double	pos;
 	double	ret;
 
-	pos = (x - (double)froma) / ((double)fromb - (double)froma);
-	ret = pos * ((double)tob - (double)toa) + (double)toa;
+	pos = (x - from.min) / (from.max - from.min);
+	ret = pos * (to.max - to.min) + to.min;
 	return (ret);
 }
 
