@@ -29,6 +29,16 @@ double	get_distance_to_cylinder(t_vec v_w, t_map *m, t_cylinder *tc)
 	return (cv.t);
 }
 
+//(1) ambient light (kankyo kou)
+void	calc_cylinder_ambient_reflection(
+	t_map *m, t_color *color, t_cylinder *tc)
+{
+	set_color(color,
+		m->kAmb.r * m->ambItsty * tc->rgb.r,
+		m->kAmb.g * m->ambItsty * tc->rgb.g,
+		m->kAmb.b * m->ambItsty * tc->rgb.b);
+}
+
 //(2) diffuse reflection 拡散反射光
 double	calc_cylinder_diffuse_reflection(
 	t_map *m, t_color *color, int i, t_cylinder *tc)
@@ -47,9 +57,12 @@ double	calc_cylinder_diffuse_reflection(
 		naiseki = 0;
 	nlDot = adjust_range(naiseki,
 			(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
-	color->r += m->kDif.r * m->lit[i].itsty * m->lit[i].rgb.r * nlDot * tc->rgb.r;
-	color->g += m->kDif.g * m->lit[i].itsty * m->lit[i].rgb.g * nlDot * tc->rgb.g;
-	color->b += m->kDif.b * m->lit[i].itsty * m->lit[i].rgb.b * nlDot * tc->rgb.b;
+	color->r += m->kDif.r * m->lit[i].itsty * m->lit[i].rgb.r
+		* nlDot * tc->rgb.r;
+	color->g += m->kDif.g * m->lit[i].itsty * m->lit[i].rgb.g
+		* nlDot * tc->rgb.g;
+	color->b += m->kDif.b * m->lit[i].itsty * m->lit[i].rgb.b
+		* nlDot * tc->rgb.b;
 	return (naiseki);
 }
 
@@ -70,17 +83,20 @@ void	calc_cylinder_reflection(
 	v_n.y = 0;
 	v_n.z = 2 * (m->camdir.v_tpos.z - tc->center.z);
 	naiseki = ft_vecinnerprod(ft_vecnormalize(v_n), v_lightDir);
-	refDir = ft_vecnormalize(
-			ft_vecsub(ft_vecmult(ft_vecnormalize(v_n), 2 * naiseki), v_lightDir));
+	refDir = ft_vecnormalize(ft_vecsub(
+				ft_vecmult(ft_vecnormalize(v_n), 2 * naiseki), v_lightDir));
 	invEyeDir = ft_vecnormalize(ft_vecmult(m->camdir.v_de, -1));
 	vrDot = ft_vecinnerprod(invEyeDir, refDir);
 	if (vrDot < 0)
 		vrDot = 0;
 	vrDotPow = adjust_range(pow(vrDot, m->shininess),
 			(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
-	color->r += m->kSpe.r * m->lit[i].itsty * m->lit[i].rgb.r * vrDotPow * tc->rgb.r;
-	color->g += m->kSpe.g * m->lit[i].itsty * m->lit[i].rgb.g * vrDotPow * tc->rgb.g;
-	color->b += m->kSpe.b * m->lit[i].itsty * m->lit[i].rgb.b * vrDotPow * tc->rgb.b;
+	color->r += m->kSpe.r * m->lit[i].itsty * m->lit[i].rgb.r
+		* vrDotPow * tc->rgb.r;
+	color->g += m->kSpe.g * m->lit[i].itsty * m->lit[i].rgb.g
+		* vrDotPow * tc->rgb.g;
+	color->b += m->kSpe.b * m->lit[i].itsty * m->lit[i].rgb.b
+		* vrDotPow * tc->rgb.b;
 }
 
 // tpos			：cross point (pi) of the v_cam and the surface of the cylinder
@@ -93,11 +109,7 @@ t_color	get_color_by_rt_cylinder(t_map *m, t_cylinder *tc)
 	double	hit_t;
 	double	naiseki;
 
-	//(1) ambient light 環境光
-	set_color(&color,
-		m->kAmb.r * m->ambItsty * tc->rgb.r,
-		m->kAmb.g * m->ambItsty * tc->rgb.g,
-		m->kAmb.b * m->ambItsty * tc->rgb.b);
+	calc_cylinder_ambient_reflection(m, &color, tc);
 	i = 0;
 	while (i < m->lit_cnt)
 	{

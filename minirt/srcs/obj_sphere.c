@@ -15,6 +15,15 @@ double	get_distance_to_sphere(t_vec v_w, t_map *m, t_sphere *ts)
 	return (cv.t);
 }
 
+//(1) ambient light (kankyo kou)
+void	calc_sphere_ambient_reflection(t_map *m, t_color *color, t_sphere *ts)
+{
+	set_color(color,
+		m->kAmb.r * m->ambItsty * ts->rgb.r,
+		m->kAmb.g * m->ambItsty * ts->rgb.g,
+		m->kAmb.b * m->ambItsty * ts->rgb.b);
+}
+
 // (2) calc diffuse reflection (kakusan hansya kou)
 double	calc_sphere_diffuse_reflection(
 	t_map *m, t_color *color, int i, t_sphere *ts)
@@ -31,9 +40,12 @@ double	calc_sphere_diffuse_reflection(
 		naiseki = 0;
 	nlDot = adjust_range(naiseki,
 			(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
-	color->r += m->kDif.r * m->lit[i].itsty * m->lit[i].rgb.r * nlDot * ts->rgb.r;
-	color->g += m->kDif.g * m->lit[i].itsty * m->lit[i].rgb.g * nlDot * ts->rgb.g;
-	color->b += m->kDif.b * m->lit[i].itsty * m->lit[i].rgb.b * nlDot * ts->rgb.b;
+	color->r += m->kDif.r * m->lit[i].itsty * m->lit[i].rgb.r
+		* nlDot * ts->rgb.r;
+	color->g += m->kDif.g * m->lit[i].itsty * m->lit[i].rgb.g
+		* nlDot * ts->rgb.g;
+	color->b += m->kDif.b * m->lit[i].itsty * m->lit[i].rgb.b
+		* nlDot * ts->rgb.b;
 	return (naiseki);
 }
 
@@ -57,10 +69,13 @@ void	calc_specular_reflection(t_map *m, t_color *color, int i, t_sphere *ts)
 	if (vrDot < 0)
 		vrDot = 0;
 	vrDotPow = adjust_range(pow(vrDot, m->shininess),
-		(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
-	color->r += m->kSpe.r * m->lit[i].itsty * m->lit[i].rgb.r * vrDotPow * ts->rgb.r;
-	color->g += m->kSpe.g * m->lit[i].itsty * m->lit[i].rgb.g * vrDotPow * ts->rgb.g;
-	color->b += m->kSpe.b * m->lit[i].itsty * m->lit[i].rgb.b * vrDotPow * ts->rgb.b;
+			(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
+	color->r += m->kSpe.r * m->lit[i].itsty * m->lit[i].rgb.r
+		* vrDotPow * ts->rgb.r;
+	color->g += m->kSpe.g * m->lit[i].itsty * m->lit[i].rgb.g
+		* vrDotPow * ts->rgb.g;
+	color->b += m->kSpe.b * m->lit[i].itsty * m->lit[i].rgb.b
+		* vrDotPow * ts->rgb.b;
 }
 
 //tpos	across point of eyevec and sphere surface(pi)
@@ -71,11 +86,7 @@ t_color	get_color_by_rt_sphere(t_map *m, t_sphere *ts)
 	double	hit_t;
 	double	naiseki;
 
-	//(1) ambient light (kankyo kou)
-	set_color(&color,
-		m->kAmb.r * m->ambItsty * ts->rgb.r,
-		m->kAmb.g * m->ambItsty * ts->rgb.g,
-		m->kAmb.b * m->ambItsty * ts->rgb.b);
+	calc_sphere_ambient_reflection(m, &color, ts);
 	i = 0;
 	while (i < m->lit_cnt)
 	{
