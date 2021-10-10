@@ -17,15 +17,15 @@ double	get_distance_to_sphere(t_vec v_w, t_map *m, t_sphere *ts)
 
 // (2) calc diffuse reflection (kakusan hansya kou)
 double	calc_sphere_diffuse_reflection(
-	t_map *m, t_color *color, t_vec v_tpos, int i, t_sphere *ts)
+	t_map *m, t_color *color, int i, t_sphere *ts)
 {
 	t_vec	v_lightDir;
 	t_vec	v_sphereN;
 	double	naiseki;
 	double	nlDot;
 
-	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, v_tpos));
-	v_sphereN = ft_vecnormalize(ft_vecsub(v_tpos, ts->center));
+	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
+	v_sphereN = ft_vecnormalize(ft_vecsub(m->camdir.v_tpos, ts->center));
 	naiseki = ft_vecinnerprod(v_sphereN, v_lightDir);
 	if (naiseki < 0)
 		naiseki = 0;
@@ -85,7 +85,7 @@ t_color	get_color_by_rt_sphere(t_map *m, t_sphere *ts)
 			i++;
 			continue ;
 		}
-		naiseki = calc_sphere_diffuse_reflection(m, &color, m->camdir.v_tpos, i, ts);
+		naiseki = calc_sphere_diffuse_reflection(m, &color, i, ts);
 		if (naiseki > 0)
 			calc_specular_reflection(m, &color, i, ts);
 		i++;

@@ -13,6 +13,10 @@ void		init_m(t_map *m);
 int			main(int argc, char **argv);
 // obj_cylinder.c
 double		get_distance_to_cylinder(t_vec v_w, t_map *m, t_cylinder *tc);
+double		calc_cylinder_diffuse_reflection(
+				t_map *m, t_color *color, int i, t_cylinder *tc);
+void		calc_cylinder_reflection(
+				t_map *m, t_color *color, int i, t_cylinder *tc);
 t_color		get_color_by_rt_cylinder(t_map *m, t_cylinder *tc);
 void		print_cylinder(t_cylinder *tc);
 // obj_plane.c
@@ -22,7 +26,7 @@ void		print_plane(t_plane *tp);
 // obj_sphere.c
 double		get_distance_to_sphere(t_vec v_w, t_map *m, t_sphere *ts);
 double		calc_sphere_diffuse_reflection(
-				t_map *m, t_color *color, t_vec v_tpos, int i, t_sphere *ts);
+				t_map *m, t_color *color, int i, t_sphere *ts);
 void		calc_specular_reflection(t_map *m, t_color *color, int i, t_sphere *ts);
 t_color		get_color_by_rt_sphere(t_map *m, t_sphere *ts);
 void		print_sphere(t_sphere *ts);
