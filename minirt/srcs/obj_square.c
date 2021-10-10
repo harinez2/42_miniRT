@@ -40,14 +40,14 @@ void	ft_init_square(t_square *ts)
 	ft_init_triangle(&ts->tr_b);
 }
 
-double	get_distance_to_square(t_vec v_w, t_vec v_eye, t_square *ts)
+double	get_distance_to_square(t_vec v_w, t_map *m, t_square *ts)
 {
 	double	t;
 	double	t1;
 	double	t2;
 
-	t1 = get_distance_to_triangle(v_w, v_eye, &ts->tr_a);
-	t2 = get_distance_to_triangle(v_w, v_eye, &ts->tr_b);
+	t1 = get_distance_to_triangle(v_w, m, &ts->tr_a);
+	t2 = get_distance_to_triangle(v_w, m, &ts->tr_b);
 	if (t1 > 0 && t2 > 0)
 		t = fmin(t1, t2);
 	else
@@ -55,9 +55,9 @@ double	get_distance_to_square(t_vec v_w, t_vec v_eye, t_square *ts)
 	return (t);
 }
 
-t_color	get_color_by_rt_square(t_curr_cam_vecs cv, t_map *m, t_square *ts)
+t_color	get_color_by_rt_square(t_map *m, t_square *ts)
 {
-	return (get_color_by_rt_plane(cv, m, &ts->tr_a.plane));
+	return (get_color_by_rt_plane(m, &ts->tr_a.plane));
 }
 
 void	print_square(t_square *ts)

@@ -11,15 +11,15 @@ void	ft_init_triangle(t_triangle *tt)
 	tt->plane.rgb = tt->rgb;
 }
 
-double	get_distance_to_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt)
+double	get_distance_to_triangle(t_vec v_w, t_map *m, t_triangle *tt)
 {
 	double	t;
 
-	t = get_distance_to_plane(v_w, v_eye, &tt->plane);
+	t = get_distance_to_plane(v_w, m, &tt->plane);
 	if (t >= 0)
 	{
-		t_vec v_de = ft_vecsub(v_w, v_eye);
-		t_vec v_tpos = ft_vecadd(v_eye, ft_vecmult(v_de, t));//tpos：視線と面上の交点(pi)
+		t_vec v_de = ft_vecsub(v_w, m->curr_cam.pos);
+		t_vec v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(v_de, t));//tpos：視線と面上の交点(pi)
 		double a, b, c;
 		if (tt->first.x == tt->second.x && tt->first.x == tt->third.x)
 		{
@@ -41,9 +41,9 @@ double	get_distance_to_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt)
 	return (t);
 }
 
-t_color	get_color_by_rt_triangle(t_curr_cam_vecs cv, t_map *m, t_triangle *tt)
+t_color	get_color_by_rt_triangle(t_map *m, t_triangle *tt)
 {
-	return (get_color_by_rt_plane(cv, m, &tt->plane));
+	return (get_color_by_rt_plane(m, &tt->plane));
 }
 
 void	print_triangle(t_triangle *tt)

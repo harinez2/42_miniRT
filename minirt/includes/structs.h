@@ -31,6 +31,20 @@ typedef struct s_light
 	t_color	rgb;
 }	t_light;
 
+typedef struct s_screen
+{
+	double		distance_cam_scr;
+	t_vec		unitvec_scrx;
+	t_vec		unitvec_scry;
+}	t_screen;
+
+typedef struct s_curr_cam_dir
+{
+	t_vec	v_w;
+	t_vec	v_de;
+	t_vec	v_tpos;
+}	t_curr_cam_dir;
+
 // Map data ***************************************************
 
 // ambItsty		Ialpha / ambient(environment) intensity
@@ -40,36 +54,35 @@ typedef struct s_light
 // shininess	alpha lightness
 typedef struct s_map
 {
-	void		*mlx;
-	void		*win;
-	int			window_x;
-	int			window_y;
+	void			*mlx;
+	void			*win;
+	int				window_x;
+	int				window_y;
 
-	int			cam_cnt;
-	t_camera	cam[MAX_CAMERA_COUNT];
+	int				cam_cnt;
+	t_camera		cam[MAX_CAMERA_COUNT];
 
-	int			curr_cam_num;
-	t_camera	curr_cam;
-	double		distance_cam_scr;
-	t_vec		unitvec_scrx;
-	t_vec		unitvec_scry;
+	int				curr_cam_num;
+	t_camera		curr_cam;
+	t_screen		scr;
+	t_curr_cam_dir	camdir;
 
-	int			lit_cnt;
-	t_light		lit[MAX_LIGHT_COUNT];
+	int				lit_cnt;
+	t_light			lit[MAX_LIGHT_COUNT];
 
-	double		ambItsty;
-	t_color		kAmb;
-	t_color		kDif;
-	t_color		kSpe;
-	double		shininess;
+	double			ambItsty;
+	t_color			kAmb;
+	t_color			kDif;
+	t_color			kSpe;
+	double			shininess;
 
-	int			obj_count;
-	int			obj_type[MAX_OBJ_COUNT];
-	void		*obj[MAX_OBJ_COUNT];
+	int				obj_count;
+	int				obj_type[MAX_OBJ_COUNT];
+	void			*obj[MAX_OBJ_COUNT];
 
-	int			bmp;
-	int			dsp;
-	int			endian;
+	int				bmp;
+	int				dsp;
+	int				endian;
 }	t_map;
 
 // Calculation structure ******************************************
@@ -89,13 +102,6 @@ typedef struct s_calcvals
 	double		D;
 	double		t;
 }	t_calcvals;
-
-typedef struct s_curr_cam_vecs
-{
-	t_vec	v_w;
-	t_vec	v_de;
-	t_vec	v_tpos;
-}	t_curr_cam_vecs;
 
 // Objects ***********************************************************
 

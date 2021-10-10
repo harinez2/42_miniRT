@@ -25,10 +25,10 @@ static void	print_m_eye(t_map *m)
 	printf("  Current Camera[%d]: pos: %.2f, %.2f, %.2f / orien: %.2f, %.2f, %.2f / distance:%.2f\n",
 		m->curr_cam_num, m->curr_cam.pos.x, m->curr_cam.pos.y, m->curr_cam.pos.z,
 		m->curr_cam.orien.x, m->curr_cam.orien.y, m->curr_cam.orien.z,
-		m->distance_cam_scr);
+		m->scr.distance_cam_scr);
 	printf("                     unitx: %.2f, %.2f, %.2f / unity: %.2f, %.2f, %.2f\n\n",
-		m->unitvec_scrx.x, m->unitvec_scrx.y, m->unitvec_scrx.z,
-		m->unitvec_scry.x, m->unitvec_scry.y, m->unitvec_scry.z);
+		m->scr.unitvec_scrx.x, m->scr.unitvec_scrx.y, m->scr.unitvec_scrx.z,
+		m->scr.unitvec_scry.x, m->scr.unitvec_scry.y, m->scr.unitvec_scry.z);
 }
 
 static void	print_m_light(t_map *m)

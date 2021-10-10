@@ -1,12 +1,12 @@
 #include	"main.h"
 
-double	get_distance_to_sphere(t_vec v_w, t_vec v_cam, t_sphere *ts)
+double	get_distance_to_sphere(t_vec v_w, t_map *m, t_sphere *ts)
 {
 	t_calcvals	cv;
 	t_vec		v_center_cam;
 
-	cv.v_de = ft_vecsub(v_w, v_cam);
-	v_center_cam = ft_vecsub(v_cam, ts->center);
+	cv.v_de = ft_vecsub(v_w, m->curr_cam.pos);
+	v_center_cam = ft_vecsub(m->curr_cam.pos, ts->center);
 	cv.A = ft_vecnormsq(cv.v_de);
 	cv.B = 2 * ft_vecinnerprod(cv.v_de, v_center_cam);
 	cv.C = ft_vecnormsq(v_center_cam) - ts->diameter * ts->diameter;
@@ -38,8 +38,7 @@ double	calc_sphere_diffuse_reflection(
 }
 
 // (3) calc specular reflection (kyomen hansya kou)
-void	calc_specular_reflection(t_map *m, t_color *color, int i,
-	t_sphere *ts, t_curr_cam_vecs cv)
+void	calc_specular_reflection(t_map *m, t_color *color, int i, t_sphere *ts)
 {
 	t_vec	v_sphereN;
 	t_vec	v_lightDir;
@@ -49,11 +48,11 @@ void	calc_specular_reflection(t_map *m, t_color *color, int i,
 	double	vrDot;
 	double	vrDotPow;
 
-	v_sphereN = ft_vecnormalize(ft_vecsub(cv.v_tpos, ts->center));
-	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, cv.v_tpos));
+	v_sphereN = ft_vecnormalize(ft_vecsub(m->camdir.v_tpos, ts->center));
+	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
 	naiseki = ft_vecinnerprod(v_sphereN, v_lightDir);
 	refDir = ft_vecsub(ft_vecmult(v_sphereN, 2 * naiseki), v_lightDir);
-	invEyeDir = ft_vecnormalize(ft_vecmult(cv.v_de, -1));
+	invEyeDir = ft_vecnormalize(ft_vecmult(m->camdir.v_de, -1));
 	vrDot = ft_vecinnerprod(invEyeDir, refDir);
 	if (vrDot < 0)
 		vrDot = 0;
@@ -65,7 +64,7 @@ void	calc_specular_reflection(t_map *m, t_color *color, int i,
 }
 
 //tpos	across point of eyevec and sphere surface(pi)
-t_color	get_color_by_rt_sphere(t_curr_cam_vecs cv, t_map *m, t_sphere *ts)
+t_color	get_color_by_rt_sphere(t_map *m, t_sphere *ts)
 {
 	t_color	color;
 	int		i;
@@ -80,15 +79,15 @@ t_color	get_color_by_rt_sphere(t_curr_cam_vecs cv, t_map *m, t_sphere *ts)
 	i = 0;
 	while (i < m->lit_cnt)
 	{
-		get_minimum_distance_to_obj(m->lit[i].pos, cv.v_tpos, m, &hit_t);
+		get_minimum_distance_to_obj(m->lit[i].pos, m, &hit_t);
 		if (hit_t != -1)
 		{
 			i++;
 			continue ;
 		}
-		naiseki = calc_sphere_diffuse_reflection(m, &color, cv.v_tpos, i, ts);
+		naiseki = calc_sphere_diffuse_reflection(m, &color, m->camdir.v_tpos, i, ts);
 		if (naiseki > 0)
-			calc_specular_reflection(m, &color, i, ts, cv);
+			calc_specular_reflection(m, &color, i, ts);
 		i++;
 	}
 	return (set_rgb_inrange(color));
