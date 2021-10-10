@@ -1,5 +1,6 @@
 #include	"main.h"
 
+// tpos：cross point (pi) of the v_cam and the surface of the cylinder
 double	get_nearest_cylinder(t_vec v_w, t_vec v_cam, t_cylinder *tc)
 {
 	t_calcvals	cv;
@@ -18,7 +19,7 @@ double	get_nearest_cylinder(t_vec v_w, t_vec v_cam, t_cylinder *tc)
 	cv.t = calc_t(cv.A, cv.B, cv.D);
 	if (cv.t > 0)
 	{
-		v_tpos = ft_vecadd(v_cam, ft_vecmult(cv.v_de, cv.t));//tpos：視線と球上の交点(pi)
+		v_tpos = ft_vecadd(v_cam, ft_vecmult(cv.v_de, cv.t));
 		diff = v_tpos.y - tc->center.y;
 		if (diff < 0)
 			diff *= -1;
@@ -28,6 +29,7 @@ double	get_nearest_cylinder(t_vec v_w, t_vec v_cam, t_cylinder *tc)
 	return (cv.t);
 }
 
+// tpos：cross point (pi) of the v_cam and the surface of the cylinder
 t_color	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
 {
 	t_color color;
@@ -42,7 +44,7 @@ t_color	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
 		m->kAmb.g * m->ambItsty * tc->rgb.g,
 		m->kAmb.b * m->ambItsty * tc->rgb.b);
 	v_de = ft_vecsub(v_w, m->curr_cam.pos);
-	v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(v_de, t));//tpos：視線と球上の交点(pi)
+	v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(v_de, t));
 	i = 0;
 	while (i < m->lit_cnt)
 	{
