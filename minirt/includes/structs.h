@@ -90,6 +90,13 @@ typedef struct s_calcvals
 	double		t;
 }	t_calcvals;
 
+typedef struct s_curr_cam_vecs
+{
+	t_vec	v_w;
+	t_vec	v_de;
+	t_vec	v_tpos;
+}	t_curr_cam_vecs;
+
 // Objects ***********************************************************
 
 typedef struct s_sphere

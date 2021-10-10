@@ -65,12 +65,10 @@ void	calc_specular_reflection(t_map *m, t_color *color, t_vec v_tpos, int i,
 }
 
 //tpos	across point of eyevec and sphere surface(pi)
-t_color	get_color_by_rt_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t)
+t_color	get_color_by_rt_sphere(t_curr_cam_vecs	cv, t_map *m, t_sphere *ts)
 {
 	t_color	color;
 	int		i;
-	t_vec	v_de;
-	t_vec	v_tpos;
 	double	hit_t;
 	double	naiseki;
 
@@ -79,20 +77,18 @@ t_color	get_color_by_rt_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t)
 		m->kAmb.r * m->ambItsty * ts->rgb.r,
 		m->kAmb.g * m->ambItsty * ts->rgb.g,
 		m->kAmb.b * m->ambItsty * ts->rgb.b);
-	v_de = ft_vecsub(v_w, m->curr_cam.pos);
-	v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(v_de, t));
 	i = 0;
 	while (i < m->lit_cnt)
 	{
-		get_minimum_distance_to_obj(m->lit[i].pos, v_tpos, m, &hit_t);
+		get_minimum_distance_to_obj(m->lit[i].pos, cv.v_tpos, m, &hit_t);
 		if (hit_t != -1)
 		{
 			i++;
 			continue ;
 		}
-		naiseki = calc_sphere_diffuse_reflection(m, &color, v_tpos, i, ts);
+		naiseki = calc_sphere_diffuse_reflection(m, &color, cv.v_tpos, i, ts);
 		if (naiseki > 0)
-			calc_specular_reflection(m, &color, v_tpos, i, ts, v_de);
+			calc_specular_reflection(m, &color, cv.v_tpos, i, ts, cv.v_de);
 		i++;
 	}
 	return (set_rgb_inrange(color));

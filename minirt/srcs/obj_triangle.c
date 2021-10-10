@@ -41,9 +41,9 @@ double	get_distance_to_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt)
 	return (t);
 }
 
-t_color	get_color_by_rt_triangle(t_vec v_w, t_map *m, t_triangle *tt, double t)
+t_color	get_color_by_rt_triangle(t_curr_cam_vecs cv, t_map *m, t_triangle *tt)
 {
-	return (get_color_by_rt_plane(v_w, m, &tt->plane, t));
+	return (get_color_by_rt_plane(cv, m, &tt->plane));
 }
 
 void	print_triangle(t_triangle *tt)

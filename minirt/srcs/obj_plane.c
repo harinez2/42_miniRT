@@ -21,12 +21,10 @@ double	get_distance_to_plane(t_vec v_w, t_vec v_eye, t_plane *tp)
 	return (-1);
 }
 
-t_color	get_color_by_rt_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
+t_color	get_color_by_rt_plane(t_curr_cam_vecs cv, t_map *m, t_plane *tp)
 {
 	t_color	color;
 	int		i;
-	t_vec	v_de;
-	t_vec	v_tpos;
 	double	hit_t;
 	t_vec	v_lightDir;
 	double	naiseki;
@@ -41,12 +39,10 @@ t_color	get_color_by_rt_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 		m->kAmb.r * m->ambItsty * tp->rgb.r,
 		m->kAmb.g * m->ambItsty * tp->rgb.g,
 		m->kAmb.b * m->ambItsty * tp->rgb.b);
-	v_de = ft_vecsub(v_w, m->curr_cam.pos);
-	v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(v_de, t));
 	i = 0;
 	while (i < m->lit_cnt)
 	{
-		get_minimum_distance_to_obj(m->lit[i].pos, v_tpos, m, &hit_t);
+		get_minimum_distance_to_obj(m->lit[i].pos, cv.v_tpos, m, &hit_t);
 		if (hit_t != -1)
 		{
 			i++;
@@ -54,7 +50,7 @@ t_color	get_color_by_rt_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 		}
 
 		//(2) diffuse reflection 拡散反射光
-		v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, v_tpos));
+		v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, cv.v_tpos));
 		naiseki = ft_vecinnerprod(ft_vecnormalize(tp->normal), v_lightDir);
 		if (naiseki < 0)
 			naiseki = 0;
@@ -68,7 +64,7 @@ t_color	get_color_by_rt_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 		if (naiseki > 0)
 		{
 			refDir = ft_vecsub(ft_vecmult(tp->normal, 2 * naiseki), v_lightDir);
-			invEyeDir = ft_vecnormalize(ft_vecmult(v_de, -1));
+			invEyeDir = ft_vecnormalize(ft_vecmult(cv.v_de, -1));
 			vrDot = ft_vecinnerprod(invEyeDir, refDir);
 			if (vrDot < 0)
 				vrDot = 0;

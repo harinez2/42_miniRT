@@ -30,36 +30,32 @@ double	get_distance_to_cylinder(t_vec v_w, t_vec v_cam, t_cylinder *tc)
 }
 
 // tpos：cross point (pi) of the v_cam and the surface of the cylinder
-t_color	get_color_by_rt_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
+t_color	get_color_by_rt_cylinder(t_curr_cam_vecs cv, t_map *m, t_cylinder *tc)
 {
 	t_color color;
 	int		i;
 	double	hit_t;
-	t_vec	v_de;
-	t_vec	v_tpos;
 
 	//(1) ambient light 環境光
 	set_color(&color,
 		m->kAmb.r * m->ambItsty * tc->rgb.r,
 		m->kAmb.g * m->ambItsty * tc->rgb.g,
 		m->kAmb.b * m->ambItsty * tc->rgb.b);
-	v_de = ft_vecsub(v_w, m->curr_cam.pos);
-	v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(v_de, t));
 	i = 0;
 	while (i < m->lit_cnt)
 	{
-		get_minimum_distance_to_obj(m->lit[i].pos, v_tpos, m, &hit_t);
+		get_minimum_distance_to_obj(m->lit[i].pos, cv.v_tpos, m, &hit_t);
 		if (hit_t != -1)
 		{
 			i++;
 			continue ;
 		}
 		//(2) diffuse reflection 拡散反射光
-		t_vec v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, v_tpos));//入射ベクトル(l)
+		t_vec v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, cv.v_tpos));//入射ベクトル(l)
 		t_vec v_n;//法線ベクトル(n)
-		v_n.x = 2 * (v_tpos.x - tc->center.x);
+		v_n.x = 2 * (cv.v_tpos.x - tc->center.x);
 		v_n.y = 0;
-		v_n.z = 2 * (v_tpos.z - tc->center.z);
+		v_n.z = 2 * (cv.v_tpos.z - tc->center.z);
 		double naiseki = ft_vecinnerprod(ft_vecnormalize(v_n), v_lightDir);
 		if (naiseki < 0)
 			naiseki = 0;
@@ -71,8 +67,9 @@ t_color	get_color_by_rt_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
 		//(3) specular reflection 鏡面反射光
 		if (naiseki > 0)
 		{
-			t_vec refDir = ft_vecnormalize(ft_vecsub(ft_vecmult(ft_vecnormalize(v_n), 2 * naiseki), v_lightDir)); 
-			t_vec invEyeDir = ft_vecnormalize(ft_vecmult(v_de, -1));
+			t_vec refDir = ft_vecnormalize(
+				ft_vecsub(ft_vecmult(ft_vecnormalize(v_n), 2 * naiseki), v_lightDir)); 
+			t_vec invEyeDir = ft_vecnormalize(ft_vecmult(cv.v_de, -1));
 			double vrDot = ft_vecinnerprod(invEyeDir, refDir);
 			if (vrDot < 0)
 				vrDot = 0;

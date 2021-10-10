@@ -43,21 +43,25 @@ int	get_minimum_distance_to_obj(
 
 t_color	get_color_by_raytracing(t_vec v_w, t_map *m, int i, double t)
 {
-	t_color	color;
-
+	t_color			color;
+	t_curr_cam_vecs	cv;
+	
+	cv.v_w = v_w;
+	cv.v_de = ft_vecsub(v_w, m->curr_cam.pos);
+	cv.v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(cv.v_de, t));
 	if (i == -1)
 		set_color(&color, 30, 60, 60);
 		// set_color(&color, 92, 151, 243);
 	else if (m->obj_type[i] == CMD_SPHERE)
-		color = get_color_by_rt_sphere(v_w, m, (t_sphere *)m->obj[i], t);
+		color = get_color_by_rt_sphere(cv, m, (t_sphere *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_PLANE)
-		color = get_color_by_rt_plane(v_w, m, (t_plane *)m->obj[i], t);
+		color = get_color_by_rt_plane(cv, m, (t_plane *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_SQUARE)
-		color = get_color_by_rt_square(v_w, m, (t_square *)m->obj[i], t);
+		color = get_color_by_rt_square(cv, m, (t_square *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_CYLINDER)
-		color = get_color_by_rt_cylinder(v_w, m, (t_cylinder *)m->obj[i], t);
+		color = get_color_by_rt_cylinder(cv, m, (t_cylinder *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_TRIANGLE)
-		color = get_color_by_rt_triangle(v_w, m, (t_triangle *)m->obj[i], t);
+		color = get_color_by_rt_triangle(cv, m, (t_triangle *)m->obj[i]);
 	return (color);
 }
 
