@@ -55,9 +55,9 @@ double	get_distance_to_square(t_vec v_w, t_vec v_eye, t_square *ts)
 	return (t);
 }
 
-t_color	ray_trace_square(t_vec v_w, t_map *m, t_square *ts, double t)
+t_color	get_color_by_rt_square(t_vec v_w, t_map *m, t_square *ts, double t)
 {
-	return (ray_trace_plane(v_w, m, &ts->tr_a.plane, t));
+	return (get_color_by_rt_plane(v_w, m, &ts->tr_a.plane, t));
 }
 
 void	print_square(t_square *ts)

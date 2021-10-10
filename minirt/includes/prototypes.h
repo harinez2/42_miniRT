@@ -13,11 +13,11 @@ void		init_m(t_map *m);
 int			main(int argc, char **argv);
 // obj_cylinder.c
 double		get_distance_to_cylinder(t_vec v_w, t_vec v_cam, t_cylinder *tc);
-t_color		ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t);
+t_color		get_color_by_rt_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t);
 void		print_cylinder(t_cylinder *tc);
 // obj_plane.c
 double		get_distance_to_plane(t_vec v_w, t_vec v_eye, t_plane *tp);
-t_color		ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t);
+t_color		get_color_by_rt_plane(t_vec v_w, t_map *m, t_plane *tp, double t);
 void		print_plane(t_plane *tp);
 // obj_sphere.c
 double		get_distance_to_sphere(t_vec v_w, t_vec v_cam, t_sphere *ts);
@@ -25,17 +25,17 @@ double		calc_sphere_diffuse_reflection(
 				t_map *m, t_color *color, t_vec v_tpos, int i, t_sphere *ts);
 void		calc_specular_reflection(t_map *m, t_color *color, t_vec v_tpos, int i,
 				t_sphere *ts, t_vec v_de);
-t_color		ray_trace_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t);
+t_color		get_color_by_rt_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t);
 void		print_sphere(t_sphere *ts);
 // obj_square.c
 void		ft_init_square(t_square *ts);
 double		get_distance_to_square(t_vec v_w, t_vec v_eye, t_square *ts);
-t_color		ray_trace_square(t_vec v_w, t_map *m, t_square *ts, double t);
+t_color		get_color_by_rt_square(t_vec v_w, t_map *m, t_square *ts, double t);
 void		print_square(t_square *ts);
 // obj_triangle.c
 void		ft_init_triangle(t_triangle *tt);
 double		get_distance_to_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt);
-t_color		ray_trace_triangle(t_vec v_w, t_map *m, t_triangle *tt, double t);
+t_color		get_color_by_rt_triangle(t_vec v_w, t_map *m, t_triangle *tt, double t);
 void		print_triangle(t_triangle *tt);
 // obj_util.c
 double		calc_t(double A, double B, double D);
@@ -56,7 +56,7 @@ void		close_win_hanlder(t_map *m, int called_by);
 // raytracer.c
 int			get_minimum_distance_to_obj(
 				t_vec v_w, t_vec vstart, t_map *m, double *hit_t);
-t_color		ray_trace_obj(t_vec v_w, t_map *m, int i, double t);
+t_color		get_color_by_raytracing(t_vec v_w, t_map *m, int i, double t);
 t_color		decide_color_with_raytracing(t_vec v_w, t_map *m);
 // readfile.c
 void		read_config_file(char *filename, t_map *m);

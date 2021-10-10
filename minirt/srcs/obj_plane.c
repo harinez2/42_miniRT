@@ -21,7 +21,7 @@ double	get_distance_to_plane(t_vec v_w, t_vec v_eye, t_plane *tp)
 	return (-1);
 }
 
-t_color	ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
+t_color	get_color_by_rt_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 {
 	t_color	color;
 	int		i;

@@ -30,7 +30,7 @@ double	get_distance_to_cylinder(t_vec v_w, t_vec v_cam, t_cylinder *tc)
 }
 
 // tpos：cross point (pi) of the v_cam and the surface of the cylinder
-t_color	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
+t_color	get_color_by_rt_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
 {
 	t_color color;
 	int		i;

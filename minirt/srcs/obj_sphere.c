@@ -65,7 +65,7 @@ void	calc_specular_reflection(t_map *m, t_color *color, t_vec v_tpos, int i,
 }
 
 //tpos	across point of eyevec and sphere surface(pi)
-t_color	ray_trace_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t)
+t_color	get_color_by_rt_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t)
 {
 	t_color	color;
 	int		i;

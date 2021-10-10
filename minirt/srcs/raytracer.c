@@ -41,7 +41,7 @@ int	get_minimum_distance_to_obj(
 	return (hit_i);
 }
 
-t_color	ray_trace_obj(t_vec v_w, t_map *m, int i, double t)
+t_color	get_color_by_raytracing(t_vec v_w, t_map *m, int i, double t)
 {
 	t_color	color;
 
@@ -49,15 +49,15 @@ t_color	ray_trace_obj(t_vec v_w, t_map *m, int i, double t)
 		set_color(&color, 30, 60, 60);
 		// set_color(&color, 92, 151, 243);
 	else if (m->obj_type[i] == CMD_SPHERE)
-		color = ray_trace_sphere(v_w, m, (t_sphere *)m->obj[i], t);
+		color = get_color_by_rt_sphere(v_w, m, (t_sphere *)m->obj[i], t);
 	else if (m->obj_type[i] == CMD_PLANE)
-		color = ray_trace_plane(v_w, m, (t_plane *)m->obj[i], t);
+		color = get_color_by_rt_plane(v_w, m, (t_plane *)m->obj[i], t);
 	else if (m->obj_type[i] == CMD_SQUARE)
-		color = ray_trace_square(v_w, m, (t_square *)m->obj[i], t);
+		color = get_color_by_rt_square(v_w, m, (t_square *)m->obj[i], t);
 	else if (m->obj_type[i] == CMD_CYLINDER)
-		color = ray_trace_cylinder(v_w, m, (t_cylinder *)m->obj[i], t);
+		color = get_color_by_rt_cylinder(v_w, m, (t_cylinder *)m->obj[i], t);
 	else if (m->obj_type[i] == CMD_TRIANGLE)
-		color = ray_trace_triangle(v_w, m, (t_triangle *)m->obj[i], t);
+		color = get_color_by_rt_triangle(v_w, m, (t_triangle *)m->obj[i], t);
 	return (color);
 }
 
@@ -67,5 +67,5 @@ t_color	decide_color_with_raytracing(t_vec v_w, t_map *m)
 	int		hit_i;
 
 	hit_i = get_minimum_distance_to_obj(v_w, m->curr_cam.pos, m, &hit_t);
-	return (ray_trace_obj(v_w, m, hit_i, hit_t));
+	return (get_color_by_raytracing(v_w, m, hit_i, hit_t));
 }
