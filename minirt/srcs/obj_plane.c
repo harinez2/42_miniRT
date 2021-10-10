@@ -21,24 +21,74 @@ double	get_distance_to_plane(t_vec v_w, t_map *m, t_plane *tp)
 	return (-1);
 }
 
+//(1) ambient light (kankyo kou)
+void	calc_plane_ambient_reflection(t_map *m, t_color *color, t_plane *tp)
+{
+	set_color(color,
+		m->kAmb.r * m->ambItsty * tp->rgb.r,
+		m->kAmb.g * m->ambItsty * tp->rgb.g,
+		m->kAmb.b * m->ambItsty * tp->rgb.b);
+}
+
+// (2) calc diffuse reflection (kakusan hansya kou)
+double	calc_plane_diffuse_reflection(
+	t_map *m, t_color *color, int i, t_plane *tp)
+{
+	t_vec	v_lightDir;
+	double	naiseki;
+	double	nlDot;
+
+	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
+	naiseki = ft_vecinnerprod(ft_vecnormalize(tp->normal), v_lightDir);
+	if (naiseki < 0)
+		naiseki = 0;
+	nlDot = adjust_range(naiseki,
+			(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
+	color->r += m->kDif.r * m->lit[i].itsty * m->lit[i].rgb.r
+		* nlDot * tp->rgb.r;
+	color->g += m->kDif.g * m->lit[i].itsty * m->lit[i].rgb.g
+		* nlDot * tp->rgb.g;
+	color->b += m->kDif.b * m->lit[i].itsty * m->lit[i].rgb.b
+		* nlDot * tp->rgb.b;
+	return (naiseki);
+}
+
+// (3) calc specular reflection (kyomen hansya kou)
+void	calc_plane_specular_reflection(
+	t_map *m, t_color *color, int i, t_plane *tp)
+{
+	t_vec	v_lightDir;
+	t_vec	refDir;
+	t_vec	invEyeDir;
+	double	naiseki;
+	double	vrDot;
+	double	vrDotPow;
+
+	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
+	naiseki = ft_vecinnerprod(ft_vecnormalize(tp->normal), v_lightDir);
+	refDir = ft_vecsub(ft_vecmult(tp->normal, 2 * naiseki), v_lightDir);
+	invEyeDir = ft_vecnormalize(ft_vecmult(m->camdir.v_de, -1));
+	vrDot = ft_vecinnerprod(invEyeDir, refDir);
+	if (vrDot < 0)
+		vrDot = 0;
+	vrDotPow = adjust_range(pow(vrDot, m->shininess),
+			(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
+	color->r += m->kSpe.r * m->lit[i].itsty * m->lit[i].rgb.r
+		* vrDotPow * tp->rgb.r;
+	color->g += m->kSpe.g * m->lit[i].itsty * m->lit[i].rgb.g
+		* vrDotPow * tp->rgb.g;
+	color->b += m->kSpe.b * m->lit[i].itsty * m->lit[i].rgb.b
+		* vrDotPow * tp->rgb.b;
+}
+
 t_color	get_color_by_rt_plane(t_map *m, t_plane *tp)
 {
 	t_color	color;
 	int		i;
 	double	hit_t;
-	t_vec	v_lightDir;
 	double	naiseki;
-	double	nlDot;
-	t_vec	refDir;
-	t_vec	invEyeDir;
-	double	vrDot;
-	double	vrDotPow;
 
-	//(1) ambient light 環境光
-	set_color(&color,
-		m->kAmb.r * m->ambItsty * tp->rgb.r,
-		m->kAmb.g * m->ambItsty * tp->rgb.g,
-		m->kAmb.b * m->ambItsty * tp->rgb.b);
+	calc_plane_ambient_reflection(m, &color, tp);
 	i = 0;
 	while (i < m->lit_cnt)
 	{
@@ -48,32 +98,9 @@ t_color	get_color_by_rt_plane(t_map *m, t_plane *tp)
 			i++;
 			continue ;
 		}
-
-		//(2) diffuse reflection 拡散反射光
-		v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
-		naiseki = ft_vecinnerprod(ft_vecnormalize(tp->normal), v_lightDir);
-		if (naiseki < 0)
-			naiseki = 0;
-		nlDot = adjust_range(naiseki,
-			(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
-		color.r += m->kDif.r * m->lit[i].itsty * m->lit[i].rgb.r * nlDot * tp->rgb.r;
-		color.g += m->kDif.g * m->lit[i].itsty * m->lit[i].rgb.g * nlDot * tp->rgb.g;
-		color.b += m->kDif.b * m->lit[i].itsty * m->lit[i].rgb.b * nlDot * tp->rgb.b;
-
-		//(3) specular reflection 鏡面反射光
+		naiseki = calc_plane_diffuse_reflection(m, &color, i, tp);
 		if (naiseki > 0)
-		{
-			refDir = ft_vecsub(ft_vecmult(tp->normal, 2 * naiseki), v_lightDir);
-			invEyeDir = ft_vecnormalize(ft_vecmult(m->camdir.v_de, -1));
-			vrDot = ft_vecinnerprod(invEyeDir, refDir);
-			if (vrDot < 0)
-				vrDot = 0;
-			vrDotPow = adjust_range(pow(vrDot, m->shininess),
-				(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
-			color.r += m->kSpe.r * m->lit[i].itsty * m->lit[i].rgb.r * vrDotPow * tp->rgb.r;
-			color.g += m->kSpe.g * m->lit[i].itsty * m->lit[i].rgb.g * vrDotPow * tp->rgb.g;
-			color.b += m->kSpe.b * m->lit[i].itsty * m->lit[i].rgb.b * vrDotPow * tp->rgb.b;
-		}
+			calc_plane_specular_reflection(m, &color, i, tp);
 		i++;
 	}
 	return (set_rgb_inrange(color));

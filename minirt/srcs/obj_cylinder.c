@@ -39,7 +39,7 @@ void	calc_cylinder_ambient_reflection(
 		m->kAmb.b * m->ambItsty * tc->rgb.b);
 }
 
-//(2) diffuse reflection 拡散反射光
+// (2) calc diffuse reflection (kakusan hansya kou)
 double	calc_cylinder_diffuse_reflection(
 	t_map *m, t_color *color, int i, t_cylinder *tc)
 {
@@ -66,7 +66,7 @@ double	calc_cylinder_diffuse_reflection(
 	return (naiseki);
 }
 
-//(3) specular reflection 鏡面反射光
+// (3) calc specular reflection (kyomen hansya kou)
 void	calc_cylinder_reflection(
 	t_map *m, t_color *color, int i, t_cylinder *tc)
 {

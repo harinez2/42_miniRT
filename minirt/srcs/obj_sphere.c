@@ -50,7 +50,8 @@ double	calc_sphere_diffuse_reflection(
 }
 
 // (3) calc specular reflection (kyomen hansya kou)
-void	calc_specular_reflection(t_map *m, t_color *color, int i, t_sphere *ts)
+void	calc_sphere_specular_reflection(
+	t_map *m, t_color *color, int i, t_sphere *ts)
 {
 	t_vec	v_sphereN;
 	t_vec	v_lightDir;
@@ -98,7 +99,7 @@ t_color	get_color_by_rt_sphere(t_map *m, t_sphere *ts)
 		}
 		naiseki = calc_sphere_diffuse_reflection(m, &color, i, ts);
 		if (naiseki > 0)
-			calc_specular_reflection(m, &color, i, ts);
+			calc_sphere_specular_reflection(m, &color, i, ts);
 		i++;
 	}
 	return (set_rgb_inrange(color));
