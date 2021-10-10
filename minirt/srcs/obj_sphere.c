@@ -2,8 +2,8 @@
 
 double	get_distance_to_sphere(t_vec v_w, t_map *m, t_sphere *ts)
 {
-	t_calcvals	cv;
-	t_vec		v_center_cam;
+	t_calc_crossing	cv;
+	t_vec			v_center_cam;
 
 	cv.v_de = ft_vecsub(v_w, m->curr_cam.pos);
 	v_center_cam = ft_vecsub(m->curr_cam.pos, ts->center);
@@ -54,30 +54,25 @@ double	calc_sphere_diffuse_reflection(
 void	calc_sphere_specular_reflection(
 	t_map *m, t_color *color, int i, t_sphere *ts)
 {
-	t_vec	v_sphereN;
-	t_vec	v_lightDir;
-	double	naiseki;
-	t_vec	refDir;
-	t_vec	invEyeDir;
-	double	vrDot;
-	double	vrDotPow;
+	t_calc_light	cl;
+	t_vec			v_sphereN;
 
 	v_sphereN = ft_vecnormalize(ft_vecsub(m->camdir.v_tpos, ts->center));
-	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
-	naiseki = ft_vecinnerprod(v_sphereN, v_lightDir);
-	refDir = ft_vecsub(ft_vecmult(v_sphereN, 2 * naiseki), v_lightDir);
-	invEyeDir = ft_vecnormalize(ft_vecmult(m->camdir.v_de, -1));
-	vrDot = ft_vecinnerprod(invEyeDir, refDir);
-	if (vrDot < 0)
-		vrDot = 0;
-	vrDotPow = adjust_range(pow(vrDot, m->shininess),
+	cl.v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
+	cl.naiseki = ft_vecinnerprod(v_sphereN, cl.v_lightDir);
+	cl.refDir = ft_vecsub(ft_vecmult(v_sphereN, 2 * cl.naiseki), cl.v_lightDir);
+	cl.invEyeDir = ft_vecnormalize(ft_vecmult(m->camdir.v_de, -1));
+	cl.vrDot = ft_vecinnerprod(cl.invEyeDir, cl.refDir);
+	if (cl.vrDot < 0)
+		cl.vrDot = 0;
+	cl.vrDotPow = adjust_range(pow(cl.vrDot, m->shininess),
 			(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
 	color->r += m->kSpe.r * m->lit[i].itsty * m->lit[i].rgb.r
-		* vrDotPow * ts->rgb.r;
+		* cl.vrDotPow * ts->rgb.r;
 	color->g += m->kSpe.g * m->lit[i].itsty * m->lit[i].rgb.g
-		* vrDotPow * ts->rgb.g;
+		* cl.vrDotPow * ts->rgb.g;
 	color->b += m->kSpe.b * m->lit[i].itsty * m->lit[i].rgb.b
-		* vrDotPow * ts->rgb.b;
+		* cl.vrDotPow * ts->rgb.b;
 }
 
 //tpos	across point of eyevec and sphere surface(pi)

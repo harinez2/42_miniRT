@@ -3,11 +3,11 @@
 // tpos：cross point (pi) of the v_cam and the surface of the cylinder
 double	get_distance_to_cylinder(t_vec v_w, t_map *m, t_cylinder *tc)
 {
-	t_calcvals	cv;
-	double		mx;
-	double		mz;
-	t_vec		v_tpos;
-	double		diff;
+	t_calc_crossing	cv;
+	double			mx;
+	double			mz;
+	t_vec			v_tpos;
+	double			diff;
 
 	cv.v_de = ft_vecsub(v_w, m->curr_cam.pos);
 	mx = m->curr_cam.pos.x - tc->center.x;
@@ -70,33 +70,27 @@ double	calc_cylinder_diffuse_reflection(
 void	calc_cylinder_reflection(
 	t_map *m, t_color *color, int i, t_cylinder *tc)
 {
-	t_vec	v_lightDir;
-	t_vec	v_n;
-	t_vec	refDir;
-	t_vec	invEyeDir;
-	double	naiseki;
-	double	vrDot;
-	double	vrDotPow;
+	t_calc_light	cl;
 
-	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
-	v_n.x = 2 * (m->camdir.v_tpos.x - tc->center.x);
-	v_n.y = 0;
-	v_n.z = 2 * (m->camdir.v_tpos.z - tc->center.z);
-	naiseki = ft_vecinnerprod(ft_vecnormalize(v_n), v_lightDir);
-	refDir = ft_vecnormalize(ft_vecsub(
-				ft_vecmult(ft_vecnormalize(v_n), 2 * naiseki), v_lightDir));
-	invEyeDir = ft_vecnormalize(ft_vecmult(m->camdir.v_de, -1));
-	vrDot = ft_vecinnerprod(invEyeDir, refDir);
-	if (vrDot < 0)
-		vrDot = 0;
-	vrDotPow = adjust_range(pow(vrDot, m->shininess),
+	cl.v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
+	cl.v_n.x = 2 * (m->camdir.v_tpos.x - tc->center.x);
+	cl.v_n.y = 0;
+	cl.v_n.z = 2 * (m->camdir.v_tpos.z - tc->center.z);
+	cl.naiseki = ft_vecinnerprod(ft_vecnormalize(cl.v_n), cl.v_lightDir);
+	cl.refDir = ft_vecnormalize(ft_vecsub(ft_vecmult(
+					ft_vecnormalize(cl.v_n), 2 * cl.naiseki), cl.v_lightDir));
+	cl.invEyeDir = ft_vecnormalize(ft_vecmult(m->camdir.v_de, -1));
+	cl.vrDot = ft_vecinnerprod(cl.invEyeDir, cl.refDir);
+	if (cl.vrDot < 0)
+		cl.vrDot = 0;
+	cl.vrDotPow = adjust_range(pow(cl.vrDot, m->shininess),
 			(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
 	color->r += m->kSpe.r * m->lit[i].itsty * m->lit[i].rgb.r
-		* vrDotPow * tc->rgb.r;
+		* cl.vrDotPow * tc->rgb.r;
 	color->g += m->kSpe.g * m->lit[i].itsty * m->lit[i].rgb.g
-		* vrDotPow * tc->rgb.g;
+		* cl.vrDotPow * tc->rgb.g;
 	color->b += m->kSpe.b * m->lit[i].itsty * m->lit[i].rgb.b
-		* vrDotPow * tc->rgb.b;
+		* cl.vrDotPow * tc->rgb.b;
 }
 
 // tpos			：cross point (pi) of the v_cam and the surface of the cylinder

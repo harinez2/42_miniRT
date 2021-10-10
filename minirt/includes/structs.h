@@ -93,7 +93,7 @@ typedef struct s_minmax
 	double		max;
 }	t_minmax;
 
-typedef struct s_calcvals
+typedef struct s_calc_crossing
 {
 	t_vec		v_de;
 	double		A;
@@ -101,7 +101,18 @@ typedef struct s_calcvals
 	double		C;
 	double		D;
 	double		t;
-}	t_calcvals;
+}	t_calc_crossing;
+
+typedef struct s_calc_light
+{
+	t_vec	v_lightDir;
+	t_vec	v_n;
+	t_vec	refDir;
+	t_vec	invEyeDir;
+	double	naiseki;
+	double	vrDot;
+	double	vrDotPow;
+}	t_calc_light;
 
 typedef struct s_multivec
 {

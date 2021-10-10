@@ -58,28 +58,24 @@ double	calc_plane_diffuse_reflection(
 void	calc_plane_specular_reflection(
 	t_map *m, t_color *color, int i, t_plane *tp)
 {
-	t_vec	v_lightDir;
-	t_vec	refDir;
-	t_vec	invEyeDir;
-	double	naiseki;
-	double	vrDot;
-	double	vrDotPow;
+	t_calc_light	cl;
 
-	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
-	naiseki = ft_vecinnerprod(ft_vecnormalize(tp->normal), v_lightDir);
-	refDir = ft_vecsub(ft_vecmult(tp->normal, 2 * naiseki), v_lightDir);
-	invEyeDir = ft_vecnormalize(ft_vecmult(m->camdir.v_de, -1));
-	vrDot = ft_vecinnerprod(invEyeDir, refDir);
-	if (vrDot < 0)
-		vrDot = 0;
-	vrDotPow = adjust_range(pow(vrDot, m->shininess),
+	cl.v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
+	cl.naiseki = ft_vecinnerprod(ft_vecnormalize(tp->normal), cl.v_lightDir);
+	cl.refDir
+		= ft_vecsub(ft_vecmult(tp->normal, 2 * cl.naiseki), cl.v_lightDir);
+	cl.invEyeDir = ft_vecnormalize(ft_vecmult(m->camdir.v_de, -1));
+	cl.vrDot = ft_vecinnerprod(cl.invEyeDir, cl.refDir);
+	if (cl.vrDot < 0)
+		cl.vrDot = 0;
+	cl.vrDotPow = adjust_range(pow(cl.vrDot, m->shininess),
 			(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
 	color->r += m->kSpe.r * m->lit[i].itsty * m->lit[i].rgb.r
-		* vrDotPow * tp->rgb.r;
+		* cl.vrDotPow * tp->rgb.r;
 	color->g += m->kSpe.g * m->lit[i].itsty * m->lit[i].rgb.g
-		* vrDotPow * tp->rgb.g;
+		* cl.vrDotPow * tp->rgb.g;
 	color->b += m->kSpe.b * m->lit[i].itsty * m->lit[i].rgb.b
-		* vrDotPow * tp->rgb.b;
+		* cl.vrDotPow * tp->rgb.b;
 }
 
 t_color	get_color_by_rt_plane(t_map *m, t_plane *tp)
