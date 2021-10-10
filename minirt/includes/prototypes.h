@@ -23,9 +23,9 @@ void		print_plane(t_plane *tp);
 double		get_distance_to_sphere(t_vec v_w, t_vec v_cam, t_sphere *ts);
 double		calc_sphere_diffuse_reflection(
 				t_map *m, t_color *color, t_vec v_tpos, int i, t_sphere *ts);
-void		calc_specular_reflection(t_map *m, t_color *color, t_vec v_tpos, int i,
-				t_sphere *ts, t_vec v_de);
-t_color		get_color_by_rt_sphere(t_curr_cam_vecs	cv, t_map *m, t_sphere *ts);
+void		calc_specular_reflection(t_map *m, t_color *color, int i,
+				t_sphere *ts, t_curr_cam_vecs cv);
+t_color		get_color_by_rt_sphere(t_curr_cam_vecs cv, t_map *m, t_sphere *ts);
 void		print_sphere(t_sphere *ts);
 // obj_square.c
 void		ft_init_square(t_square *ts);

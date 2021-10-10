@@ -38,8 +38,8 @@ double	calc_sphere_diffuse_reflection(
 }
 
 // (3) calc specular reflection (kyomen hansya kou)
-void	calc_specular_reflection(t_map *m, t_color *color, t_vec v_tpos, int i,
-	t_sphere *ts, t_vec v_de)
+void	calc_specular_reflection(t_map *m, t_color *color, int i,
+	t_sphere *ts, t_curr_cam_vecs cv)
 {
 	t_vec	v_sphereN;
 	t_vec	v_lightDir;
@@ -49,11 +49,11 @@ void	calc_specular_reflection(t_map *m, t_color *color, t_vec v_tpos, int i,
 	double	vrDot;
 	double	vrDotPow;
 
-	v_sphereN = ft_vecnormalize(ft_vecsub(v_tpos, ts->center));
-	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, v_tpos));
+	v_sphereN = ft_vecnormalize(ft_vecsub(cv.v_tpos, ts->center));
+	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, cv.v_tpos));
 	naiseki = ft_vecinnerprod(v_sphereN, v_lightDir);
 	refDir = ft_vecsub(ft_vecmult(v_sphereN, 2 * naiseki), v_lightDir);
-	invEyeDir = ft_vecnormalize(ft_vecmult(v_de, -1));
+	invEyeDir = ft_vecnormalize(ft_vecmult(cv.v_de, -1));
 	vrDot = ft_vecinnerprod(invEyeDir, refDir);
 	if (vrDot < 0)
 		vrDot = 0;
@@ -65,7 +65,7 @@ void	calc_specular_reflection(t_map *m, t_color *color, t_vec v_tpos, int i,
 }
 
 //tpos	across point of eyevec and sphere surface(pi)
-t_color	get_color_by_rt_sphere(t_curr_cam_vecs	cv, t_map *m, t_sphere *ts)
+t_color	get_color_by_rt_sphere(t_curr_cam_vecs cv, t_map *m, t_sphere *ts)
 {
 	t_color	color;
 	int		i;
@@ -88,7 +88,7 @@ t_color	get_color_by_rt_sphere(t_curr_cam_vecs	cv, t_map *m, t_sphere *ts)
 		}
 		naiseki = calc_sphere_diffuse_reflection(m, &color, cv.v_tpos, i, ts);
 		if (naiseki > 0)
-			calc_specular_reflection(m, &color, cv.v_tpos, i, ts, cv.v_de);
+			calc_specular_reflection(m, &color, i, ts, cv);
 		i++;
 	}
 	return (set_rgb_inrange(color));
