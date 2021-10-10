@@ -4,39 +4,51 @@ void	ft_init_triangle(t_triangle *tt)
 {
 	t_vec	n;
 
-	n = ft_veccrossprod(ft_vecsub(tt->second, tt->first), ft_vecsub(tt->third, tt->first));
-	//printf("tri vec: %.2f %.2f %.2f\n", n.x, n.y, n.z);
+	n = ft_veccrossprod(ft_vecsub(tt->second, tt->first),
+			ft_vecsub(tt->third, tt->first));
 	tt->plane.normal = ft_vecnormalize(n);
-	tt->plane.position = tt->first;//ft_vecnormalize(tt->first);
+	tt->plane.position = tt->first;
 	tt->plane.rgb = tt->rgb;
 }
 
+static void	calc_triangle_crossprod(
+	t_multivec *mv, t_vec v_w, t_map *m, t_triangle *tt)
+{
+	t_vec		v_de;
+	t_vec		v_tpos;
+
+	v_de = ft_vecsub(v_w, m->curr_cam.pos);
+	v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(v_de, t));
+	mv->a = ft_veccrossprod(
+			ft_vecsub(tt->second, tt->first), ft_vecsub(v_tpos, tt->second));
+	mv->b = ft_veccrossprod(
+			ft_vecsub(tt->third, tt->second), ft_vecsub(v_tpos, tt->third));
+	mv->c = ft_veccrossprod(
+			ft_vecsub(tt->first, tt->third), ft_vecsub(v_tpos, tt->first));
+}
+
+//tpos	across point of eyevec and plane surface(pi)
 double	get_distance_to_triangle(t_vec v_w, t_map *m, t_triangle *tt)
 {
-	double	t;
+	double		t;
+	t_multivec	mv;
 
 	t = get_distance_to_plane(v_w, m, &tt->plane);
 	if (t >= 0)
 	{
-		t_vec v_de = ft_vecsub(v_w, m->curr_cam.pos);
-		t_vec v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(v_de, t));//tpos：視線と面上の交点(pi)
-		double a, b, c;
+		calc_triangle_crossprod(&mv, v_w, m, tt);
 		if (tt->first.x == tt->second.x && tt->first.x == tt->third.x)
 		{
-			a = ft_veccrossprod(ft_vecsub(tt->second, tt->first), ft_vecsub(v_tpos, tt->second)).x;
-			b = ft_veccrossprod(ft_vecsub(tt->third, tt->second), ft_vecsub(v_tpos, tt->third)).x;
-			c = ft_veccrossprod(ft_vecsub(tt->first, tt->third), ft_vecsub(v_tpos, tt->first)).x;
+			if (!((mv.a.x >= 0 && mv.b.x >= 0 && mv.c.x >= 0)
+					|| (mv.a.x < 0 && mv.b.x < 0 && mv.c.x < 0)))
+				t = -1;
 		}
 		else
 		{
-			a = ft_veccrossprod(ft_vecsub(tt->second, tt->first), ft_vecsub(v_tpos, tt->second)).y;
-			b = ft_veccrossprod(ft_vecsub(tt->third, tt->second), ft_vecsub(v_tpos, tt->third)).y;
-			c = ft_veccrossprod(ft_vecsub(tt->first, tt->third), ft_vecsub(v_tpos, tt->first)).y;
+			if (!((mv.a.y >= 0 && mv.b.y >= 0 && mv.c.y >= 0)
+					|| (mv.a.y < 0 && mv.b.y < 0 && mv.c.y < 0)))
+				t = -1;
 		}
-		//printf("tr %.2f %.2f %.2f / ", v_tpos.x, v_tpos.y, v_tpos.z);
-		//printf("%.2f %.2f %.2f\n", a, b, c);
-		if (!((a >=0 && b >= 0 && c >= 0) || (a < 0 && b < 0 && c < 0)))
-			t = -1;
 	}
 	return (t);
 }
@@ -57,7 +69,6 @@ void	print_triangle(t_triangle *tt)
 	printf(" / ");
 	ft_colorprint(&tt->rgb);
 	printf("\n");
-
 	printf("          ");
 	print_plane(&tt->plane);
 }

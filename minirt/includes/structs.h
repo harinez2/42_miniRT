@@ -103,6 +103,13 @@ typedef struct s_calcvals
 	double		t;
 }	t_calcvals;
 
+typedef struct s_multivec
+{
+	t_vec		a;
+	t_vec		b;
+	t_vec		c;
+}	t_multivec;
+
 // Objects ***********************************************************
 
 typedef struct s_sphere
