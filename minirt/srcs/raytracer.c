@@ -43,13 +43,13 @@ int	get_minimum_distance_to_obj(t_vec v_w, t_map *m, double *hit_t)
 t_color	get_color_by_raytracing(t_vec v_w, t_map *m, int i, double t)
 {
 	t_color			color;
-	
+
 	m->camdir.v_w = v_w;
 	m->camdir.v_de = ft_vecsub(v_w, m->curr_cam.pos);
-	m->camdir.v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(m->camdir.v_de, t));
+	m->camdir.v_tpos
+		= ft_vecadd(m->curr_cam.pos, ft_vecmult(m->camdir.v_de, t));
 	if (i == -1)
 		set_color(&color, 30, 60, 60);
-		// set_color(&color, 92, 151, 243);
 	else if (m->obj_type[i] == CMD_SPHERE)
 		color = get_color_by_rt_sphere(m, (t_sphere *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_PLANE)

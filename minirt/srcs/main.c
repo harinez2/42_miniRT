@@ -34,7 +34,6 @@ static void	arrange_constant_values(t_map *m)
 		m->window_x = 242;
 		m->window_y = 242;
 	}
-	
 	calc_distance_cam_scr(m);
 	calc_screen_unitvec_x(m);
 	calc_screen_unitvec_y(m);

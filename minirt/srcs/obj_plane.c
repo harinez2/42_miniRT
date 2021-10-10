@@ -22,7 +22,8 @@ double	get_distance_to_plane(t_vec v_w, t_map *m, t_plane *tp)
 }
 
 //(1) ambient light (kankyo kou)
-void	calc_plane_ambient_reflection(t_map *m, t_color *color, t_plane *tp)
+void	calc_plane_ambient_reflection(
+	t_map *m, t_color *color, t_plane *tp)
 {
 	set_color(color,
 		m->kAmb.r * m->ambItsty * tp->rgb.r,

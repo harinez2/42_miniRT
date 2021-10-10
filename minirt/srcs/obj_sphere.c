@@ -16,7 +16,8 @@ double	get_distance_to_sphere(t_vec v_w, t_map *m, t_sphere *ts)
 }
 
 //(1) ambient light (kankyo kou)
-void	calc_sphere_ambient_reflection(t_map *m, t_color *color, t_sphere *ts)
+void	calc_sphere_ambient_reflection(
+	t_map *m, t_color *color, t_sphere *ts)
 {
 	set_color(color,
 		m->kAmb.r * m->ambItsty * ts->rgb.r,

@@ -85,11 +85,11 @@ t_color	read_rgb(int *i, char *s, t_map *m)
 	if (c.b < 0 || c.b > 255)
 		print_error_exit(ERR_RD_OUTOFRANGE, m);
 	c.r = adjust_range(c.r,
-		(t_minmax){.min = 0, .max = 255}, (t_minmax){.min = 0, .max = 1});
+			(t_minmax){.min = 0, .max = 255}, (t_minmax){.min = 0, .max = 1});
 	c.g = adjust_range(c.g,
-		(t_minmax){.min = 0, .max = 255}, (t_minmax){.min = 0, .max = 1});
+			(t_minmax){.min = 0, .max = 255}, (t_minmax){.min = 0, .max = 1});
 	c.b = adjust_range(c.b,
-		(t_minmax){.min = 0, .max = 255}, (t_minmax){.min = 0, .max = 1});
+			(t_minmax){.min = 0, .max = 255}, (t_minmax){.min = 0, .max = 1});
 	return (c);
 }
 

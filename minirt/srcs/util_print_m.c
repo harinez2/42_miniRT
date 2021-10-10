@@ -17,17 +17,21 @@ static void	print_m_eye(t_map *m)
 	i = 0;
 	while (i < m->cam_cnt)
 	{
-		printf("  Camera[%d]: pos: %.2f, %.2f, %.2f / orien: %.2f, %.2f, %.2f / fov:%.2f\n",
-			i, m->cam[i].pos.x, m->cam[i].pos.y, m->cam[i].pos.z,
-			m->cam[i].orien.x, m->cam[i].orien.y, m->cam[i].orien.z, m->cam[i].fov);
+		printf("  Camera[%d]: pos: %.2f, %.2f, %.2f",
+			i, m->cam[i].pos.x, m->cam[i].pos.y, m->cam[i].pos.z);
+		printf(" / orien: %.2f, %.2f, %.2f / fov:%.2f\n",
+			m->cam[i].orien.x, m->cam[i].orien.y, m->cam[i].orien.z,
+			m->cam[i].fov);
 		i++;
 	}
-	printf("  Current Camera[%d]: pos: %.2f, %.2f, %.2f / orien: %.2f, %.2f, %.2f / distance:%.2f\n",
-		m->curr_cam_num, m->curr_cam.pos.x, m->curr_cam.pos.y, m->curr_cam.pos.z,
+	printf("  Current Camera[%d]: pos: %.2f, %.2f, %.2f", m->curr_cam_num,
+		m->curr_cam.pos.x, m->curr_cam.pos.y, m->curr_cam.pos.z);
+	printf(" / orien: %.2f, %.2f, %.2f / distance:%.2f\n",
 		m->curr_cam.orien.x, m->curr_cam.orien.y, m->curr_cam.orien.z,
 		m->scr.distance_cam_scr);
-	printf("                     unitx: %.2f, %.2f, %.2f / unity: %.2f, %.2f, %.2f\n\n",
-		m->scr.unitvec_scrx.x, m->scr.unitvec_scrx.y, m->scr.unitvec_scrx.z,
+	printf("                     unitx: %.2f, %.2f, %.2f",
+		m->scr.unitvec_scrx.x, m->scr.unitvec_scrx.y, m->scr.unitvec_scrx.z);
+	printf(" / unity: %.2f, %.2f, %.2f\n\n",
 		m->scr.unitvec_scry.x, m->scr.unitvec_scry.y, m->scr.unitvec_scry.z);
 }
 
