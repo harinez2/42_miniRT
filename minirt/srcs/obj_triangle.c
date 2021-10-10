@@ -12,13 +12,8 @@ void	ft_init_triangle(t_triangle *tt)
 }
 
 static void	calc_triangle_crossprod(
-	t_multivec *mv, t_vec v_w, t_map *m, t_triangle *tt)
+	t_multivec *mv, t_vec v_tpos, t_triangle *tt)
 {
-	t_vec		v_de;
-	t_vec		v_tpos;
-
-	v_de = ft_vecsub(v_w, m->curr_cam.pos);
-	v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(v_de, t));
 	mv->a = ft_veccrossprod(
 			ft_vecsub(tt->second, tt->first), ft_vecsub(v_tpos, tt->second));
 	mv->b = ft_veccrossprod(
@@ -31,12 +26,16 @@ static void	calc_triangle_crossprod(
 double	get_distance_to_triangle(t_vec v_w, t_map *m, t_triangle *tt)
 {
 	double		t;
+	t_vec		v_de;
+	t_vec		v_tpos;
 	t_multivec	mv;
 
 	t = get_distance_to_plane(v_w, m, &tt->plane);
 	if (t >= 0)
 	{
-		calc_triangle_crossprod(&mv, v_w, m, tt);
+		v_de = ft_vecsub(v_w, m->curr_cam.pos);
+		v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(v_de, t));
+		calc_triangle_crossprod(&mv, v_tpos, tt);
 		if (tt->first.x == tt->second.x && tt->first.x == tt->third.x)
 		{
 			if (!((mv.a.x >= 0 && mv.b.x >= 0 && mv.c.x >= 0)
