@@ -1,6 +1,6 @@
 #include	"main.h"
 
-double	get_nearest_sphere(t_vec v_w, t_vec v_cam, t_sphere *ts)
+double	get_distance_to_sphere(t_vec v_w, t_vec v_cam, t_sphere *ts)
 {
 	t_calcvals	cv;
 	t_vec		v_center_cam;
@@ -84,7 +84,7 @@ t_color	ray_trace_sphere(t_vec v_w, t_map *m, t_sphere *ts, double t)
 	i = 0;
 	while (i < m->lit_cnt)
 	{
-		get_minimum_t_for_shadow(m->lit[i].pos, v_tpos, m, &hit_t);
+		get_minimum_distance_to_obj(m->lit[i].pos, v_tpos, m, &hit_t);
 		if (hit_t != -1)
 		{
 			i++;

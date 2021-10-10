@@ -1,24 +1,24 @@
 #include	"main.h"
 
-double	get_nearest_obj(t_vec v_w, t_vec vstart, int i, t_map *m)
+double	get_distance_to_obj(t_vec v_w, t_vec vstart, int i, t_map *m)
 {
 	double	chkt;
 
 	chkt = -1;
 	if (m->obj_type[i] == CMD_SPHERE)
-		chkt = get_nearest_sphere(v_w, vstart, (t_sphere *)m->obj[i]);
+		chkt = get_distance_to_sphere(v_w, vstart, (t_sphere *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_PLANE)
-		chkt = get_nearest_plane(v_w, vstart, (t_plane *)m->obj[i]);
+		chkt = get_distance_to_plane(v_w, vstart, (t_plane *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_SQUARE)
-		chkt = get_nearest_square(v_w, vstart, (t_square *)m->obj[i]);
+		chkt = get_distance_to_square(v_w, vstart, (t_square *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_CYLINDER)
-		chkt = get_nearest_cylinder(v_w, vstart, (t_cylinder *)m->obj[i]);
+		chkt = get_distance_to_cylinder(v_w, vstart, (t_cylinder *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_TRIANGLE)
-		chkt = get_nearest_triangle(v_w, vstart, (t_triangle *)m->obj[i]);
+		chkt = get_distance_to_triangle(v_w, vstart, (t_triangle *)m->obj[i]);
 	return (chkt);
 }
 
-int	get_minimum_t_for_shadow(
+int	get_minimum_distance_to_obj(
 	t_vec v_w, t_vec vstart, t_map *m, double *hit_t)
 {
 	double		t;
@@ -30,7 +30,7 @@ int	get_minimum_t_for_shadow(
 	i = 0;
 	while (i < m->obj_count)
 	{
-		t = get_nearest_obj(v_w, vstart, i, m);
+		t = get_distance_to_obj(v_w, vstart, i, m);
 		if (t > 0.001 && (*hit_t == -1 || t < *hit_t))
 		{
 			*hit_t = t;
@@ -66,6 +66,6 @@ t_color	decide_color_with_raytracing(t_vec v_w, t_map *m)
 	double	hit_t;
 	int		hit_i;
 
-	hit_i = get_minimum_t_for_shadow(v_w, m->curr_cam.pos, m, &hit_t);
+	hit_i = get_minimum_distance_to_obj(v_w, m->curr_cam.pos, m, &hit_t);
 	return (ray_trace_obj(v_w, m, hit_i, hit_t));
 }

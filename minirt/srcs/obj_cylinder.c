@@ -1,7 +1,7 @@
 #include	"main.h"
 
 // tpos：cross point (pi) of the v_cam and the surface of the cylinder
-double	get_nearest_cylinder(t_vec v_w, t_vec v_cam, t_cylinder *tc)
+double	get_distance_to_cylinder(t_vec v_w, t_vec v_cam, t_cylinder *tc)
 {
 	t_calcvals	cv;
 	double		mx;
@@ -48,7 +48,7 @@ t_color	ray_trace_cylinder(t_vec v_w, t_map *m, t_cylinder *tc, double t)
 	i = 0;
 	while (i < m->lit_cnt)
 	{
-		get_minimum_t_for_shadow(m->lit[i].pos, v_tpos, m, &hit_t);
+		get_minimum_distance_to_obj(m->lit[i].pos, v_tpos, m, &hit_t);
 		if (hit_t != -1)
 		{
 			i++;

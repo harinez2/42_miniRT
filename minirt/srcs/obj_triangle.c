@@ -11,11 +11,11 @@ void	ft_init_triangle(t_triangle *tt)
 	tt->plane.rgb = tt->rgb;
 }
 
-double	get_nearest_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt)
+double	get_distance_to_triangle(t_vec v_w, t_vec v_eye, t_triangle *tt)
 {
 	double	t;
 
-	t = get_nearest_plane(v_w, v_eye, &tt->plane);
+	t = get_distance_to_plane(v_w, v_eye, &tt->plane);
 	if (t >= 0)
 	{
 		t_vec v_de = ft_vecsub(v_w, v_eye);

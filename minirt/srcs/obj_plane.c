@@ -1,6 +1,6 @@
 #include	"main.h"
 
-double	get_nearest_plane(t_vec v_w, t_vec v_eye, t_plane *tp)
+double	get_distance_to_plane(t_vec v_w, t_vec v_eye, t_plane *tp)
 {
 	double	t;
 	t_vec	v_de;
@@ -46,7 +46,7 @@ t_color	ray_trace_plane(t_vec v_w, t_map *m, t_plane *tp, double t)
 	i = 0;
 	while (i < m->lit_cnt)
 	{
-		get_minimum_t_for_shadow(m->lit[i].pos, v_tpos, m, &hit_t);
+		get_minimum_distance_to_obj(m->lit[i].pos, v_tpos, m, &hit_t);
 		if (hit_t != -1)
 		{
 			i++;

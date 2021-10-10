@@ -40,14 +40,14 @@ void	ft_init_square(t_square *ts)
 	ft_init_triangle(&ts->tr_b);
 }
 
-double	get_nearest_square(t_vec v_w, t_vec v_eye, t_square *ts)
+double	get_distance_to_square(t_vec v_w, t_vec v_eye, t_square *ts)
 {
 	double	t;
 	double	t1;
 	double	t2;
 
-	t1 = get_nearest_triangle(v_w, v_eye, &ts->tr_a);
-	t2 = get_nearest_triangle(v_w, v_eye, &ts->tr_b);
+	t1 = get_distance_to_triangle(v_w, v_eye, &ts->tr_a);
+	t2 = get_distance_to_triangle(v_w, v_eye, &ts->tr_b);
 	if (t1 > 0 && t2 > 0)
 		t = fmin(t1, t2);
 	else
