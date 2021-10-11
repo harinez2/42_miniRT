@@ -58,9 +58,6 @@ t_color		get_color_by_rt_triangle(t_map *m, t_triangle *tt);
 // obj_util.c
 double		calc_t(double A, double B, double D);
 // output_bitmap.c
-void		set_bmp_header(uint8_t *header_buffer, int stride, t_map *m);
-int			draw_map_bmp(FILE *fp, uint8_t *buffer, int stride, t_map *m);
-int			write_bmp_simple_stream(FILE *fp, t_map *m);
 int			write_bmp(t_map *m);
 // output_screen.c
 void		calc_distance_cam_scr(t_map *m);

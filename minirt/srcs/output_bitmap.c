@@ -1,6 +1,6 @@
 #include	"main.h"
 
-void	set_bmp_header(uint8_t *header_buffer, int stride, t_map *m)
+static void	set_bmp_header(uint8_t *header_buffer, int stride, t_map *m)
 {
 	t_bmp_file_header	*file;
 	t_bmp_info_header	*info;
@@ -25,7 +25,7 @@ void	set_bmp_header(uint8_t *header_buffer, int stride, t_map *m)
 	info->biClrImportant = 0;
 }
 
-int	draw_map_bmp(FILE *fp, uint8_t *buffer, int stride, t_map *m)
+static int	draw_map_bmp(FILE *fp, uint8_t *buffer, int stride, t_map *m)
 {
 	int		x;
 	int		y;
@@ -55,7 +55,7 @@ int	draw_map_bmp(FILE *fp, uint8_t *buffer, int stride, t_map *m)
 	return (0);
 }
 
-int	write_bmp_simple_stream(FILE *fp, t_map *m)
+static int	write_bmp_simple_stream(FILE *fp, t_map *m)
 {
 	uint8_t		header_buffer[DEFAULT_HEADER_SIZE];
 	int			stride;
