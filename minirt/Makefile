@@ -10,6 +10,7 @@ SRCS		= \
 				$(SRC_DIR)/error_clean.c \
 				$(SRC_DIR)/lib_ft.c \
 				$(SRC_DIR)/main.c \
+				$(SRC_DIR)/obj_cone.c \
 				$(SRC_DIR)/obj_cylinder.c \
 				$(SRC_DIR)/obj_plane.c \
 				$(SRC_DIR)/obj_sphere.c \
@@ -25,9 +26,11 @@ SRCS		= \
 				$(SRC_DIR)/readfile_config.c \
 				$(SRC_DIR)/readfile_num.c \
 				$(SRC_DIR)/readfile_objs.c \
+				$(SRC_DIR)/readfile_objs2d.c \
 				$(SRC_DIR)/util_color.c \
 				$(SRC_DIR)/util_print_m.c \
 				$(SRC_DIR)/util_print_m_objs.c \
+				$(SRC_DIR)/util_print_m_objs2d.c \
 				$(SRC_DIR)/util_render.c \
 				$(SRC_DIR)/util_vector.c \
 				$(SRC_DIR)/util_vector_calc.c \

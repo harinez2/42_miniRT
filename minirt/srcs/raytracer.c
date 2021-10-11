@@ -15,6 +15,8 @@ static double	get_distance_to_obj(t_vec v_w, int i, t_map *m)
 		chkt = get_distance_to_cylinder(v_w, m, (t_cylinder *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_TRIANGLE)
 		chkt = get_distance_to_triangle(v_w, m, (t_triangle *)m->obj[i]);
+	else if (m->obj_type[i] == CMD_CONE)
+		chkt = get_distance_to_cone(v_w, m, (t_cone *)m->obj[i]);
 	return (chkt);
 }
 
@@ -60,6 +62,8 @@ t_color	get_color_by_raytracing(t_vec v_w, t_map *m, int i, double t)
 		color = get_color_by_rt_cylinder(m, (t_cylinder *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_TRIANGLE)
 		color = get_color_by_rt_triangle(m, (t_triangle *)m->obj[i]);
+	else if (m->obj_type[i] == CMD_CONE)
+		color = get_color_by_rt_cone(m, (t_cone *)m->obj[i]);
 	return (color);
 }
 

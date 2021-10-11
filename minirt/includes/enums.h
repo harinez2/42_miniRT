@@ -12,7 +12,8 @@ enum e_cmds
 	CMD_PLANE,
 	CMD_SQUARE,
 	CMD_CYLINDER,
-	CMD_TRIANGLE
+	CMD_TRIANGLE,
+	CMD_CONE
 };
 
 enum e_errors

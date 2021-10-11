@@ -29,6 +29,8 @@ static int	read_cmd(int *i, char *line, t_map *m)
 		cmd = read_file_cylinder(i, line, m);
 	else if (ft_strncmp(&line[*i], "tr", 2) == 0)
 		cmd = read_file_triangle(i, line, m);
+	else if (ft_strncmp(&line[*i], "co", 2) == 0)
+		cmd = read_file_cone(i, line, m);
 	return (cmd);
 }
 

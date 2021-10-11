@@ -168,6 +168,14 @@ typedef struct s_square
 	t_triangle	tr_b;
 }	t_square;
 
+typedef struct s_cone
+{
+	t_vec		vertex;
+	t_vec		normal;
+	double		theta;
+	t_color		rgb;
+}	t_cone;
+
 // Bitmap ***********************************************************
 
 # pragma pack(2)

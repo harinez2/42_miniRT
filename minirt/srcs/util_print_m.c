@@ -70,6 +70,8 @@ static void	print_m_obj(t_map *m)
 			print_cylinder(m->obj[i]);
 		else if (m->obj_type[i] == CMD_TRIANGLE)
 			print_triangle(m->obj[i]);
+		else if (m->obj_type[i] == CMD_CONE)
+			print_cone(m->obj[i]);
 		i++;
 	}
 }

@@ -11,6 +11,15 @@ int			ft_atoll(char *s, long long *retnum);
 // main.c
 void		init_m(t_map *m);
 int			main(int argc, char **argv);
+// obj_cone.c
+double		get_distance_to_cone(t_vec v_w, t_map *m, t_cone *tc);
+void		calc_cone_ambient_reflection(
+				t_map *m, t_color *color, t_cone *tc);
+double		calc_cone_diffuse_reflection(
+				t_map *m, t_color *color, int i, t_cone *tc);
+void		calc_cone_reflection(
+				t_map *m, t_color *color, int i, t_cone *tc);
+t_color		get_color_by_rt_cone(t_map *m, t_cone *tc);
 // obj_cylinder.c
 double		get_distance_to_cylinder(t_vec v_w, t_map *m, t_cylinder *tc);
 void		calc_cylinder_ambient_reflection(
@@ -86,6 +95,8 @@ int			read_file_plane(int *i, char *line, t_map *m);
 int			read_file_square(int *i, char *line, t_map *m);
 int			read_file_cylinder(int *i, char *line, t_map *m);
 int			read_file_triangle(int *i, char *line, t_map *m);
+// readfile_objs2d.c
+int			read_file_cone(int *i, char *line, t_map *m);
 // util_color.c
 int			ft_color(int red, int green, int blue);
 void		set_color(t_color *c, double red, double green, double blue);
@@ -99,6 +110,8 @@ void		print_plane(t_plane *tp);
 void		print_sphere(t_sphere *ts);
 void		print_square(t_square *ts);
 void		print_triangle(t_triangle *tt);
+// util_print_m_objs2d.c
+void		print_cone(t_cone *tc);
 // util_render.c
 double		adjust_range(double x, t_minmax from, t_minmax to);
 int			get_endian(void);
