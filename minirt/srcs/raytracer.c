@@ -42,7 +42,7 @@ int	get_minimum_distance_to_obj(t_vec v_w, t_map *m, double *hit_t)
 	return (hit_i);
 }
 
-t_color	get_color_by_raytracing(t_vec v_w, t_map *m, int i, double t)
+static t_color	get_color_with_lightning(t_vec v_w, t_map *m, int i, double t)
 {
 	t_color			color;
 
@@ -67,11 +67,38 @@ t_color	get_color_by_raytracing(t_vec v_w, t_map *m, int i, double t)
 	return (color);
 }
 
-t_color	decide_color_with_raytracing(t_vec v_w, t_map *m)
+static t_color	get_color_with_raytracing(t_vec v_w, t_map *m)
 {
 	double	hit_t;
 	int		hit_i;
 
 	hit_i = get_minimum_distance_to_obj(v_w, m, &hit_t);
-	return (get_color_by_raytracing(v_w, m, hit_i, hit_t));
+	return (get_color_with_lightning(v_w, m, hit_i, hit_t));
+}
+
+t_color	get_color_on_screen(t_map *m, int x, int y)
+{
+	t_vec		v_w;
+	t_color		color;
+	const int	print_foreach = 100;
+
+	v_w.x = m->curr_cam.orien.x * m->scr.distance_cam_scr
+		+ (x - m->window_x / 2) * m->scr.unitvec_scrx.x
+		+ (y - m->window_y / 2) * m->scr.unitvec_scry.x;
+	v_w.y = m->curr_cam.orien.y * m->scr.distance_cam_scr
+		+ (x - m->window_x / 2) * m->scr.unitvec_scrx.y
+		+ (y - m->window_y / 2) * m->scr.unitvec_scry.y;
+	v_w.z = m->curr_cam.orien.z * m->scr.distance_cam_scr
+		+ (x - m->window_x / 2) * m->scr.unitvec_scrx.z
+		+ (y - m->window_y / 2) * m->scr.unitvec_scry.z;
+	color = get_color_with_raytracing(v_w, m);
+	if (m->dsp && x % print_foreach == 0 && y % print_foreach == 0)
+	{
+		if (x == 0)
+			printf("\n");
+		printf("  v_w : ");
+		ft_vecprint(&v_w);
+		printf("  /  %.2f, %.2f, %.2f\n", color.r, color.g, color.b);
+	}
+	return(color);
 }

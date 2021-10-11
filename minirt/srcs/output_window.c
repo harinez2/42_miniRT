@@ -1,36 +1,10 @@
 #include	"main.h"
 
-static void	put_pixel_based_on_ray(t_map *m, int x, int y)
-{
-	t_vec		v_w;
-	t_color		color;
-	const int	print_foreach = 100;
-
-	v_w.x = m->curr_cam.orien.x * m->scr.distance_cam_scr
-		+ (x - m->window_x / 2) * m->scr.unitvec_scrx.x
-		+ (y - m->window_y / 2) * m->scr.unitvec_scry.x;
-	v_w.y = m->curr_cam.orien.y * m->scr.distance_cam_scr
-		+ (x - m->window_x / 2) * m->scr.unitvec_scrx.y
-		+ (y - m->window_y / 2) * m->scr.unitvec_scry.y;
-	v_w.z = m->curr_cam.orien.z * m->scr.distance_cam_scr
-		+ (x - m->window_x / 2) * m->scr.unitvec_scrx.z
-		+ (y - m->window_y / 2) * m->scr.unitvec_scry.z;
-	color = decide_color_with_raytracing(v_w, m);
-	mlx_pixel_put(m->mlx, m->win, x, y, ft_color(color.r, color.g, color.b));
-	if (m->dsp && x % print_foreach == 0 && y % print_foreach == 0)
-	{
-		if (x == 0)
-			printf("\n");
-		printf("  v_w : ");
-		ft_vecprint(&v_w);
-		printf("  /  %.2f, %.2f, %.2f\n", color.r, color.g, color.b);
-	}
-}
-
 int	draw_map_on_window(t_map *m)
 {
 	int		x;
 	int		y;
+	t_color	color;
 
 	y = 0;
 	while (y < m->window_y)
@@ -38,7 +12,8 @@ int	draw_map_on_window(t_map *m)
 		x = 0;
 		while (x < m->window_x)
 		{
-			put_pixel_based_on_ray(m, x, y);
+			color = get_color_on_screen(m, x, y);
+			mlx_pixel_put(m->mlx, m->win, x, y, ft_color(color.r, color.g, color.b));
 			x++;
 		}
 		y++;

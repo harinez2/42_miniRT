@@ -74,8 +74,7 @@ int			keypress_handler(int key, t_map *m);
 void		close_win_hanlder(t_map *m, int called_by);
 // raytracer.c
 int			get_minimum_distance_to_obj(t_vec v_w, t_map *m, double *hit_t);
-t_color		get_color_by_raytracing(t_vec v_w, t_map *m, int i, double t);
-t_color		decide_color_with_raytracing(t_vec v_w, t_map *m);
+t_color		get_color_on_screen(t_map *m, int x, int y);
 // readfile.c
 void		read_config_file(char *filename, t_map *m);
 // readfile_config.c
