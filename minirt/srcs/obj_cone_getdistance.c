@@ -21,7 +21,7 @@ static double	check_cone_length(t_map *m, t_cone *tc, t_calc_crossing	cv)
 	v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(cv.v_de, cv.t));
 	v_po_p = ft_vecsub(v_tpos, tc->vertex);
 	v_po_p_len = ft_vecnorm(v_po_p);
-	if (ft_vecnorm(tc->normal) / cos(ft_degree_to_rad(tc->theta)) < v_po_p_len)
+	if (ft_vecnorm(tc->normal) / cos(ft_degree_to_rad(tc->theta)) <= v_po_p_len)
 		return (-1);
 	return (0);
 }
