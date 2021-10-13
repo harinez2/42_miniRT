@@ -3,40 +3,34 @@
 double	get_distance_to_cone(t_vec v_w, t_map *m, t_cone *tc)
 {
 	t_calc_crossing	cv;
-	double			mx;
-	double			my;
-	double			mz;
+	t_multdouble	md1;
+	t_multdouble	md2;
 	double			l;
-	double			p;
-	double			q;
-	double			r;
-	// t_vec			v_tpos;
-	// double			diff;
+	t_vec			v_tpos;
 
 	cv.v_de = ft_vecsub(v_w, m->curr_cam.pos);
-	mx = m->curr_cam.pos.x - tc->vertex.x;
-	my = m->curr_cam.pos.y - tc->vertex.y;
-	mz = m->curr_cam.pos.z - tc->vertex.z;
+	md1.a = m->curr_cam.pos.x - tc->vertex.x;
+	md1.b = m->curr_cam.pos.y - tc->vertex.y;
+	md1.c = m->curr_cam.pos.z - tc->vertex.z;
 	l = sqrt(tc->normal.x * tc->normal.x + tc->normal.y * tc->normal.y
 		+ tc->normal.z * tc->normal.z) * cos(ft_degree_to_rad(tc->theta));
-	p = tc->normal.x * tc->normal.x / (l * l) - 1;
-	q = tc->normal.y * tc->normal.y / (l * l) - 1;
-	r = tc->normal.z * tc->normal.z / (l * l) - 1;
-	cv.A = p * cv.v_de.x * cv.v_de.x + q * cv.v_de.y * cv.v_de.y
-		+ r * cv.v_de.z * cv.v_de.z;
-	cv.B = 2 * (p * mx * cv.v_de.x + q * my * cv.v_de.y + r * mz * cv.v_de.z);
-	cv.C = p * mx * mx + q * my * my + r * mz * mz;
+	md2.a = tc->normal.x * tc->normal.x / (l * l) - 1;
+	md2.b = tc->normal.y * tc->normal.y / (l * l) - 1;
+	md2.c = tc->normal.z * tc->normal.z / (l * l) - 1;
+	cv.A = md2.a * cv.v_de.x * cv.v_de.x + md2.b * cv.v_de.y * cv.v_de.y
+		+ md2.c * cv.v_de.z * cv.v_de.z;
+	cv.B = 2 * (md2.a * md1.a * cv.v_de.x + md2.b * md1.b * cv.v_de.y + md2.c * md1.c * cv.v_de.z);
+	cv.C = md2.a * md1.a * md1.a + md2.b * md1.b * md1.b + md2.c * md1.c * md1.c;
 	cv.D = cv.B * cv.B - 4 * cv.A * cv.C;
 	cv.t = calc_t(cv.A, cv.B, cv.D);
-	// if (cv.t > 0)
-	// {
-	// 	v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(cv.v_de, cv.t));
-	// 	diff = v_tpos.y - tc->center.y;
-	// 	if (diff < 0)
-	// 		diff *= -1;
-	// 	if (diff > tc->height / 2)
-	// 		cv.t = -1;
-	// }
+	if (cv.t > 0)
+	{
+		v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(cv.v_de, cv.t));
+		t_vec v_po_p = ft_vecsub(v_tpos, tc->vertex);
+		double v_po_p_len = ft_vecnorm(v_po_p);
+		if (ft_vecnorm(tc->normal) / cos(ft_degree_to_rad(tc->theta)) < v_po_p_len)
+			return (-1);
+	}
 	return (cv.t);
 }
 

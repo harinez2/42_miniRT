@@ -122,6 +122,13 @@ typedef struct s_multivec
 	t_vec		d;
 }	t_multivec;
 
+typedef struct s_multdouble
+{
+	double		a;
+	double		b;
+	double		c;
+}	t_multdouble;
+
 // Objects ***********************************************************
 
 typedef struct s_sphere
