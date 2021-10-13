@@ -93,8 +93,8 @@ void	calc_cylinder_reflection(
 		* cl.vrDotPow * tc->rgb.b;
 }
 
-// tpos			：cross point (pi) of the v_cam and the surface of the cylinder
-// v_lightDir	: vector of incidence (l) (nyuusha bector)
+// tpos			：cross point (pi) of the v_cam and the surface of the object
+// v_lightDir	: vector of incidence (l) (nyuusha vector)
 // v_n			: normal vector (n) (housen vector)
 t_color	get_color_by_rt_cylinder(t_map *m, t_cylinder *tc)
 {
