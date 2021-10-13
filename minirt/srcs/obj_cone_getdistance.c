@@ -1,5 +1,17 @@
 #include	"main.h"
 
+static double	check_cone_direction(t_map *m, t_cone *tc, t_calc_crossing	cv)
+{
+	t_vec		v_tpos;
+	t_vec		v_po_p;
+
+	v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(cv.v_de, cv.t));
+	v_po_p = ft_vecsub(v_tpos, tc->vertex);
+	if (ft_vecinnerprod(v_po_p, tc->normal) < 0)
+		return (-1);
+	return (0);
+}
+
 static double	check_cone_length(t_map *m, t_cone *tc, t_calc_crossing	cv)
 {
 	t_vec		v_tpos;
@@ -11,7 +23,7 @@ static double	check_cone_length(t_map *m, t_cone *tc, t_calc_crossing	cv)
 	v_po_p_len = ft_vecnorm(v_po_p);
 	if (ft_vecnorm(tc->normal) / cos(ft_degree_to_rad(tc->theta)) < v_po_p_len)
 		return (-1);
-	return (cv.t);
+	return (0);
 }
 
 double	get_distance_to_cone(t_vec v_w, t_map *m, t_cone *tc)
@@ -36,7 +48,9 @@ double	get_distance_to_cone(t_vec v_w, t_map *m, t_cone *tc)
 	cv.C = md2.a * md1.a * md1.a + md2.b * md1.b * md1.b + md2.c * md1.c * md1.c;
 	cv.D = cv.B * cv.B - 4 * cv.A * cv.C;
 	cv.t = calc_t(cv.A, cv.B, cv.D);
-	if (cv.t > 0)
-		return(check_cone_length(m, tc, cv));
+	if (cv.t > 0 && check_cone_direction(m, tc, cv) == -1)
+		return(-1);
+	else if (cv.t > 0 && check_cone_length(m, tc, cv) == -1)
+		return(-1);
 	return (cv.t);
 }
