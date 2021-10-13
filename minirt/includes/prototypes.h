@@ -12,7 +12,6 @@ int			ft_atoll(char *s, long long *retnum);
 void		init_m(t_map *m);
 int			main(int argc, char **argv);
 // obj_cone.c
-double		get_distance_to_cone(t_vec v_w, t_map *m, t_cone *tc);
 void		calc_cone_ambient_reflection(
 				t_map *m, t_color *color, t_cone *tc);
 double		calc_cone_diffuse_reflection(
@@ -20,6 +19,8 @@ double		calc_cone_diffuse_reflection(
 void		calc_cone_reflection(
 				t_map *m, t_color *color, int i, t_cone *tc);
 t_color		get_color_by_rt_cone(t_map *m, t_cone *tc);
+// obj_cone_getdistance.c
+double		get_distance_to_cone(t_vec v_w, t_map *m, t_cone *tc);
 // obj_cylinder.c
 double		get_distance_to_cylinder(t_vec v_w, t_map *m, t_cylinder *tc);
 void		calc_cylinder_ambient_reflection(
