@@ -57,28 +57,25 @@ double	calc_cone_diffuse_reflection(
 void	calc_cone_reflection(
 	t_map *m, t_color *color, int i, t_cone *tc)
 {
-	(void)m;(void)color;(void)i;(void)tc;
-	// t_calc_light	cl;
+	t_calc_light	cl;
 
-	// cl.v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
-	// cl.v_n.x = 2 * (m->camdir.v_tpos.x - tc->normal.x);
-	// cl.v_n.y = 0;
-	// cl.v_n.z = 2 * (m->camdir.v_tpos.z - tc->normal.z);
-	// cl.naiseki = ft_vecinnerprod(ft_vecnormalize(cl.v_n), cl.v_lightDir);
-	// cl.refDir = ft_vecnormalize(ft_vecsub(ft_vecmult(
-	// 				ft_vecnormalize(cl.v_n), 2 * cl.naiseki), cl.v_lightDir));
-	// cl.invEyeDir = ft_vecnormalize(ft_vecmult(m->camdir.v_de, -1));
-	// cl.vrDot = ft_vecinnerprod(cl.invEyeDir, cl.refDir);
-	// if (cl.vrDot < 0)
-	// 	cl.vrDot = 0;
-	// cl.vrDotPow = adjust_range(pow(cl.vrDot, m->shininess),
-	// 		(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
-	// color->r += m->kSpe.r * m->lit[i].itsty * m->lit[i].rgb.r
-	// 	* cl.vrDotPow * tc->rgb.r;
-	// color->g += m->kSpe.g * m->lit[i].itsty * m->lit[i].rgb.g
-	// 	* cl.vrDotPow * tc->rgb.g;
-	// color->b += m->kSpe.b * m->lit[i].itsty * m->lit[i].rgb.b
-	// 	* cl.vrDotPow * tc->rgb.b;
+	cl.v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
+	cl.v_n = get_normal_vector_at_tpos(m, tc);
+	cl.naiseki = ft_vecinnerprod(ft_vecnormalize(cl.v_n), cl.v_lightDir);
+	cl.refDir = ft_vecnormalize(ft_vecsub(ft_vecmult(
+					ft_vecnormalize(cl.v_n), 2 * cl.naiseki), cl.v_lightDir));
+	cl.invEyeDir = ft_vecnormalize(ft_vecmult(m->camdir.v_de, -1));
+	cl.vrDot = ft_vecinnerprod(cl.invEyeDir, cl.refDir);
+	if (cl.vrDot < 0)
+		cl.vrDot = 0;
+	cl.vrDotPow = adjust_range(pow(cl.vrDot, m->shininess),
+			(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
+	color->r += m->kSpe.r * m->lit[i].itsty * m->lit[i].rgb.r
+		* cl.vrDotPow * tc->rgb.r;
+	color->g += m->kSpe.g * m->lit[i].itsty * m->lit[i].rgb.g
+		* cl.vrDotPow * tc->rgb.g;
+	color->b += m->kSpe.b * m->lit[i].itsty * m->lit[i].rgb.b
+		* cl.vrDotPow * tc->rgb.b;
 }
 
 // tpos			：cross point (pi) of the v_cam and the surface of the object
