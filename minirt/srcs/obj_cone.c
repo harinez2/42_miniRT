@@ -10,18 +10,12 @@ void	calc_cone_ambient_reflection(
 		m->kAmb.b * m->ambItsty * tc->rgb.b);
 }
 
-// (2) calc diffuse reflection (kakusan hansya kou)
-double	calc_cone_diffuse_reflection(
-	t_map *m, t_color *color, int i, t_cone *tc)
+static t_vec	get_normal_vector_at_tpos(t_map *m, t_cone *tc)
 {
-	t_vec	v_lightDir;
 	t_vec	v_p0_p;
 	double	t;
 	t_vec	v_n;
-	double	naiseki;
-	double	nlDot;
 
-	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
 	v_p0_p.x = m->camdir.v_tpos.x - tc->vertex.x;
 	v_p0_p.y = m->camdir.v_tpos.y - tc->vertex.y;
 	v_p0_p.z = m->camdir.v_tpos.z - tc->vertex.z;
@@ -31,6 +25,20 @@ double	calc_cone_diffuse_reflection(
 	v_n.x = t * m->camdir.v_tpos.x - t * tc->vertex.x - tc->normal.x;
 	v_n.y = t * m->camdir.v_tpos.y - t * tc->vertex.y - tc->normal.y;
 	v_n.z = t * m->camdir.v_tpos.z - t * tc->vertex.z - tc->normal.z;
+	return (v_n);
+}
+
+// (2) calc diffuse reflection (kakusan hansya kou)
+double	calc_cone_diffuse_reflection(
+	t_map *m, t_color *color, int i, t_cone *tc)
+{
+	t_vec	v_lightDir;
+	t_vec	v_n;
+	double	naiseki;
+	double	nlDot;
+
+	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
+	v_n = get_normal_vector_at_tpos(m, tc);
 	naiseki = ft_vecinnerprod(ft_vecnormalize(v_n), v_lightDir);
 	if (naiseki < 0)
 		naiseki = 0;
