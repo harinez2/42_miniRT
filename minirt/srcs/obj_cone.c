@@ -15,50 +15,22 @@ double	calc_cone_diffuse_reflection(
 	t_map *m, t_color *color, int i, t_cone *tc)
 {
 	t_vec	v_lightDir;
+	t_vec	v_p_p0;
+	double	t;
 	t_vec	v_n;
 	double	naiseki;
 	double	nlDot;
 
 	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
-
-	double t = (m->camdir.v_tpos.x * tc->normal.x
-		+ m->camdir.v_tpos.y * tc->normal.y
-		+ m->camdir.v_tpos.z * tc->normal.z
-		- tc->vertex.x * tc->normal.x
-		- tc->vertex.y * tc->normal.y
-		- tc->vertex.z * tc->normal.z)
-		/ ( (m->camdir.v_tpos.x - tc->vertex.x) * (m->camdir.v_tpos.x - tc->vertex.x)
-		  + (m->camdir.v_tpos.y - tc->vertex.y) * (m->camdir.v_tpos.y - tc->vertex.y)
-		  + (m->camdir.v_tpos.z - tc->vertex.z) * (m->camdir.v_tpos.z - tc->vertex.z)
-		);
+	v_p_p0.x = m->camdir.v_tpos.x - tc->vertex.x;
+	v_p_p0.y = m->camdir.v_tpos.y - tc->vertex.y;
+	v_p_p0.z = m->camdir.v_tpos.z - tc->vertex.z;
+	t = (v_p_p0.x * tc->normal.x + v_p_p0.y * tc->normal.y + v_p_p0.z * tc->normal.z)
+		/ (v_p_p0.x * v_p_p0.x + v_p_p0.y * v_p_p0.y + v_p_p0.z * v_p_p0.z);
 	v_n.x = t * m->camdir.v_tpos.x - t * tc->vertex.x - tc->normal.x;
 	v_n.y = t * m->camdir.v_tpos.y - t * tc->vertex.y - tc->normal.y;
 	v_n.z = t * m->camdir.v_tpos.z - t * tc->vertex.z - tc->normal.z;
-	// double			l;
-	// double mm;
-	// l = sqrt(tc->normal.x * tc->normal.x + tc->normal.y * tc->normal.y
-	// 	+ tc->normal.z * tc->normal.z) * cos(ft_degree_to_rad(tc->theta));
-	// mm = sqrt(m->camdir.v_tpos.x * m->camdir.v_tpos.x
-	// 		- 2 * m->camdir.v_tpos.x * tc->vertex.x
-	// 		+ tc->vertex.x * tc->vertex.x
-	// 		+ m->camdir.v_tpos.y * m->camdir.v_tpos.y
-	// 		- 2 * m->camdir.v_tpos.y * tc->vertex.y
-	// 		+ tc->vertex.y * tc->vertex.y
-	// 		+ m->camdir.v_tpos.z * m->camdir.v_tpos.z
-	// 		- 2 * m->camdir.v_tpos.z * tc->vertex.z
-	// 		+ tc->vertex.z * tc->vertex.z
-	// 	);
-	// v_n.x = tc->normal.x - l * (m->camdir.v_tpos.x - tc->vertex.x) / mm;
-	// v_n.y = tc->normal.y - l * (m->camdir.v_tpos.y - tc->vertex.y) / mm;
-	// v_n.z = tc->normal.z - l * (m->camdir.v_tpos.z - tc->vertex.z) / mm;
-	// if (rand() % 100 == 0)
-	// {
-	// 	t_vec v = ft_vecnormalize(v_n);
-	// 	ft_vecprint(&v);
-	// 	printf("\n");
-	// }
 	naiseki = ft_vecinnerprod(ft_vecnormalize(v_n), v_lightDir);
-	// printf("%f\n", naiseki);
 	if (naiseki < 0)
 		naiseki = 0;
 	nlDot = adjust_range(naiseki,
