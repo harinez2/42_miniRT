@@ -22,7 +22,7 @@ double	get_distance_to_plane(t_vec v_w, t_map *m, t_plane *tp)
 }
 
 // (2) calc diffuse reflection (kakusan hansya kou)
-double	calc_plane_diffuse_reflection(
+static double	calc_plane_diffuse_reflection(
 	t_map *m, t_color *color, int i, t_plane *tp)
 {
 	t_vec	v_lightDir;
@@ -39,7 +39,7 @@ double	calc_plane_diffuse_reflection(
 }
 
 // (3) calc specular reflection (kyomen hansya kou)
-void	calc_plane_specular_reflection(
+static void	calc_plane_specular_reflection(
 	t_map *m, t_color *color, int i, t_plane *tp)
 {
 	t_calc_light	cl;

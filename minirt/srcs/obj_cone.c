@@ -19,7 +19,7 @@ static t_vec	get_normal_vector_at_tpos(t_map *m, t_cone *tc)
 }
 
 // (2) calc diffuse reflection (kakusan hansya kou)
-double	calc_cone_diffuse_reflection(
+static double	calc_cone_diffuse_reflection(
 	t_map *m, t_color *color, int i, t_cone *tc)
 {
 	t_vec	v_lightDir;
@@ -38,7 +38,7 @@ double	calc_cone_diffuse_reflection(
 }
 
 // (3) calc specular reflection (kyomen hansya kou)
-void	calc_cone_reflection(
+static void	calc_cone_reflection(
 	t_map *m, t_color *color, int i, t_cone *tc)
 {
 	t_calc_light	cl;

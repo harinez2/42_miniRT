@@ -16,7 +16,7 @@ double	get_distance_to_sphere(t_vec v_w, t_map *m, t_sphere *ts)
 }
 
 // (2) calc diffuse reflection (kakusan hansya kou)
-double	calc_sphere_diffuse_reflection(
+static double	calc_sphere_diffuse_reflection(
 	t_map *m, t_color *color, int i, t_sphere *ts)
 {
 	t_vec	v_lightDir;
@@ -35,7 +35,7 @@ double	calc_sphere_diffuse_reflection(
 }
 
 // (3) calc specular reflection (kyomen hansya kou)
-void	calc_sphere_specular_reflection(
+static void	calc_sphere_specular_reflection(
 	t_map *m, t_color *color, int i, t_sphere *ts)
 {
 	t_calc_light	cl;

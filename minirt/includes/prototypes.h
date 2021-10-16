@@ -12,33 +12,17 @@ int			ft_atoll(char *s, long long *retnum);
 void		init_m(t_map *m);
 int			main(int argc, char **argv);
 // obj_cone.c
-double		calc_cone_diffuse_reflection(
-				t_map *m, t_color *color, int i, t_cone *tc);
-void		calc_cone_reflection(
-				t_map *m, t_color *color, int i, t_cone *tc);
 t_color		get_color_by_rt_cone(t_map *m, t_cone *tc);
 // obj_cone_getdistance.c
 double		get_distance_to_cone(t_vec v_w, t_map *m, t_cone *tc);
 // obj_cylinder.c
 double		get_distance_to_cylinder(t_vec v_w, t_map *m, t_cylinder *tc);
-double		calc_cylinder_diffuse_reflection(
-				t_map *m, t_color *color, int i, t_cylinder *tc);
-void		calc_cylinder_reflection(
-				t_map *m, t_color *color, int i, t_cylinder *tc);
 t_color		get_color_by_rt_cylinder(t_map *m, t_cylinder *tc);
 // obj_plane.c
 double		get_distance_to_plane(t_vec v_w, t_map *m, t_plane *tp);
-double		calc_plane_diffuse_reflection(
-				t_map *m, t_color *color, int i, t_plane *tp);
-void		calc_plane_specular_reflection(
-				t_map *m, t_color *color, int i, t_plane *tp);
 t_color		get_color_by_rt_plane(t_map *m, t_plane *tp);
 // obj_sphere.c
 double		get_distance_to_sphere(t_vec v_w, t_map *m, t_sphere *ts);
-double		calc_sphere_diffuse_reflection(
-				t_map *m, t_color *color, int i, t_sphere *ts);
-void		calc_sphere_specular_reflection(
-				t_map *m, t_color *color, int i, t_sphere *ts);
 t_color		get_color_by_rt_sphere(t_map *m, t_sphere *ts);
 // obj_square.c
 void		ft_init_square(t_square *ts);
