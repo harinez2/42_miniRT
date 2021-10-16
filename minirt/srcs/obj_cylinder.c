@@ -29,13 +29,6 @@ double	get_distance_to_cylinder(t_vec v_w, t_map *m, t_cylinder *tc)
 	return (cv.t);
 }
 
-//(1) ambient light (kankyo kou)
-void	calc_cylinder_ambient_reflection(
-	t_map *m, t_color *color, t_cylinder *tc)
-{
-	set_ambient_reflection_color(m, color, &tc->rgb);
-}
-
 // (2) calc diffuse reflection (kakusan hansya kou)
 double	calc_cylinder_diffuse_reflection(
 	t_map *m, t_color *color, int i, t_cylinder *tc)
@@ -89,7 +82,7 @@ t_color	get_color_by_rt_cylinder(t_map *m, t_cylinder *tc)
 	double	hit_t;
 	double	naiseki;
 
-	calc_cylinder_ambient_reflection(m, &color, tc);
+	set_ambient_reflection_color(m, &color, &tc->rgb);
 	i = 0;
 	while (i < m->lit_cnt)
 	{

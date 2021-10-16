@@ -1,12 +1,5 @@
 #include	"main.h"
 
-//(1) ambient light (kankyo kou)
-void	calc_cone_ambient_reflection(
-	t_map *m, t_color *color, t_cone *tc)
-{
-	set_ambient_reflection_color(m, color, &tc->rgb);
-}
-
 static t_vec	get_normal_vector_at_tpos(t_map *m, t_cone *tc)
 {
 	t_vec	v_p0_p;
@@ -75,7 +68,7 @@ t_color	get_color_by_rt_cone(t_map *m, t_cone *tc)
 	double	hit_t;
 	double	naiseki;
 
-	calc_cone_ambient_reflection(m, &color, tc);
+	set_ambient_reflection_color(m, &color, &tc->rgb);
 	i = 0;
 	while (i < m->lit_cnt)
 	{
