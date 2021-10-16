@@ -25,7 +25,7 @@ static void	set_bmp_header(uint8_t *header_buffer, int stride, t_map *m)
 	info->biClrImportant = 0;
 }
 
-static int	draw_map_bmp(int fd, uint8_t *buffer, int stride, t_map *m)
+static int	draw_map_on_bmp(int fd, uint8_t *buffer, int stride, t_map *m)
 {
 	int		x;
 	int		y;
@@ -72,7 +72,7 @@ static int	write_bmp_simple_stream(int fd, t_map *m)
 		return (-1);
 	}
 	memset(buffer, 0, stride);
-	draw_map_bmp(fd, buffer, stride, m);
+	draw_map_on_bmp(fd, buffer, stride, m);
 	free(buffer);
 	return (0);
 }
