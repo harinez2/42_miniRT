@@ -1,5 +1,13 @@
 #include	"main.h"
 
+static void	validate_before_opening_file(t_map *m, char *filename)
+{
+	if (m->dsp)
+		printf(">>>>> Reading config file...\n");
+	if (ft_strncmp(filename + ft_strlen(filename) - 3, ".rt", 4) != 0)
+		print_error_exit(ERR_SYS_FILENAME, m);
+}
+
 static void	validate_parameters(t_map *m)
 {
 	if (m->ambItsty == -1)
@@ -59,13 +67,10 @@ void	read_config_file(char *filename, t_map *m)
 	int		ret;
 
 	ret = 0;
-	if (ft_strncmp(filename + ft_strlen(filename) - 3, ".rt", 4) != 0)
-		print_error_exit(ERR_SYS_FILENAME, m);
+	validate_before_opening_file(m, filename);
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 		print_error_exit(ERR_SYS_FILEOPEN, m);
-	if (m->dsp)
-		printf(">>>>> Reading config file...\n");
 	while (1)
 	{
 		i = get_next_line(fd, &line);
