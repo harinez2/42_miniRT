@@ -44,26 +44,20 @@ double	calc_cylinder_diffuse_reflection(
 	t_map *m, t_color *color, int i, t_cylinder *tc)
 {
 	t_vec	v_lightDir;
-	t_vec	v_n;
-	double	naiseki;
-	double	nlDot;
+	t_vec	v_nornal;
+	double	innprod_lit_n;
+	t_color	add_color;
 
 	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
-	v_n.x = 2 * (m->camdir.v_tpos.x - tc->center.x);
-	v_n.y = 0;
-	v_n.z = 2 * (m->camdir.v_tpos.z - tc->center.z);
-	naiseki = ft_vecinnerprod(ft_vecnormalize(v_n), v_lightDir);
-	if (naiseki < 0)
-		naiseki = 0;
-	nlDot = adjust_range(naiseki,
-			(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
-	color->r += m->kDif.r * m->lit[i].itsty * m->lit[i].rgb.r
-		* nlDot * tc->rgb.r;
-	color->g += m->kDif.g * m->lit[i].itsty * m->lit[i].rgb.g
-		* nlDot * tc->rgb.g;
-	color->b += m->kDif.b * m->lit[i].itsty * m->lit[i].rgb.b
-		* nlDot * tc->rgb.b;
-	return (naiseki);
+	v_nornal.x = 2 * (m->camdir.v_tpos.x - tc->center.x);
+	v_nornal.y = 0;
+	v_nornal.z = 2 * (m->camdir.v_tpos.z - tc->center.z);
+	innprod_lit_n = ft_vecinnerprod(ft_vecnormalize(v_nornal), v_lightDir);
+	if (innprod_lit_n < 0)
+		innprod_lit_n = 0;
+	add_color = get_addcolor_based_on_innprod(innprod_lit_n, &tc->rgb);
+	add_diffuse_reflection_color(m, i, color, &add_color);
+	return (innprod_lit_n);
 }
 
 // (3) calc specular reflection (kyomen hansya kou)
