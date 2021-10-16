@@ -57,6 +57,11 @@ void		ft_init_triangle(t_triangle *tt);
 double		get_distance_to_triangle(t_vec v_w, t_map *m, t_triangle *tt);
 t_color		get_color_by_rt_triangle(t_map *m, t_triangle *tt);
 // obj_util.c
+void		set_ambient_reflection_color(
+				t_map *m, t_color *color, t_color *add_color);
+t_color		get_addcolor_based_on_innprod(double innprod, t_color *base_color);
+void		add_diffuse_reflection_color(
+				t_map *m, int lit_i, t_color *color, t_color *add_color);
 double		calc_t(double A, double B, double D);
 // output_bitmap.c
 int			write_bmp(t_map *m);

@@ -4,10 +4,7 @@
 void	calc_cone_ambient_reflection(
 	t_map *m, t_color *color, t_cone *tc)
 {
-	set_color(color,
-		m->kAmb.r * m->ambItsty * tc->rgb.r,
-		m->kAmb.g * m->ambItsty * tc->rgb.g,
-		m->kAmb.b * m->ambItsty * tc->rgb.b);
+	set_ambient_reflection_color(m, color, &tc->rgb);
 }
 
 static t_vec	get_normal_vector_at_tpos(t_map *m, t_cone *tc)
@@ -33,24 +30,18 @@ double	calc_cone_diffuse_reflection(
 	t_map *m, t_color *color, int i, t_cone *tc)
 {
 	t_vec	v_lightDir;
-	t_vec	v_n;
-	double	naiseki;
-	double	nlDot;
+	t_vec	v_nornal;
+	double	innprod_lit_n;
+	t_color	add_color;
 
 	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
-	v_n = get_normal_vector_at_tpos(m, tc);
-	naiseki = ft_vecinnerprod(ft_vecnormalize(v_n), v_lightDir);
-	if (naiseki < 0)
-		naiseki = 0;
-	nlDot = adjust_range(naiseki,
-			(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
-	color->r += m->kDif.r * m->lit[i].itsty * m->lit[i].rgb.r
-		* nlDot * tc->rgb.r;
-	color->g += m->kDif.g * m->lit[i].itsty * m->lit[i].rgb.g
-		* nlDot * tc->rgb.g;
-	color->b += m->kDif.b * m->lit[i].itsty * m->lit[i].rgb.b
-		* nlDot * tc->rgb.b;
-	return (naiseki);
+	v_nornal = ft_vecnormalize(get_normal_vector_at_tpos(m, tc));
+	innprod_lit_n = ft_vecinnerprod(v_nornal, v_lightDir);
+	if (innprod_lit_n < 0)
+		innprod_lit_n = 0;
+	add_color = get_addcolor_based_on_innprod(innprod_lit_n, &tc->rgb);
+	add_diffuse_reflection_color(m, i, color, &add_color);
+	return (innprod_lit_n);
 }
 
 // (3) calc specular reflection (kyomen hansya kou)
