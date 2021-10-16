@@ -37,8 +37,6 @@ void		calc_plane_specular_reflection(
 t_color		get_color_by_rt_plane(t_map *m, t_plane *tp);
 // obj_sphere.c
 double		get_distance_to_sphere(t_vec v_w, t_map *m, t_sphere *ts);
-void		calc_sphere_ambient_reflection(
-				t_map *m, t_color *color, t_sphere *ts);
 double		calc_sphere_diffuse_reflection(
 				t_map *m, t_color *color, int i, t_sphere *ts);
 void		calc_sphere_specular_reflection(

@@ -15,39 +15,23 @@ double	get_distance_to_sphere(t_vec v_w, t_map *m, t_sphere *ts)
 	return (cv.t);
 }
 
-//(1) ambient light (kankyo kou)
-void	calc_sphere_ambient_reflection(
-	t_map *m, t_color *color, t_sphere *ts)
-{
-	set_color(color,
-		m->kAmb.r * m->ambItsty * ts->rgb.r,
-		m->kAmb.g * m->ambItsty * ts->rgb.g,
-		m->kAmb.b * m->ambItsty * ts->rgb.b);
-}
-
 // (2) calc diffuse reflection (kakusan hansya kou)
 double	calc_sphere_diffuse_reflection(
 	t_map *m, t_color *color, int i, t_sphere *ts)
 {
 	t_vec	v_lightDir;
-	t_vec	v_sphereN;
-	double	naiseki;
-	double	nlDot;
+	t_vec	v_nornal;
+	double	innprod_lit_n;
+	t_color	add_color;
 
 	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
-	v_sphereN = ft_vecnormalize(ft_vecsub(m->camdir.v_tpos, ts->center));
-	naiseki = ft_vecinnerprod(v_sphereN, v_lightDir);
-	if (naiseki < 0)
-		naiseki = 0;
-	nlDot = adjust_range(naiseki,
-			(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
-	color->r += m->kDif.r * m->lit[i].itsty * m->lit[i].rgb.r
-		* nlDot * ts->rgb.r;
-	color->g += m->kDif.g * m->lit[i].itsty * m->lit[i].rgb.g
-		* nlDot * ts->rgb.g;
-	color->b += m->kDif.b * m->lit[i].itsty * m->lit[i].rgb.b
-		* nlDot * ts->rgb.b;
-	return (naiseki);
+	v_nornal = ft_vecnormalize(ft_vecsub(m->camdir.v_tpos, ts->center));
+	innprod_lit_n = ft_vecinnerprod(v_nornal, v_lightDir);
+	if (innprod_lit_n < 0)
+		innprod_lit_n = 0;
+	add_color = adjust_color_level(&ts->rgb, innprod_lit_n);
+	add_diffuse_reflection_color(m, i, color, &add_color);
+	return (innprod_lit_n);
 }
 
 // (3) calc specular reflection (kyomen hansya kou)
@@ -55,24 +39,18 @@ void	calc_sphere_specular_reflection(
 	t_map *m, t_color *color, int i, t_sphere *ts)
 {
 	t_calc_light	cl;
-	t_vec			v_sphereN;
+	t_color			add_color;
 
-	v_sphereN = ft_vecnormalize(ft_vecsub(m->camdir.v_tpos, ts->center));
 	cl.v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
-	cl.naiseki = ft_vecinnerprod(v_sphereN, cl.v_lightDir);
-	cl.refDir = ft_vecsub(ft_vecmult(v_sphereN, 2 * cl.naiseki), cl.v_lightDir);
+	cl.v_n = ft_vecnormalize(ft_vecsub(m->camdir.v_tpos, ts->center));
+	cl.naiseki = ft_vecinnerprod(cl.v_n, cl.v_lightDir);
+	cl.refDir = ft_vecsub(ft_vecmult(cl.v_n, 2 * cl.naiseki), cl.v_lightDir);
 	cl.invEyeDir = ft_vecnormalize(ft_vecmult(m->camdir.v_de, -1));
 	cl.vrDot = ft_vecinnerprod(cl.invEyeDir, cl.refDir);
 	if (cl.vrDot < 0)
 		cl.vrDot = 0;
-	cl.vrDotPow = adjust_range(pow(cl.vrDot, m->shininess),
-			(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
-	color->r += m->kSpe.r * m->lit[i].itsty * m->lit[i].rgb.r
-		* cl.vrDotPow * ts->rgb.r;
-	color->g += m->kSpe.g * m->lit[i].itsty * m->lit[i].rgb.g
-		* cl.vrDotPow * ts->rgb.g;
-	color->b += m->kSpe.b * m->lit[i].itsty * m->lit[i].rgb.b
-		* cl.vrDotPow * ts->rgb.b;
+	add_color = adjust_color_level(&ts->rgb, pow(cl.vrDot, m->shininess));
+	add_specular_reflection_color(m, i, color, &add_color);
 }
 
 //tpos	across point of eyevec and sphere surface(pi)
@@ -83,7 +61,7 @@ t_color	get_color_by_rt_sphere(t_map *m, t_sphere *ts)
 	double	hit_t;
 	double	naiseki;
 
-	calc_sphere_ambient_reflection(m, &color, ts);
+	set_ambient_reflection_color(m, &color, &ts->rgb);
 	i = 0;
 	while (i < m->lit_cnt)
 	{
