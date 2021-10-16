@@ -25,7 +25,7 @@ static void	set_bmp_header(uint8_t *header_buffer, int stride, t_map *m)
 	info->biClrImportant = 0;
 }
 
-static int	draw_map_bmp(FILE *fp, uint8_t *buffer, int stride, t_map *m)
+static int	draw_map_bmp(int fd, uint8_t *buffer, int stride, t_map *m)
 {
 	int		x;
 	int		y;
@@ -45,7 +45,7 @@ static int	draw_map_bmp(FILE *fp, uint8_t *buffer, int stride, t_map *m)
 			*row++ = c.r;
 			x++;
 		}
-		if (fwrite(buffer, stride, 1, fp) != 1)
+		if (write(fd, buffer, stride) <= 0)
 		{
 			free(buffer);
 			return (-1);
@@ -55,7 +55,7 @@ static int	draw_map_bmp(FILE *fp, uint8_t *buffer, int stride, t_map *m)
 	return (0);
 }
 
-static int	write_bmp_simple_stream(FILE *fp, t_map *m)
+static int	write_bmp_simple_stream(int fd, t_map *m)
 {
 	uint8_t		header_buffer[DEFAULT_HEADER_SIZE];
 	int			stride;
@@ -66,13 +66,13 @@ static int	write_bmp_simple_stream(FILE *fp, t_map *m)
 	if (!buffer)
 		return (-1);
 	set_bmp_header(header_buffer, stride, m);
-	if (fwrite(header_buffer, DEFAULT_HEADER_SIZE, 1, fp) != 1)
+	if (write(fd, header_buffer, DEFAULT_HEADER_SIZE) <= 0)
 	{
 		free(buffer);
 		return (-1);
 	}
 	memset(buffer, 0, stride);
-	draw_map_bmp(fp, buffer, stride, m);
+	draw_map_bmp(fd, buffer, stride, m);
 	free(buffer);
 	return (0);
 }
@@ -81,17 +81,17 @@ int	write_bmp(t_map *m)
 {
 	int		ret;
 	char	*filename;
-	FILE	*fp;
+	int		fd;
 
 	filename = "out.bmp";
 	ret = -1;
-	fp = fopen(filename, "wb");
-	if (fp == NULL)
+	fd = open(filename, O_CREAT | O_WRONLY);
+	if (fd < 0)
 	{
 		perror(filename);
 		return (ret);
 	}
-	ret = write_bmp_simple_stream(fp, m);
-	fclose(fp);
+	ret = write_bmp_simple_stream(fd, m);
+	close(fd);
 	return (ret);
 }
