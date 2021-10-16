@@ -1,5 +1,16 @@
 #include	"main.h"
 
+static void	calc_ABCD(t_calc_crossing *cv, t_multdouble *md1, t_multdouble *md2)
+{
+	cv->A = md2->a * cv->v_de.x * cv->v_de.x + md2->b * cv->v_de.y * cv->v_de.y
+		+ md2->c * cv->v_de.z * cv->v_de.z;
+	cv->B = 2 * (md2->a * md1->a * cv->v_de.x + md2->b * md1->b * cv->v_de.y
+			+ md2->c * md1->c * cv->v_de.z);
+	cv->C = md2->a * md1->a * md1->a + md2->b * md1->b * md1->b
+		+ md2->c * md1->c * md1->c;
+	cv->D = cv->B * cv->B - 4 * cv->A * cv->C;
+}
+
 static double	check_cone_direction(t_map *m, t_cone *tc, t_calc_crossing	cv)
 {
 	t_vec		v_tpos;
@@ -42,13 +53,7 @@ double	get_distance_to_cone(t_vec v_w, t_map *m, t_cone *tc)
 	md2.a = tc->normal.x * tc->normal.x / (l * l) - 1;
 	md2.b = tc->normal.y * tc->normal.y / (l * l) - 1;
 	md2.c = tc->normal.z * tc->normal.z / (l * l) - 1;
-	cv.A = md2.a * cv.v_de.x * cv.v_de.x + md2.b * cv.v_de.y * cv.v_de.y
-		+ md2.c * cv.v_de.z * cv.v_de.z;
-	cv.B = 2 * (md2.a * md1.a * cv.v_de.x + md2.b * md1.b * cv.v_de.y
-			+ md2.c * md1.c * cv.v_de.z);
-	cv.C = md2.a * md1.a * md1.a + md2.b * md1.b * md1.b
-		+ md2.c * md1.c * md1.c;
-	cv.D = cv.B * cv.B - 4 * cv.A * cv.C;
+	calc_ABCD(&cv, &md1, &md2);
 	cv.t = calc_t(cv.A, cv.B, cv.D);
 	if (cv.t > 0 && check_cone_direction(m, tc, cv) == -1)
 		return (-1);

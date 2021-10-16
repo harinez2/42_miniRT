@@ -46,10 +46,7 @@ static int	draw_map_on_bmp(int fd, uint8_t *buffer, int stride, t_map *m)
 			x++;
 		}
 		if (write(fd, buffer, stride) <= 0)
-		{
-			free(buffer);
 			return (-1);
-		}
 		y++;
 	}
 	return (0);
