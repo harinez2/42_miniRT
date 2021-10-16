@@ -7,19 +7,7 @@
 // 6	2	bfReserved1		(reserved)
 // 8	2	bfReserved2		(reserved)
 // 10	4	bfOffBits		offset(byte) from file top to img data
-static void	set_bmp_file_header(uint8_t *header_buffer, int stride, t_map *m)
-{
-	int	i;
-
-	ft_memcpy(header_buffer, "BM", 2);
-	i = DEFAULT_HEADER_SIZE + stride * m->window_y;
-	ft_memcpy(header_buffer + 2, &i, 4);
-	ft_memset(header_buffer + 6, 0, 2);
-	ft_memset(header_buffer + 8, 0, 2);
-	i = DEFAULT_HEADER_SIZE;
-	ft_memcpy(header_buffer + 10, &i, 4);
-}
-
+//
 // info header (40 byte)
 // pos	size	name		desc
 // 14	4	biSize			info header size
@@ -33,16 +21,21 @@ static void	set_bmp_file_header(uint8_t *header_buffer, int stride, t_map *m)
 // 42	4	biYPelsPerMeter	y resolution in pixel
 // 46	4	biClrUsed		stored palette num
 // 50	4	biClrImportant	important color num
-static void	set_bmp_info_header(uint8_t *header_buffer, int stride, t_map *m)
+static void	set_bmp_header(uint8_t *header_buffer, int stride, t_map *m)
 {
 	int	i;
 
+	ft_memcpy(header_buffer, "BM", 2);
+	i = DEFAULT_HEADER_SIZE + stride * m->window_y;
+	ft_memcpy(header_buffer + 2, &i, 4);
+	ft_memset(header_buffer + 6, 0, 2);
+	ft_memset(header_buffer + 8, 0, 2);
+	i = DEFAULT_HEADER_SIZE;
+	ft_memcpy(header_buffer + 10, &i, 4);
 	i = INFO_HEADER_SIZE;
 	ft_memcpy(header_buffer + 14, &i, 4);
-	i = m->window_x;
-	ft_memcpy(header_buffer + 18, &i, 4);
-	i = m->window_y;
-	ft_memcpy(header_buffer + 22, &i, 4);
+	ft_memcpy(header_buffer + 18, &(m->window_x), 4);
+	ft_memcpy(header_buffer + 22, &(m->window_y), 4);
 	i = 1;
 	ft_memcpy(header_buffer + 26, &i, 2);
 	i = 24;
@@ -93,8 +86,7 @@ static int	write_bmp_simple_stream(int fd, t_map *m)
 	buffer = malloc(stride);
 	if (!buffer)
 		return (-1);
-	set_bmp_file_header(header_buffer, stride, m);
-	set_bmp_info_header(header_buffer, stride, m);
+	set_bmp_header(header_buffer, stride, m);
 	if (write(fd, header_buffer, DEFAULT_HEADER_SIZE) <= 0)
 	{
 		free(buffer);
