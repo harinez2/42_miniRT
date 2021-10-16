@@ -51,7 +51,7 @@ static t_color	get_color_with_lightning(t_vec v_w, t_map *m, int i, double t)
 	m->camdir.v_tpos
 		= ft_vecadd(m->curr_cam.pos, ft_vecmult(m->camdir.v_de, t));
 	if (i == -1)
-		set_color(&color, 30, 60, 60);
+		set_color(&color, 0, 0, 0);
 	else if (m->obj_type[i] == CMD_SPHERE)
 		color = get_color_by_rt_sphere(m, (t_sphere *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_PLANE)
