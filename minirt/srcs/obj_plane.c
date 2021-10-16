@@ -25,10 +25,7 @@ double	get_distance_to_plane(t_vec v_w, t_map *m, t_plane *tp)
 void	calc_plane_ambient_reflection(
 	t_map *m, t_color *color, t_plane *tp)
 {
-	set_color(color,
-		m->kAmb.r * m->ambItsty * tp->rgb.r,
-		m->kAmb.g * m->ambItsty * tp->rgb.g,
-		m->kAmb.b * m->ambItsty * tp->rgb.b);
+	set_ambient_reflection_color(m, color, &tp->rgb);
 }
 
 // (2) calc diffuse reflection (kakusan hansya kou)
