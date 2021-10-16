@@ -4,10 +4,6 @@
 // error_clean.c
 void		print_error_exit(int errNo, t_map *m);
 void		free_map(t_map *m);
-// lib_ft.c
-int			ft_strncmp(char *s1, char *s2, unsigned int n);
-int			is_whitespace(const char c);
-int			ft_atoll(char *s, long long *retnum);
 // main.c
 void		init_m(t_map *m);
 int			main(int argc, char **argv);
@@ -43,19 +39,12 @@ void		add_specular_reflection_color(
 double		calc_t(double A, double B, double D);
 // output_bitmap.c
 int			write_bmp(t_map *m);
-// output_screen.c
-void		calc_distance_cam_scr(t_map *m);
-void		calc_screen_unitvec_x(t_map *m);
-void		calc_screen_unitvec_y(t_map *m);
 // output_window.c
 int			draw_map_on_window(t_map *m);
 void		display_window(t_map *m);
 // output_window_handler.c
 int			keypress_handler(int key, t_map *m);
 void		close_win_hanlder(t_map *m, int called_by);
-// raytracer.c
-int			get_minimum_distance_to_obj(t_vec v_w, t_map *m, double *hit_t);
-t_color		get_color_on_screen(t_map *m, int x, int y);
 // readfile.c
 void		read_config_file(char *filename, t_map *m);
 // readfile_config.c
@@ -77,11 +66,20 @@ int			read_file_cylinder(int *i, char *line, t_map *m);
 int			read_file_triangle(int *i, char *line, t_map *m);
 // readfile_objs2d.c
 int			read_file_cone(int *i, char *line, t_map *m);
+// screen_init.c
+void		init_screen_values(t_map *m);
+// screen_raytrace.c
+int			get_minimum_distance_to_obj(t_vec v_w, t_map *m, double *hit_t);
+t_color		get_color_on_screen(t_map *m, int x, int y);
 // util_color.c
 int			ft_color(int red, int green, int blue);
 void		set_color(t_color *c, double red, double green, double blue);
 t_color		set_rgb_inrange(t_color c);
 void		ft_colorprint(t_color *c);
+// util_lib.c
+int			ft_strncmp(char *s1, char *s2, unsigned int n);
+int			is_whitespace(const char c);
+int			ft_atoll(char *s, long long *retnum);
 // util_print_m.c
 void		print_m(t_map *m);
 // util_print_m_objs.c

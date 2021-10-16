@@ -1,6 +1,6 @@
 #include	"main.h"
 
-void	calc_distance_cam_scr(t_map *m)
+static void	calc_distance_cam_scr(t_map *m)
 {
 	double	tan_theta_div_two;
 
@@ -16,7 +16,7 @@ void	calc_distance_cam_scr(t_map *m)
 }
 
 // unitvec x is a unit vector which the z-axis vec is zero.
-void	calc_screen_unitvec_x(t_map *m)
+static void	calc_screen_unitvec_x(t_map *m)
 {
 	if (m->curr_cam.orien.x == 0 && m->curr_cam.orien.y >= 0)
 		m->scr.unitvec_scrx = ft_vec(1, 0, 0);
@@ -44,7 +44,7 @@ void	calc_screen_unitvec_x(t_map *m)
 }
 
 // unitvec y is a unit vector which the x-axis vec is zero.
-void	calc_screen_unitvec_y(t_map *m)
+static void	calc_screen_unitvec_y(t_map *m)
 {
 	if (m->curr_cam.orien.z == 0)
 		m->scr.unitvec_scry = ft_vec(0, 0, 1);
@@ -58,4 +58,11 @@ void	calc_screen_unitvec_y(t_map *m)
 	if (m->dsp)
 		ft_vecprint_with_name("  unitvec_scry(normalized)  ",
 			&m->scr.unitvec_scry);
+}
+
+void	init_screen_values(t_map *m)
+{
+	calc_distance_cam_scr(m);
+	calc_screen_unitvec_x(m);
+	calc_screen_unitvec_y(m);
 }

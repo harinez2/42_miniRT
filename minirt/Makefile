@@ -8,10 +8,9 @@ SRCS		= \
 				gnl/get_next_line.c \
 				gnl/get_next_line_utils.c \
 				$(SRC_DIR)/error_clean.c \
-				$(SRC_DIR)/lib_ft.c \
 				$(SRC_DIR)/main.c \
-				$(SRC_DIR)/obj_cone_getdistance.c \
 				$(SRC_DIR)/obj_cone.c \
+				$(SRC_DIR)/obj_cone_getdistance.c \
 				$(SRC_DIR)/obj_cylinder.c \
 				$(SRC_DIR)/obj_plane.c \
 				$(SRC_DIR)/obj_sphere.c \
@@ -19,16 +18,17 @@ SRCS		= \
 				$(SRC_DIR)/obj_triangle.c \
 				$(SRC_DIR)/obj_util.c \
 				$(SRC_DIR)/output_bitmap.c \
-				$(SRC_DIR)/output_screen.c \
 				$(SRC_DIR)/output_window.c \
 				$(SRC_DIR)/output_window_handler.c \
-				$(SRC_DIR)/raytracer.c \
 				$(SRC_DIR)/readfile.c \
 				$(SRC_DIR)/readfile_config.c \
 				$(SRC_DIR)/readfile_num.c \
 				$(SRC_DIR)/readfile_objs.c \
 				$(SRC_DIR)/readfile_objs2d.c \
+				$(SRC_DIR)/screen_init.c \
+				$(SRC_DIR)/screen_raytrace.c \
 				$(SRC_DIR)/util_color.c \
+				$(SRC_DIR)/util_lib.c \
 				$(SRC_DIR)/util_print_m.c \
 				$(SRC_DIR)/util_print_m_objs.c \
 				$(SRC_DIR)/util_print_m_objs2d.c \
