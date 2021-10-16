@@ -10,7 +10,7 @@ static t_vec	get_normal_vector_at_tpos(t_map *m, t_cone *tc)
 	v_p0_p.y = m->camdir.v_tpos.y - tc->vertex.y;
 	v_p0_p.z = m->camdir.v_tpos.z - tc->vertex.z;
 	t = (v_p0_p.x * tc->normal.x + v_p0_p.y * tc->normal.y
-		+ v_p0_p.z * tc->normal.z)
+			+ v_p0_p.z * tc->normal.z)
 		/ (v_p0_p.x * v_p0_p.x + v_p0_p.y * v_p0_p.y + v_p0_p.z * v_p0_p.z);
 	v_n.x = t * m->camdir.v_tpos.x - t * tc->vertex.x - tc->normal.x;
 	v_n.y = t * m->camdir.v_tpos.y - t * tc->vertex.y - tc->normal.y;
@@ -55,7 +55,6 @@ void	calc_cone_reflection(
 		cl.vrDot = 0;
 	add_color = adjust_color_level(&tc->rgb, pow(cl.vrDot, m->shininess));
 	add_specular_reflection_color(m, i, color, &add_color);
-	
 }
 
 // tpos			：cross point (pi) of the v_cam and the surface of the object

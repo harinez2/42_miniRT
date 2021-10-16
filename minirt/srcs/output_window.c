@@ -13,7 +13,8 @@ int	draw_map_on_window(t_map *m)
 		while (x < m->window_x)
 		{
 			color = get_color_on_screen(m, x, y);
-			mlx_pixel_put(m->mlx, m->win, x, y, ft_color(color.r, color.g, color.b));
+			mlx_pixel_put(
+				m->mlx, m->win, x, y, ft_color(color.r, color.g, color.b));
 			x++;
 		}
 		y++;

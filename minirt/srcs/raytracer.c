@@ -100,5 +100,5 @@ t_color	get_color_on_screen(t_map *m, int x, int y)
 		ft_vecprint(&v_w);
 		printf("  /  %.2f, %.2f, %.2f\n", color.r, color.g, color.b);
 	}
-	return(color);
+	return (color);
 }
