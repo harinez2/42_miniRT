@@ -44,7 +44,7 @@ void	add_specular_reflection_color(
 		* add_color->b;
 }
 
-double	calc_t(double A, double B, double D)
+double	calc_minimum_t(double A, double B, double D)
 {
 	double	t1;
 	double	t2;

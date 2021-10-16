@@ -54,7 +54,7 @@ double	get_distance_to_cone(t_vec v_w, t_map *m, t_cone *tc)
 	md2.b = tc->normal.y * tc->normal.y / (l * l) - 1;
 	md2.c = tc->normal.z * tc->normal.z / (l * l) - 1;
 	calc_ABCD(&cv, &md1, &md2);
-	cv.t = calc_t(cv.A, cv.B, cv.D);
+	cv.t = calc_minimum_t(cv.A, cv.B, cv.D);
 	if (cv.t > 0 && check_cone_direction(m, tc, cv) == -1)
 		return (-1);
 	else if (cv.t > 0 && check_cone_length(m, tc, cv) == -1)

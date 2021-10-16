@@ -36,7 +36,7 @@ void		add_diffuse_reflection_color(
 				t_map *m, int lit_i, t_color *color, t_color *add_color);
 void		add_specular_reflection_color(
 				t_map *m, int lit_i, t_color *color, t_color *add_color);
-double		calc_t(double A, double B, double D);
+double		calc_minimum_t(double A, double B, double D);
 // output_bitmap.c
 int			write_bmp(t_map *m);
 // output_window.c

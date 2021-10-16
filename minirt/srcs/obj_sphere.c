@@ -11,7 +11,7 @@ double	get_distance_to_sphere(t_vec v_w, t_map *m, t_sphere *ts)
 	cv.B = 2 * ft_vecinnerprod(cv.v_de, v_center_cam);
 	cv.C = ft_vecnormsq(v_center_cam) - ts->diameter * ts->diameter;
 	cv.D = cv.B * cv.B - 4 * cv.A * cv.C;
-	cv.t = calc_t(cv.A, cv.B, cv.D);
+	cv.t = calc_minimum_t(cv.A, cv.B, cv.D);
 	return (cv.t);
 }
 
