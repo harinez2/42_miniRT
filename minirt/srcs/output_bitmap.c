@@ -1,28 +1,59 @@
 #include	"main.h"
 
-static void	set_bmp_header(uint8_t *header_buffer, int stride, t_map *m)
+// file header (14 byte)
+// pos	size	name		desc
+// 0	2	bfType			'BM'
+// 2	4	bfSize			file size(byte)
+// 6	2	bfReserved1		(reserved)
+// 8	2	bfReserved2		(reserved)
+// 10	4	bfOffBits		offset(byte) from file top to img data
+static void	set_bmp_file_header(uint8_t *header_buffer, int stride, t_map *m)
 {
-	t_bmp_file_header	*file;
-	t_bmp_info_header	*info;
+	int	i;
 
-	file = (t_bmp_file_header *)header_buffer;
-	info = (t_bmp_info_header *)(header_buffer + FILE_HEADER_SIZE);
-	file->bfType = FILE_TYPE;
-	file->bfSize = DEFAULT_HEADER_SIZE + stride * m->window_y;
-	file->bfReserved1 = 0;
-	file->bfReserved2 = 0;
-	file->bfOffBits = DEFAULT_HEADER_SIZE;
-	info->biSize = INFO_HEADER_SIZE;
-	info->biWidth = m->window_x;
-	info->biHeight = m->window_y;
-	info->biPlanes = 1;
-	info->biBitCount = 24;
-	info->biCompression = 0;
-	info->biSizeImage = stride * m->window_y;
-	info->biXPelsPerMeter = 0;
-	info->biYPelsPerMeter = 0;
-	info->biClrUsed = 0;
-	info->biClrImportant = 0;
+	ft_memcpy(header_buffer, "BM", 2);
+	i = DEFAULT_HEADER_SIZE + stride * m->window_y;
+	ft_memcpy(header_buffer + 2, &i, 4);
+	ft_memset(header_buffer + 6, 0, 2);
+	ft_memset(header_buffer + 8, 0, 2);
+	i = DEFAULT_HEADER_SIZE;
+	ft_memcpy(header_buffer + 10, &i, 4);
+}
+
+// info header (40 byte)
+// pos	size	name		desc
+// 14	4	biSize			info header size
+// 18	4	biWidth			img width(piexl)
+// 22	4	biHeight		img height(pixel)
+// 26	2	biPlanes		plane num(always 1)
+// 28	2	biBitCount		color bit
+// 30	4	biCompression	compression format
+// 34	4	biSizeImage		img data size
+// 38	4	biXPelsPerMeter	x resolution in pixel
+// 42	4	biYPelsPerMeter	y resolution in pixel
+// 46	4	biClrUsed		stored palette num
+// 50	4	biClrImportant	important color num
+static void	set_bmp_info_header(uint8_t *header_buffer, int stride, t_map *m)
+{
+	int	i;
+
+	i = INFO_HEADER_SIZE;
+	ft_memcpy(header_buffer + 14, &i, 4);
+	i = m->window_x;
+	ft_memcpy(header_buffer + 18, &i, 4);
+	i = m->window_y;
+	ft_memcpy(header_buffer + 22, &i, 4);
+	i = 1;
+	ft_memcpy(header_buffer + 26, &i, 2);
+	i = 24;
+	ft_memcpy(header_buffer + 28, &i, 2);
+	ft_memset(header_buffer + 30, 0, 4);
+	i = stride * m->window_y;
+	ft_memcpy(header_buffer + 34, &i, 4);
+	ft_memset(header_buffer + 38, 0, 4);
+	ft_memset(header_buffer + 42, 0, 4);
+	ft_memset(header_buffer + 46, 0, 4);
+	ft_memset(header_buffer + 50, 0, 4);
 }
 
 static int	draw_map_on_bmp(int fd, uint8_t *buffer, int stride, t_map *m)
@@ -62,7 +93,8 @@ static int	write_bmp_simple_stream(int fd, t_map *m)
 	buffer = malloc(stride);
 	if (!buffer)
 		return (-1);
-	set_bmp_header(header_buffer, stride, m);
+	set_bmp_file_header(header_buffer, stride, m);
+	set_bmp_info_header(header_buffer, stride, m);
 	if (write(fd, header_buffer, DEFAULT_HEADER_SIZE) <= 0)
 	{
 		free(buffer);
@@ -82,7 +114,7 @@ int	write_bmp(t_map *m)
 
 	filename = "out.bmp";
 	ret = -1;
-	fd = open(filename, O_CREAT | O_WRONLY);
+	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC);
 	if (fd < 0)
 	{
 		perror(filename);

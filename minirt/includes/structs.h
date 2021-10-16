@@ -185,39 +185,6 @@ typedef struct s_cone
 
 // Bitmap ***********************************************************
 
-# pragma pack(2)
-
-//	bfType		file type (must be "BM")
-//	bfOffBits	offset between the beginning of the file and image info
-typedef struct s_bmp_file_header {
-	uint16_t	bfType;
-	uint32_t	bfSize;
-	uint16_t	bfReserved1;
-	uint16_t	bfReserved2;
-	uint32_t	bfOffBits;
-}	t_bmp_file_header;
-
-# pragma pack()
-
-// biPlanes				num of pic(usually 1)
-// biXPelsPerMeter		width resolution
-// biYPelsPerMeter		height resolution
-// biClrUsed			used color num in color palette
-// biClrImportant		important color num in color palette
-typedef struct s_bmp_info_header {
-	uint32_t	biSize;
-	int32_t		biWidth;
-	int32_t		biHeight;
-	uint16_t	biPlanes;
-	uint16_t	biBitCount;
-	uint32_t	biCompression;
-	uint32_t	biSizeImage;
-	int32_t		biXPelsPerMeter;
-	int32_t		biYPelsPerMeter;
-	uint32_t	biClrUsed;
-	uint32_t	biClrImportant;
-}	t_bmp_info_header;
-
 // color information of RGBA
 typedef struct s_color_rgba {
 	uint8_t	r;
