@@ -33,10 +33,7 @@ double	get_distance_to_cylinder(t_vec v_w, t_map *m, t_cylinder *tc)
 void	calc_cylinder_ambient_reflection(
 	t_map *m, t_color *color, t_cylinder *tc)
 {
-	set_color(color,
-		m->kAmb.r * m->ambItsty * tc->rgb.r,
-		m->kAmb.g * m->ambItsty * tc->rgb.g,
-		m->kAmb.b * m->ambItsty * tc->rgb.b);
+	set_ambient_reflection_color(m, color, &tc->rgb);
 }
 
 // (2) calc diffuse reflection (kakusan hansya kou)
