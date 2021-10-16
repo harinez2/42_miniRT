@@ -9,16 +9,16 @@ void	set_ambient_reflection_color(
 		m->kAmb.b * m->ambItsty * add_color->b);
 }
 
-t_color	get_addcolor_based_on_innprod(double innprod, t_color *base_color)
+t_color	adjust_color_level(t_color *base_color, double innprod)
 {
 	double	innprod_color;
 	t_color	add_color;
 
 	innprod_color = adjust_range(innprod,
 			(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
-	add_color.r = innprod_color * base_color->r;
-	add_color.g = innprod_color * base_color->g;
-	add_color.b = innprod_color * base_color->b;
+	add_color.r = base_color->r * innprod_color;
+	add_color.g = base_color->g * innprod_color;
+	add_color.b = base_color->b * innprod_color;
 	return (add_color);
 }
 

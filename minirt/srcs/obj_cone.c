@@ -39,7 +39,7 @@ double	calc_cone_diffuse_reflection(
 	innprod_lit_n = ft_vecinnerprod(v_nornal, v_lightDir);
 	if (innprod_lit_n < 0)
 		innprod_lit_n = 0;
-	add_color = get_addcolor_based_on_innprod(innprod_lit_n, &tc->rgb);
+	add_color = adjust_color_level(&tc->rgb, innprod_lit_n);
 	add_diffuse_reflection_color(m, i, color, &add_color);
 	return (innprod_lit_n);
 }
