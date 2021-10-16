@@ -4,6 +4,8 @@ static void	print_error_msg(int errNo)
 {
 	if (errNo == ERR_SYS_MALLOC)
 		printf("Error\nFailed to allocate memory.\n");
+	else if (errNo == ERR_SYS_FILENAME)
+		printf("Error\nFile extension is not '.rt'.\n");
 	else if (errNo == ERR_SYS_FILEOPEN)
 		printf("Error\nFailed to open file.\n");
 	else if (errNo == ERR_SYS_FILEWRITE)

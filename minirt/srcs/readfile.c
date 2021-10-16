@@ -59,6 +59,8 @@ void	read_config_file(char *filename, t_map *m)
 	int		ret;
 
 	ret = 0;
+	if (ft_strncmp(filename + ft_strlen(filename) - 3, ".rt", 4) != 0)
+		print_error_exit(ERR_SYS_FILENAME, m);
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 		print_error_exit(ERR_SYS_FILEOPEN, m);
