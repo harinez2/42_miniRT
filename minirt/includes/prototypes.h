@@ -28,8 +28,6 @@ void		calc_cylinder_reflection(
 t_color		get_color_by_rt_cylinder(t_map *m, t_cylinder *tc);
 // obj_plane.c
 double		get_distance_to_plane(t_vec v_w, t_map *m, t_plane *tp);
-void		calc_plane_ambient_reflection(
-				t_map *m, t_color *color, t_plane *tp);
 double		calc_plane_diffuse_reflection(
 				t_map *m, t_color *color, int i, t_plane *tp);
 void		calc_plane_specular_reflection(
