@@ -49,6 +49,7 @@ void	calc_cone_reflection(
 	t_map *m, t_color *color, int i, t_cone *tc)
 {
 	t_calc_light	cl;
+	t_color			add_color;
 
 	cl.v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
 	cl.v_n = get_normal_vector_at_tpos(m, tc);
@@ -59,14 +60,9 @@ void	calc_cone_reflection(
 	cl.vrDot = ft_vecinnerprod(cl.invEyeDir, cl.refDir);
 	if (cl.vrDot < 0)
 		cl.vrDot = 0;
-	cl.vrDotPow = adjust_range(pow(cl.vrDot, m->shininess),
-			(t_minmax){.min = 0, .max = 1}, (t_minmax){.min = 0, .max = 255});
-	color->r += m->kSpe.r * m->lit[i].itsty * m->lit[i].rgb.r
-		* cl.vrDotPow * tc->rgb.r;
-	color->g += m->kSpe.g * m->lit[i].itsty * m->lit[i].rgb.g
-		* cl.vrDotPow * tc->rgb.g;
-	color->b += m->kSpe.b * m->lit[i].itsty * m->lit[i].rgb.b
-		* cl.vrDotPow * tc->rgb.b;
+	add_color = adjust_color_level(&tc->rgb, pow(cl.vrDot, m->shininess));
+	add_specular_reflection_color(m, i, color, &add_color);
+	
 }
 
 // tpos			：cross point (pi) of the v_cam and the surface of the object

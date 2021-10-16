@@ -33,6 +33,17 @@ void	add_diffuse_reflection_color(
 		* add_color->b;
 }
 
+void	add_specular_reflection_color(
+	t_map *m, int lit_i, t_color *color, t_color *add_color)
+{
+	color->r += m->kSpe.r * m->lit[lit_i].itsty * m->lit[lit_i].rgb.r
+		* add_color->r;
+	color->g += m->kSpe.g * m->lit[lit_i].itsty * m->lit[lit_i].rgb.g
+		* add_color->g;
+	color->b += m->kSpe.b * m->lit[lit_i].itsty * m->lit[lit_i].rgb.b
+		* add_color->b;
+}
+
 double	calc_t(double A, double B, double D)
 {
 	double	t1;
