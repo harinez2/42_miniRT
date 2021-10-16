@@ -52,6 +52,9 @@ $(NAME): $(OBJS)
 .c.o: $(SRCS)
 	$(CC) $(CFLAGS) $(INCLUDE) $(CCFLAGS_L) -c $< -o $@
 
+debug:
+	$(CC) $(CFLAGS) $(INCLUDE) $(SRCS) $(CCFLAGS_L) $(LIBNAME) -o $(NAME)
+
 clean:
 	$(RM) $(OBJS)
 
