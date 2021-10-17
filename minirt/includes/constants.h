@@ -8,7 +8,6 @@
 # define MAX_LIGHT_COUNT	30
 
 // for bmp file
-# define FILE_TYPE				0x4D42	// value of "BM" in little endian
 # define FILE_HEADER_SIZE		14
 # define INFO_HEADER_SIZE		40
 # define DEFAULT_HEADER_SIZE	54	// FILE_HEADER_SIZE + INFO_HEADER_SIZE
