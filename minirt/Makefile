@@ -40,6 +40,7 @@ SRCS		= \
 OBJS		= $(SRCS:.c=.o)
 CFLAGS		= -Wall -Werror -Wextra 
 CCFLAGS_L	= -L$(CLONE_DIR) -L$(INCLIB) -lmlx -lXext -lX11 -lm -lbsd
+DBGFLG		= -g3 -fsanitize=address
 CC			= gcc
 RM			= rm -f
 
@@ -53,7 +54,7 @@ $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(INCLUDE) $(CCFLAGS_L) -c $< -o $@
 
 debug:
-	$(CC) $(CFLAGS) $(INCLUDE) $(SRCS) $(CCFLAGS_L) $(LIBNAME) -o $(NAME)
+	$(CC) $(CFLAGS) $(INCLUDE) $(SRCS) $(CCFLAGS_L) $(DBGFLG) $(LIBNAME) -o $(NAME)
 
 clean:
 	$(RM) $(OBJS)
