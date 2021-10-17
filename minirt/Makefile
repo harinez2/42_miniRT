@@ -5,8 +5,8 @@ INCLIB		= /usr/lib
 INCLUDE		= -I./includes -I/usr/include -I$(CLONE_DIR)
 SRC_DIR		= srcs
 SRCS		= \
-				gnl/get_next_line.c \
-				gnl/get_next_line_utils.c \
+				$(SRC_DIR)/gnl/get_next_line.c \
+				$(SRC_DIR)/gnl/get_next_line_utils.c \
 				$(SRC_DIR)/error_clean.c \
 				$(SRC_DIR)/main.c \
 				$(SRC_DIR)/obj_cone.c \

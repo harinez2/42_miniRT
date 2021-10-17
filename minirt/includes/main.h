@@ -6,7 +6,7 @@
 # include	<limits.h>
 # include	"mlx.h"
 # include	"mlx_int.h"
-# include	"../gnl/get_next_line.h"
+# include	"../srcs/gnl/get_next_line.h"
 
 # include	"constants.h"
 # include	"structs.h"
