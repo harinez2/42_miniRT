@@ -31,6 +31,8 @@ int	read_file_ambient(int *i, char *line, t_map *m)
 int	read_file_camera(int *i, char *line, t_map *m)
 {
 	(*i)++;
+	if (m->cam_cnt >= MAX_CAMERA_COUNT)
+		print_error_exit(ERR_RD_TOOMUCH_CAM_SPECIFIED, m);
 	m->cam[m->cam_cnt].pos = read_xyz(i, line, m);
 	m->cam[m->cam_cnt].orien = read_xyz(i, line, m);
 	m->cam[m->cam_cnt].fov = read_double(i, line, m);
@@ -43,6 +45,8 @@ int	read_file_camera(int *i, char *line, t_map *m)
 int	read_file_light(int *i, char *line, t_map *m)
 {
 	(*i)++;
+	if (m->lit_cnt >= MAX_LIGHT_COUNT)
+		print_error_exit(ERR_RD_TOOMUCH_LIT_SPECIFIED, m);
 	m->lit[m->lit_cnt].pos = read_xyz(i, line, m);
 	m->lit[m->lit_cnt].itsty = read_double(i, line, m);
 	m->lit[m->lit_cnt++].rgb = read_rgb(i, line, m);
