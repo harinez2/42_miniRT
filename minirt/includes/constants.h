@@ -12,11 +12,6 @@
 # define INFO_HEADER_SIZE		40
 # define DEFAULT_HEADER_SIZE	54	// FILE_HEADER_SIZE + INFO_HEADER_SIZE
 
-# define COLOR_TYPE_INDEX	0
-# define COLOR_TYPE_GRAY	1
-# define COLOR_TYPE_RGB		2
-# define COLOR_TYPE_RGBA	3
-
 # define SUCCESS			0
 # define FAIL				-1
 

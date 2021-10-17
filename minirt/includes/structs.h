@@ -183,37 +183,4 @@ typedef struct s_cone
 	t_color		rgb;
 }	t_cone;
 
-// Bitmap ***********************************************************
-
-// color information of RGBA
-typedef struct s_color_rgba {
-	uint8_t	r;
-	uint8_t	g;
-	uint8_t	b;
-	uint8_t	a;
-}	t_color_rgba;
-
-/**
- * @brief pixcel information(union)
- * Show either RGBA, gray scale, or color index.
- * It's impossible to define which expression format is used by itself.
- * c	RGBA
- * g	gray scale
- * i	color index
- */
-typedef union u_pixcel {
-	t_color_rgba	c;
-	uint8_t			g;
-	uint8_t			i;
-}	t_pixcel;
-
-typedef struct s_image {
-	uint32_t		width;
-	uint32_t		height;
-	uint16_t		color_type;
-	uint16_t		palette_num;
-	t_color_rgba	*palette;
-	t_pixcel		**map;
-}	t_image;
-
 #endif

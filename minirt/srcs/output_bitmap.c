@@ -92,7 +92,6 @@ static int	write_bmp_simple_stream(int fd, t_map *m)
 		free(buffer);
 		return (-1);
 	}
-	memset(buffer, 0, stride);
 	draw_map_on_bmp(fd, buffer, stride, m);
 	free(buffer);
 	return (0);
