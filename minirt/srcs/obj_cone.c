@@ -45,10 +45,10 @@ static void	calc_cone_reflection(
 	t_color			add_color;
 
 	cl.v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
-	cl.v_n = get_normal_vector_at_tpos(m, tc);
-	cl.naiseki = ft_vecinnerprod(ft_vecnormalize(cl.v_n), cl.v_lightDir);
-	cl.refDir = ft_vecnormalize(ft_vecsub(ft_vecmult(
-					ft_vecnormalize(cl.v_n), 2 * cl.naiseki), cl.v_lightDir));
+	cl.v_n = ft_vecnormalize(get_normal_vector_at_tpos(m, tc));
+	cl.naiseki = ft_vecinnerprod(cl.v_n, cl.v_lightDir);
+	cl.refDir = ft_vecnormalize(
+			ft_vecsub(ft_vecmult(cl.v_n, 2 * cl.naiseki), cl.v_lightDir));
 	cl.invEyeDir = ft_vecnormalize(ft_vecmult(m->camdir.v_de, -1));
 	cl.vrDot = ft_vecinnerprod(cl.invEyeDir, cl.refDir);
 	if (cl.vrDot < 0)
