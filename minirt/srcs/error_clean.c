@@ -14,6 +14,8 @@ static int	print_error_msg_fileread(int errNo)
 		printf("Error\nToo much 'C' is specified.\n");
 	else if (errNo == ERR_RD_TOOMUCH_LIT_SPECIFIED)
 		printf("Error\nToo much 'L' is specified.\n");
+	else if (errNo == ERR_RD_TOOMUCH_OBJ_SPECIFIED)
+		printf("Error\nToo much objects are specified.\n");
 	else if (errNo == ERR_CHK_NO_A)
 		printf("Error\n'A' is not specified.\n");
 	else

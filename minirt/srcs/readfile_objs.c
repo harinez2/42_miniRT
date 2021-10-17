@@ -3,6 +3,8 @@
 int	read_file_sphere(int *i, char *line, t_map *m)
 {
 	(*i) += 2;
+	if (m->obj_count >= MAX_OBJ_COUNT)
+		print_error_exit(ERR_RD_TOOMUCH_OBJ_SPECIFIED, m);
 	m->obj_type[m->obj_count] = CMD_SPHERE;
 	m->obj[m->obj_count] = (t_sphere *)malloc(sizeof(t_sphere));
 	((t_sphere *)m->obj[m->obj_count])->center = read_xyz(i, line, m);
@@ -15,6 +17,8 @@ int	read_file_sphere(int *i, char *line, t_map *m)
 int	read_file_plane(int *i, char *line, t_map *m)
 {
 	(*i) += 2;
+	if (m->obj_count >= MAX_OBJ_COUNT)
+		print_error_exit(ERR_RD_TOOMUCH_OBJ_SPECIFIED, m);
 	m->obj_type[m->obj_count] = CMD_PLANE;
 	m->obj[m->obj_count] = (t_plane *)malloc(sizeof(t_plane));
 	((t_plane *)m->obj[m->obj_count])->normal = read_xyz(i, line, m);
@@ -27,6 +31,8 @@ int	read_file_plane(int *i, char *line, t_map *m)
 int	read_file_square(int *i, char *line, t_map *m)
 {
 	(*i) += 2;
+	if (m->obj_count >= MAX_OBJ_COUNT)
+		print_error_exit(ERR_RD_TOOMUCH_OBJ_SPECIFIED, m);
 	m->obj_type[m->obj_count] = CMD_SQUARE;
 	m->obj[m->obj_count] = (t_square *)malloc(sizeof(t_square));
 	((t_square *)m->obj[m->obj_count])->centr = read_xyz(i, line, m);
@@ -41,6 +47,8 @@ int	read_file_square(int *i, char *line, t_map *m)
 int	read_file_cylinder(int *i, char *line, t_map *m)
 {
 	(*i) += 2;
+	if (m->obj_count >= MAX_OBJ_COUNT)
+		print_error_exit(ERR_RD_TOOMUCH_OBJ_SPECIFIED, m);
 	m->obj_type[m->obj_count] = CMD_CYLINDER;
 	m->obj[m->obj_count] = (t_cylinder *)malloc(sizeof(t_cylinder));
 	((t_cylinder *)m->obj[m->obj_count])->center = read_xyz(i, line, m);
@@ -55,6 +63,8 @@ int	read_file_cylinder(int *i, char *line, t_map *m)
 int	read_file_triangle(int *i, char *line, t_map *m)
 {
 	(*i) += 2;
+	if (m->obj_count >= MAX_OBJ_COUNT)
+		print_error_exit(ERR_RD_TOOMUCH_OBJ_SPECIFIED, m);
 	m->obj_type[m->obj_count] = CMD_TRIANGLE;
 	m->obj[m->obj_count] = (t_triangle *)malloc(sizeof(t_triangle));
 	((t_triangle *)m->obj[m->obj_count])->first = read_xyz(i, line, m);
