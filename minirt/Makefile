@@ -38,30 +38,33 @@ SRCS		= \
 				$(SRC_DIR)/util_vector_calcprod.c \
 				$(SRC_DIR)/util_vector_normalize.c
 OBJS		= $(SRCS:.c=.o)
-CFLAGS		= -Wall -Werror -Wextra 
-CCFLAGS_L	= -L$(CLONE_DIR) -L$(INCLIB) -lmlx -lXext -lX11 -lm -lbsd
-DBGFLG		= -g3 -fsanitize=address
+CFLAGS		= -Wall -Werror -Wextra
+CFLAGS_L	= -L$(CLONE_DIR) -L$(INCLIB) -lmlx -lXext -lX11 -lm -lbsd
+DBGFLG		= -g3 -fsanitize=address -fsanitize=leak
 CC			= gcc
 RM			= rm -f
 
 
+.PHONY: all
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(INCLUDE) $(OBJS) $(CCFLAGS_L) $(LIBNAME) -o $(NAME)
+	$(CC) $(CFLAGS) $(INCLUDE) $(OBJS) $(CFLAGS_L) $(LIBNAME) -o $(NAME)
 
 .c.o: $(SRCS)
-	$(CC) $(CFLAGS) $(INCLUDE) $(CCFLAGS_L) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDE) $(CFLAGS_L) -c $< -o $@
 
-debug:
-	$(CC) $(CFLAGS) $(INCLUDE) $(SRCS) $(CCFLAGS_L) $(DBGFLG) $(LIBNAME) -o $(NAME)
-
+.PHONY: clean
 clean:
 	$(RM) $(OBJS)
 
+.PHONY: fclean
 fclean: clean
 	$(RM) $(NAME)
 
+.PHONY: re
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: debug
+debug: CFLAGS += $(DBGFLG)
+debug: re
