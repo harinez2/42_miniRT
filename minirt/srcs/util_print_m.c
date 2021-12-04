@@ -34,9 +34,6 @@ static void	print_m_eye(t_map *m)
 	printf("  distance_cam_scr : %.2f\n", m->scr.distance_cam_scr);
 	ft_vecprint_with_name("  unitx ", &m->scr.unitvec_scrx);
 	ft_vecprint_with_name("  unity ", &m->scr.unitvec_scry);
-	ft_vecprint_with_name("\n  v_w   ", &m->camdir.v_w);
-	ft_vecprint_with_name("  v_de  ", &m->camdir.v_de);
-	ft_vecprint_with_name("  v_tpos", &m->camdir.v_tpos);
 }
 
 static void	print_m_light(t_map *m)
