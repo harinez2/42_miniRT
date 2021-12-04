@@ -9,6 +9,7 @@ SRCS		= \
 				$(SRC_DIR)/gnl/get_next_line_utils.c \
 				$(SRC_DIR)/error_clean.c \
 				$(SRC_DIR)/main.c \
+				$(SRC_DIR)/map.c \
 				$(SRC_DIR)/obj_cone.c \
 				$(SRC_DIR)/obj_cone_getdistance.c \
 				$(SRC_DIR)/obj_cylinder.c \

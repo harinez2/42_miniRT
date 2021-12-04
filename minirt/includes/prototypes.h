@@ -3,10 +3,12 @@
 
 // error_clean.c
 void		print_error_exit(int errNo, t_map *m);
-void		free_map(t_map *m);
 // main.c
-void		init_m(t_map *m);
 int			main(int argc, char **argv);
+// map.c
+void		init_m(t_map *m);
+void		arrange_constant_values(t_map *m);
+void		free_map(t_map *m);
 // obj_cone.c
 t_color		get_color_by_rt_cone(t_map *m, t_cone *tc);
 // obj_cone_getdistance.c

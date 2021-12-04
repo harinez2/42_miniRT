@@ -48,16 +48,3 @@ void	print_error_exit(int errNo, t_map *m)
 	free_map(m);
 	exit(errNo);
 }
-
-void	free_map(t_map *m)
-{
-	int		i;
-
-	i = 0;
-	while (i < m->obj_count)
-	{
-		free(m->obj[i]);
-		m->obj[i] = NULL;
-		i++;
-	}
-}
