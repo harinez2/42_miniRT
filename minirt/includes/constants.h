@@ -2,6 +2,7 @@
 # define CONSTANTS_H
 
 # define PI				3.14159265359
+# define EPSILON		0.001
 
 # define MAX_OBJ_COUNT		200
 # define MAX_CAMERA_COUNT	30
