@@ -62,6 +62,8 @@ static void	calc_screen_unitvec_y(t_map *m)
 
 void	init_screen_values(t_map *m)
 {
+	if (m->dsp)
+		printf("\n>>>>> Calculating screen parameter...\n");
 	calc_distance_cam_scr(m);
 	calc_screen_unitvec_x(m);
 	calc_screen_unitvec_y(m);
