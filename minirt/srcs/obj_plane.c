@@ -15,7 +15,7 @@ double	get_distance_to_plane(t_vec v_w, t_map *m, t_plane *tp)
 		b = ft_vecinnerprod(m->curr_cam.pos, tp->normal);
 		c = ft_vecinnerprod(v_de, tp->normal);
 		t = (a - b) / c;
-		if (t > 0)
+		if (t > EPSILON)
 			return (t);
 	}
 	return (-1);

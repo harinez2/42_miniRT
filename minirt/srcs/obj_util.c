@@ -51,7 +51,7 @@ double	calc_minimum_t(double A, double B, double D)
 	double	t;
 
 	t = -1;
-	if (D == 0)
+	if (-EPSILON < D && D < EPSILON)
 		t = -B / (2 * A);
 	else if (D > 0)
 	{

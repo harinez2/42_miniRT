@@ -31,7 +31,7 @@ double	get_distance_to_triangle(t_vec v_w, t_map *m, t_triangle *tt)
 	t_multivec	mv;
 
 	t = get_distance_to_plane(v_w, m, &tt->plane);
-	if (t >= 0)
+	if (t > 0)
 	{
 		v_de = ft_vecsub(v_w, m->curr_cam.pos);
 		v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(v_de, t));
