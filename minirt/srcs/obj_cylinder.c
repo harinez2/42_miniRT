@@ -5,22 +5,22 @@ double	get_distance_to_cylinder(t_vec v_w, t_map *m, t_cylinder *tc)
 {
 	t_calc_crossing	cv;
 	double			mx;
-	double			mz;
+	double			my;
 	t_vec			v_tpos;
 	double			diff;
 
 	cv.v_de = ft_vecsub(v_w, m->curr_cam.pos);
 	mx = m->curr_cam.pos.x - tc->center.x;
-	mz = m->curr_cam.pos.z - tc->center.z;
-	cv.A = cv.v_de.x * cv.v_de.x + cv.v_de.z * cv.v_de.z;
-	cv.B = 2 * (cv.v_de.x * mx + cv.v_de.z * mz);
-	cv.C = mx * mx + mz * mz - tc->diameter * tc->diameter;
+	my = m->curr_cam.pos.y - tc->center.y;
+	cv.A = cv.v_de.x * cv.v_de.x + cv.v_de.y * cv.v_de.y;
+	cv.B = 2 * (cv.v_de.x * mx + cv.v_de.y * my);
+	cv.C = mx * mx + my * my - tc->diameter * tc->diameter;
 	cv.D = cv.B * cv.B - 4 * cv.A * cv.C;
 	cv.t = calc_minimum_t(cv.A, cv.B, cv.D);
-	if (cv.t > 0)
+	if (cv.t > EPSILON)
 	{
 		v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(cv.v_de, cv.t));
-		diff = v_tpos.y - tc->center.y;
+		diff = v_tpos.z - tc->center.z;
 		if (diff < 0)
 			diff *= -1;
 		if (diff > tc->height / 2)
