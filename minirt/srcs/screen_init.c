@@ -30,8 +30,7 @@ static void	calc_screen_unitvec_x(t_map *m)
 	{
 		m->scr.unitvec_scrx.x = 1;
 		m->scr.unitvec_scrx.y
-			= -1 * (m->curr_cam.orien.x * m->scr.unitvec_scrx.x)
-			/ m->curr_cam.orien.y;
+			= -1 * m->curr_cam.orien.x / m->curr_cam.orien.y;
 		m->scr.unitvec_scrx.z = 0;
 	}
 	if (m->dsp)
