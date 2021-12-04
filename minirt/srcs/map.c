@@ -31,8 +31,8 @@ void	arrange_constant_values(t_map *m)
 	m->kSpe.b = (1 - m->kAmb.b) / 3;
 	if (m->window_x == -1)
 	{
-		m->window_x = 242;
-		m->window_y = 242;
+		m->window_x = 512;
+		m->window_y = 512;
 	}
 	init_screen_values(m);
 }
