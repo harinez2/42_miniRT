@@ -50,7 +50,7 @@ double	read_double(int *i, char *s, t_map *m)
 	}
 	if (!is_whitespace(s[*i]) && s[*i] != '\0' && s[*i] != ',')
 		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
-	return (int_part + deci_part * 0.1 * ret);
+	return (int_part + deci_part * pow(0.1, ret));
 }
 
 t_vec	read_xyz(int *i, char *s, t_map *m)
