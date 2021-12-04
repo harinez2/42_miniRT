@@ -5,7 +5,7 @@ int	main(int argc, char **argv)
 	t_map	m;
 	int		i;
 
-	init_m(&m);
+	init_map(&m);
 	i = 0;
 	while (++i < argc)
 	{

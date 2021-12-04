@@ -1,6 +1,6 @@
 #include	"main.h"
 
-void	init_m(t_map *m)
+void	init_map(t_map *m)
 {
 	m->window_x = -1;
 	m->window_y = -1;
