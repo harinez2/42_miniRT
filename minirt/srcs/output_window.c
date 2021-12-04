@@ -19,6 +19,8 @@ int	draw_map_on_window(t_map *m)
 		}
 		y++;
 	}
+	if (m->dsp)
+		printf("  ----------------------------------------\n");
 	return (0);
 }
 
