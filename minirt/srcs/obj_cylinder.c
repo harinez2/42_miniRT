@@ -5,13 +5,30 @@ static void	calc_ABCD(
 {
 	double			v;
 
-	v = sqrt(tc->orientation.x * tc->orientation.x + tc->orientation.y * tc->orientation.y
-		+ tc->orientation.z * tc->orientation.z);
+	v = sqrt(tc->orientation.x * tc->orientation.x
+			+ tc->orientation.y * tc->orientation.y
+			+ tc->orientation.z * tc->orientation.z);
 	cv->A = md2->a * md2->a + md2->b * md2->b + md2->c * md2->c;
 	cv->B = 2 * (md2->a * md3->a + md2->b * md3->b + md2->c * md3->c);
 	cv->C = md3->a * md3->a + md3->b * md3->b + md3->c * md3->c
-			- v * v * tc->diameter * tc->diameter;
+		- v * v * tc->diameter * tc->diameter;
 	cv->D = cv->B * cv->B - 4 * cv->A * cv->C;
+}
+
+static double	check_cylinder_length(
+	t_map *m, t_cylinder *tc, t_calc_crossing cv)
+{
+	t_vec		v_tpos;
+	t_vec		v_po_p;
+	double		v_po_p_len;
+
+	v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(cv.v_de, cv.t));
+	v_po_p = ft_vecsub(v_tpos, tc->center);
+	v_po_p_len = ft_vecnorm(v_po_p);
+	if (tc->diameter * tc->diameter + tc->height * tc->height / 4
+		< v_po_p_len * v_po_p_len)
+		return (-1);
+	return (0);
 }
 
 // tpos：cross point (pi) of the v_cam and the surface of the cylinder
@@ -34,46 +51,10 @@ double	get_distance_to_cylinder(t_vec v_w, t_map *m, t_cylinder *tc)
 	md3.c = tc->orientation.x * md1.b - tc->orientation.y * md1.a;
 	calc_ABCD(&cv, &md2, &md3, tc);
 	cv.t = calc_minimum_t(cv.A, cv.B, cv.D);
-	if (cv.t > EPSILON)
-	{
-		// v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(cv.v_de, cv.t));
-		// diff = v_tpos.z - tc->center.z;
-		// if (diff < 0)
-		// 	diff *= -1;
-		// if (diff > tc->height / 2)
-		// 	cv.t = -1;
-	}
+	if (cv.t > 0 && check_cylinder_length(m, tc, cv) == -1)
+		return (-1);
 	return (cv.t);
 }
-
-
-// double	get_distance_to_cylinder(t_vec v_w, t_map *m, t_cylinder *tc)
-// {
-// 	t_calc_crossing	cv;
-// 	double			mx;
-// 	double			my;
-// 	t_vec			v_tpos;
-// 	double			diff;
-
-// 	cv.v_de = ft_vecsub(v_w, m->curr_cam.pos);
-// 	mx = m->curr_cam.pos.x - tc->center.x;
-// 	my = m->curr_cam.pos.y - tc->center.y;
-// 	cv.A = cv.v_de.x * cv.v_de.x + cv.v_de.y * cv.v_de.y;
-// 	cv.B = 2 * (cv.v_de.x * mx + cv.v_de.y * my);
-// 	cv.C = mx * mx + my * my - tc->diameter * tc->diameter;
-// 	cv.D = cv.B * cv.B - 4 * cv.A * cv.C;
-// 	cv.t = calc_minimum_t(cv.A, cv.B, cv.D);
-// 	if (cv.t > EPSILON)
-// 	{
-// 		v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(cv.v_de, cv.t));
-// 		diff = v_tpos.z - tc->center.z;
-// 		if (diff < 0)
-// 			diff *= -1;
-// 		if (diff > tc->height / 2)
-// 			cv.t = -1;
-// 	}
-// 	return (cv.t);
-// }
 
 // (2) calc diffuse reflection (kakusan hansya kou)
 static double	calc_cylinder_diffuse_reflection(
