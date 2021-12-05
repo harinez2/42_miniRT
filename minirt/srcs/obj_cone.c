@@ -6,15 +6,13 @@ static t_vec	get_normal_vector_at_tpos_cone(t_map *m, t_cone *tc)
 	double	t;
 	t_vec	v_n;
 
-	v_p0_p.x = m->camdir.v_tpos.x - tc->vertex.x;
-	v_p0_p.y = m->camdir.v_tpos.y - tc->vertex.y;
-	v_p0_p.z = m->camdir.v_tpos.z - tc->vertex.z;
+	v_p0_p = ft_vecsub(m->camdir.v_tpos, tc->vertex);
 	t = (v_p0_p.x * tc->normal.x + v_p0_p.y * tc->normal.y
 			+ v_p0_p.z * tc->normal.z)
 		/ (v_p0_p.x * v_p0_p.x + v_p0_p.y * v_p0_p.y + v_p0_p.z * v_p0_p.z);
-	v_n.x = t * m->camdir.v_tpos.x - t * tc->vertex.x - tc->normal.x;
-	v_n.y = t * m->camdir.v_tpos.y - t * tc->vertex.y - tc->normal.y;
-	v_n.z = t * m->camdir.v_tpos.z - t * tc->vertex.z - tc->normal.z;
+	v_n = ft_vecsub(
+			ft_vecmult(ft_vecsub(m->camdir.v_tpos, tc->vertex), t),
+			tc->normal);
 	return (v_n);
 }
 

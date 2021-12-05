@@ -10,9 +10,9 @@ static t_vec	get_normal_vector_at_tpos_cylinder(t_map *m, t_cylinder *tc)
 	t = (v_p0_p.x * tc->orientation.x + v_p0_p.y * tc->orientation.y
 			+ v_p0_p.z * tc->orientation.z)
 		/ (v_p0_p.x * v_p0_p.x + v_p0_p.y * v_p0_p.y + v_p0_p.z * v_p0_p.z);
-	v_n.x = t * m->camdir.v_tpos.x - t * tc->center.x - tc->orientation.x;
-	v_n.y = t * m->camdir.v_tpos.y - t * tc->center.y - tc->orientation.y;
-	v_n.z = t * m->camdir.v_tpos.z - t * tc->center.z - tc->orientation.z;
+	v_n = ft_vecsub(
+			ft_vecmult(ft_vecsub(m->camdir.v_tpos, tc->center), t),
+			tc->orientation);
 	return (v_n);
 }
 
