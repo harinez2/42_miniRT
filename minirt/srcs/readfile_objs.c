@@ -21,8 +21,8 @@ int	read_file_plane(int *i, char *line, t_map *m)
 		print_error_exit(ERR_RD_TOOMUCH_OBJ_SPECIFIED, m);
 	m->obj_type[m->obj_count] = CMD_PLANE;
 	m->obj[m->obj_count] = (t_plane *)malloc(sizeof(t_plane));
-	((t_plane *)m->obj[m->obj_count])->normal = read_xyz(i, line, m);
 	((t_plane *)m->obj[m->obj_count])->position = read_xyz(i, line, m);
+	((t_plane *)m->obj[m->obj_count])->normal = read_xyz(i, line, m);
 	((t_plane *)m->obj[m->obj_count])->rgb = read_rgb(i, line, m);
 	m->obj_count++;
 	return (CMD_PLANE);
