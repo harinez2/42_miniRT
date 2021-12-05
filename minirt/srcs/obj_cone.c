@@ -1,6 +1,6 @@
 #include	"main.h"
 
-static t_vec	get_normal_vector_at_tpos(t_map *m, t_cone *tc)
+static t_vec	get_normal_vector_at_tpos_cone(t_map *m, t_cone *tc)
 {
 	t_vec	v_p0_p;
 	double	t;
@@ -28,7 +28,7 @@ static double	calc_cone_diffuse_reflection(
 	t_color	add_color;
 
 	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
-	v_nornal = ft_vecnormalize(get_normal_vector_at_tpos(m, tc));
+	v_nornal = ft_vecnormalize(get_normal_vector_at_tpos_cone(m, tc));
 	innprod_lit_n = ft_vecinnerprod(v_nornal, v_lightDir);
 	if (innprod_lit_n < 0)
 		innprod_lit_n = 0;
@@ -45,7 +45,7 @@ static void	calc_cone_reflection(
 	t_color			add_color;
 
 	cl.v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
-	cl.v_n = ft_vecnormalize(get_normal_vector_at_tpos(m, tc));
+	cl.v_n = ft_vecnormalize(get_normal_vector_at_tpos_cone(m, tc));
 	cl.naiseki = ft_vecinnerprod(cl.v_n, cl.v_lightDir);
 	cl.refDir = ft_vecnormalize(
 			ft_vecsub(ft_vecmult(cl.v_n, 2 * cl.naiseki), cl.v_lightDir));

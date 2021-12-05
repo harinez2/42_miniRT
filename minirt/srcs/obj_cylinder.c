@@ -1,5 +1,21 @@
 #include	"main.h"
 
+static t_vec	get_normal_vector_at_tpos_cylinder(t_map *m, t_cylinder *tc)
+{
+	t_vec	v_p0_p;
+	double	t;
+	t_vec	v_n;
+
+	v_p0_p = ft_vecsub(m->camdir.v_tpos, tc->center);
+	t = (v_p0_p.x * tc->orientation.x + v_p0_p.y * tc->orientation.y
+			+ v_p0_p.z * tc->orientation.z)
+		/ (v_p0_p.x * v_p0_p.x + v_p0_p.y * v_p0_p.y + v_p0_p.z * v_p0_p.z);
+	v_n.x = t * m->camdir.v_tpos.x - t * tc->center.x - tc->orientation.x;
+	v_n.y = t * m->camdir.v_tpos.y - t * tc->center.y - tc->orientation.y;
+	v_n.z = t * m->camdir.v_tpos.z - t * tc->center.z - tc->orientation.z;
+	return (v_n);
+}
+
 // (2) calc diffuse reflection (kakusan hansya kou)
 static double	calc_cylinder_diffuse_reflection(
 	t_map *m, t_color *color, int i, t_cylinder *tc)
@@ -10,10 +26,8 @@ static double	calc_cylinder_diffuse_reflection(
 	t_color	add_color;
 
 	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
-	v_nornal.x = 2 * (m->camdir.v_tpos.x - tc->center.x);
-	v_nornal.y = 0;
-	v_nornal.z = 2 * (m->camdir.v_tpos.z - tc->center.z);
-	innprod_lit_n = ft_vecinnerprod(ft_vecnormalize(v_nornal), v_lightDir);
+	v_nornal = ft_vecnormalize(get_normal_vector_at_tpos_cylinder(m, tc));
+	innprod_lit_n = ft_vecinnerprod(v_nornal, v_lightDir);
 	if (innprod_lit_n < 0)
 		innprod_lit_n = 0;
 	add_color = adjust_color_level(&tc->rgb, innprod_lit_n);
@@ -29,12 +43,10 @@ static void	calc_cylinder_reflection(
 	t_color			add_color;
 
 	cl.v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
-	cl.v_n.x = 2 * (m->camdir.v_tpos.x - tc->center.x);
-	cl.v_n.y = 0;
-	cl.v_n.z = 2 * (m->camdir.v_tpos.z - tc->center.z);
-	cl.naiseki = ft_vecinnerprod(ft_vecnormalize(cl.v_n), cl.v_lightDir);
-	cl.refDir = ft_vecnormalize(ft_vecsub(ft_vecmult(
-					ft_vecnormalize(cl.v_n), 2 * cl.naiseki), cl.v_lightDir));
+	cl.v_n = ft_vecnormalize(get_normal_vector_at_tpos_cylinder(m, tc));
+	cl.naiseki = ft_vecinnerprod(cl.v_n, cl.v_lightDir);
+	cl.refDir = ft_vecnormalize(
+			ft_vecsub(ft_vecmult(cl.v_n, 2 * cl.naiseki), cl.v_lightDir));
 	cl.invEyeDir = ft_vecnormalize(ft_vecmult(m->camdir.v_de, -1));
 	cl.vrDot = ft_vecinnerprod(cl.invEyeDir, cl.refDir);
 	if (cl.vrDot < 0)
@@ -67,6 +79,6 @@ t_color	get_color_by_rt_cylinder(t_map *m, t_cylinder *tc)
 		if (naiseki > 0)
 			calc_cylinder_reflection(m, &color, i, tc);
 		i++;
-	}set_color(&color, 255,255,255);
+	}
 	return (set_rgb_inrange(color));
 }
