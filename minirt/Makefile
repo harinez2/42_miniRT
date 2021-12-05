@@ -30,6 +30,7 @@ SRCS		= \
 				$(SRC_DIR)/screen_raytrace.c \
 				$(SRC_DIR)/util_color.c \
 				$(SRC_DIR)/util_lib.c \
+				$(SRC_DIR)/util_print.c \
 				$(SRC_DIR)/util_print_m.c \
 				$(SRC_DIR)/util_print_m_objs.c \
 				$(SRC_DIR)/util_print_m_objs2d.c \
