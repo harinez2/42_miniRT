@@ -36,6 +36,9 @@ static void	shrink_window_max_size(t_map *m)
 		m->window_x = screen_x;
 	if (m->window_y > screen_y)
 		m->window_y = screen_y;
+	if (m->dsp)
+		printf("  adjusted window_x:%d, window_y:%d\n",
+			m->window_x, m->window_y);
 }
 
 void	display_window(t_map *m)
