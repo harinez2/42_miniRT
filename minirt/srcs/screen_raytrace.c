@@ -83,14 +83,14 @@ t_color	get_color_on_screen(t_map *m, int x, int y)
 	const int	print_foreach = 100;
 
 	v_w.x = m->curr_cam.orien.x * m->scr.distance_cam_scr
-		+ (x - m->window_x / 2) * m->scr.unitvec_scrx.x
-		+ (y - m->window_y / 2) * m->scr.unitvec_scry.x;
+		- (x - m->window_x / 2) * m->scr.unitvec_scrx.x
+		- (y - m->window_y / 2) * m->scr.unitvec_scry.x;
 	v_w.y = m->curr_cam.orien.y * m->scr.distance_cam_scr
-		+ (x - m->window_x / 2) * m->scr.unitvec_scrx.y
-		+ (y - m->window_y / 2) * m->scr.unitvec_scry.y;
+		- (x - m->window_x / 2) * m->scr.unitvec_scrx.y
+		- (y - m->window_y / 2) * m->scr.unitvec_scry.y;
 	v_w.z = m->curr_cam.orien.z * m->scr.distance_cam_scr
-		+ (x - m->window_x / 2) * m->scr.unitvec_scrx.z
-		+ (y - m->window_y / 2) * m->scr.unitvec_scry.z;
+		- (x - m->window_x / 2) * m->scr.unitvec_scrx.z
+		- (y - m->window_y / 2) * m->scr.unitvec_scry.z;
 	color = get_color_with_raytracing(v_w, m);
 	if (m->dsp && x % print_foreach == 0 && y % print_foreach == 0)
 	{
