@@ -32,7 +32,7 @@ int	get_minimum_distance_to_obj(t_vec v_w, t_map *m, double *hit_t)
 	while (i < m->obj_count)
 	{
 		t = get_distance_to_obj(v_w, i, m);
-		if (t > 0 && (*hit_t == -1 || t < *hit_t))
+		if (t > EPSILON && (*hit_t == -1 || t < *hit_t))
 		{
 			*hit_t = t;
 			hit_i = i;
