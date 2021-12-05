@@ -16,6 +16,7 @@ SRCS		= \
 				$(SRC_DIR)/obj_cone.c \
 				$(SRC_DIR)/obj_cone_getdistance.c \
 				$(SRC_DIR)/obj_cylinder.c \
+				$(SRC_DIR)/obj_cylinder_getdistance.c \
 				$(SRC_DIR)/obj_plane.c \
 				$(SRC_DIR)/obj_sphere.c \
 				$(SRC_DIR)/obj_square.c \

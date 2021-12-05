@@ -24,8 +24,9 @@ t_color		get_color_by_rt_cone(t_map *m, t_cone *tc);
 // obj_cone_getdistance.c
 double		get_distance_to_cone(t_vec v_w, t_map *m, t_cone *tc);
 // obj_cylinder.c
-double		get_distance_to_cylinder(t_vec v_w, t_map *m, t_cylinder *tc);
 t_color		get_color_by_rt_cylinder(t_map *m, t_cylinder *tc);
+// obj_cylinder_getdistance.c
+double		get_distance_to_cylinder(t_vec v_w, t_map *m, t_cylinder *tc);
 // obj_plane.c
 double		get_distance_to_plane(t_vec v_w, t_map *m, t_plane *tp);
 t_color		get_color_by_rt_plane(t_map *m, t_plane *tp);
