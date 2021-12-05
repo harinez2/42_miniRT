@@ -28,7 +28,8 @@ static void	print_error_msg(int errNo)
 	if (errNo == ERR_SYS_MALLOC)
 		printerr("Error\nFailed to allocate memory.\n");
 	else if (errNo == ERR_SYS_FILENAME)
-		printerr("Error\nUnrecognied parameter. File extension should be '.rt'.\n");
+		printerr(
+			"Error\nUnrecognied parameter. File extension should be '.rt'.\n");
 	else if (errNo == ERR_SYS_FILEOPEN)
 		printerr("Error\nFailed to open file.\n");
 	else if (errNo == ERR_SYS_FILEWRITE)
