@@ -96,9 +96,9 @@ t_color	get_color_on_screen(t_map *m, int x, int y)
 	{
 		if (x == 0)
 			printf("\n");
-		printf("  v_w : ");
+		printf("  v_w : pos ");
 		ft_vecprint(&v_w);
-		printf("  /  %.2f, %.2f, %.2f\n", color.r, color.g, color.b);
+		printf("  / color %.2f, %.2f, %.2f\n", color.r, color.g, color.b);
 	}
 	return (color);
 }
