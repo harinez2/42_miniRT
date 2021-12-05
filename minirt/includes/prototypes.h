@@ -9,6 +9,16 @@ int			main(int argc, char **argv);
 void		init_map(t_map *m);
 void		arrange_constant_values(t_map *m);
 void		free_map(t_map *m);
+// map_print.c
+void		print_m(t_map *m);
+// map_print_objs.c
+void		print_cylinder(t_cylinder *tc);
+void		print_plane(t_plane *tp);
+void		print_sphere(t_sphere *ts);
+void		print_square(t_square *ts);
+void		print_triangle(t_triangle *tt);
+// map_print_objs2d.c
+void		print_cone(t_cone *tc);
 // obj_cone.c
 t_color		get_color_by_rt_cone(t_map *m, t_cone *tc);
 // obj_cone_getdistance.c
@@ -86,16 +96,6 @@ void		*ft_memset(void *b, int c, size_t n);
 void		*ft_memcpy(void *dst, const void *src, size_t n);
 // util_print.c
 void		printerr(const char *msg);
-// util_print_m.c
-void		print_m(t_map *m);
-// util_print_m_objs.c
-void		print_cylinder(t_cylinder *tc);
-void		print_plane(t_plane *tp);
-void		print_sphere(t_sphere *ts);
-void		print_square(t_square *ts);
-void		print_triangle(t_triangle *tt);
-// util_print_m_objs2d.c
-void		print_cone(t_cone *tc);
 // util_render.c
 double		adjust_range(double x, t_minmax from, t_minmax to);
 int			get_endian(void);

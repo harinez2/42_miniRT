@@ -10,6 +10,9 @@ SRCS		= \
 				$(SRC_DIR)/error_clean.c \
 				$(SRC_DIR)/main.c \
 				$(SRC_DIR)/map.c \
+				$(SRC_DIR)/map_print.c \
+				$(SRC_DIR)/map_print_objs.c \
+				$(SRC_DIR)/map_print_objs2d.c \
 				$(SRC_DIR)/obj_cone.c \
 				$(SRC_DIR)/obj_cone_getdistance.c \
 				$(SRC_DIR)/obj_cylinder.c \
@@ -31,9 +34,6 @@ SRCS		= \
 				$(SRC_DIR)/util_color.c \
 				$(SRC_DIR)/util_lib.c \
 				$(SRC_DIR)/util_print.c \
-				$(SRC_DIR)/util_print_m.c \
-				$(SRC_DIR)/util_print_m_objs.c \
-				$(SRC_DIR)/util_print_m_objs2d.c \
 				$(SRC_DIR)/util_render.c \
 				$(SRC_DIR)/util_vector.c \
 				$(SRC_DIR)/util_vector_calc.c \
