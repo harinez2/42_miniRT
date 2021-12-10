@@ -58,9 +58,11 @@ t_vec	read_xyz(int *i, char *s, t_map *m)
 	t_vec	v;
 
 	v.x = read_double(i, s, m);
+	skip_separater(i, s);
 	if (s[(*i)++] != ',')
 		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
 	v.y = read_double(i, s, m);
+	skip_separater(i, s);
 	if (s[(*i)++] != ',')
 		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
 	v.z = read_double(i, s, m);
@@ -72,11 +74,13 @@ t_color	read_rgb(int *i, char *s, t_map *m)
 	t_color		c;
 
 	c.r = read_int(i, s, m);
+	skip_separater(i, s);
 	if (s[(*i)++] != ',')
 		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
 	else if (c.r < 0 || c.r > 255)
 		print_error_exit(ERR_RD_OUTOFRANGE, m);
 	c.g = read_int(i, s, m);
+	skip_separater(i, s);
 	if (s[(*i)++] != ',')
 		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
 	else if (c.g < 0 || c.g > 255)
