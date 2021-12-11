@@ -94,7 +94,7 @@ void		ft_colorprint(t_color *c);
 // util_lib.c
 int			ft_strncmp(char *s1, char *s2, unsigned int n);
 int			is_whitespace(const char c);
-int			ft_atoll(char *s, long long *retnum);
+int			ft_atoll(char *s, long long *retnum, int *neg_flg);
 // util_lib_mem.c
 void		*ft_memset(void *b, int c, size_t n);
 void		*ft_memcpy(void *dst, const void *src, size_t n);

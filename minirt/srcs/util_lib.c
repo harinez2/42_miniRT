@@ -41,16 +41,15 @@ static int	get_plusminus_sign(char *s, int *i)
 	return (neg);
 }
 
-int	ft_atoll(char *s, long long *retnum)
+int	ft_atoll(char *s, long long *retnum, int *neg_flg)
 {
 	long long	ret;
 	int			i;
-	int			neg;
 
 	i = 0;
 	while (is_whitespace(s[i]))
 		i++;
-	neg = get_plusminus_sign(s, &i);
+	*neg_flg = get_plusminus_sign(s, &i);
 	ret = 0;
 	while (s[i] >= '0' && s[i] <= '9')
 	{
@@ -58,8 +57,8 @@ int	ft_atoll(char *s, long long *retnum)
 		if (ret < 0)
 			return (-1);
 	}
-	if (neg == -1 && ret == LLONG_MAX)
+	if (*neg_flg == -1 && ret == LLONG_MAX)
 		return (-1);
-	*retnum = ret * neg;
+	*retnum = ret * (*neg_flg);
 	return (i);
 }

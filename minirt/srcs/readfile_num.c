@@ -34,9 +34,11 @@ double	read_double(int *i, char *s, t_map *m)
 	long long	int_part;
 	long long	deci_part;
 	int			ret;
+	int			neg_flg;
+	int			dummy;
 
 	skip_separater(i, s);
-	ret = ft_atoll(&s[*i], &int_part);
+	ret = ft_atoll(&s[*i], &int_part, &neg_flg);
 	if (ret <= 0)
 		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
 	*i += ret;
@@ -45,14 +47,14 @@ double	read_double(int *i, char *s, t_map *m)
 	if (s[*i] == '.')
 	{
 		(*i)++;
-		ret = ft_atoll(&s[*i], &deci_part);
+		ret = ft_atoll(&s[*i], &deci_part, &dummy);
 		if (ret < 0)
 			print_error_exit(ERR_RD_INCORRECTFORMAT, m);
 		*i += ret;
 	}
 	if (!is_whitespace(s[*i]) && s[*i] != '\0' && s[*i] != ',')
 		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
-	return (int_part + deci_part * pow(0.1, ret));
+	return (int_part + neg_flg * deci_part * pow(0.1, ret));
 }
 
 t_vec	read_xyz(int *i, char *s, t_map *m)
