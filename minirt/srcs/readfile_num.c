@@ -81,16 +81,16 @@ t_color	read_rgb(int *i, char *s, t_map *m)
 	skip_separater(i, s);
 	if (s[(*i)++] != ',')
 		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
-	else if (c.r < 0 || c.r > 255)
+	else if (c.r < 0 || 255 < c.r)
 		print_error_exit(ERR_RD_OUTOFRANGE, m);
 	c.g = read_int(i, s, m);
 	skip_separater(i, s);
 	if (s[(*i)++] != ',')
 		print_error_exit(ERR_RD_INCORRECTFORMAT, m);
-	else if (c.g < 0 || c.g > 255)
+	else if (c.g < 0 || 255 < c.g)
 		print_error_exit(ERR_RD_OUTOFRANGE, m);
 	c.b = read_int(i, s, m);
-	if (c.b < 0 || c.b > 255)
+	if (c.b < 0 || 255 < c.b)
 		print_error_exit(ERR_RD_OUTOFRANGE, m);
 	c.r = adjust_range(c.r,
 			(t_minmax){.min = 0, .max = 255}, (t_minmax){.min = 0, .max = 1});

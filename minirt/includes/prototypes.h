@@ -80,6 +80,8 @@ int			read_file_triangle(int *i, char *line, t_map *m);
 // readfile_objs2d.c
 int			read_file_cone(int *i, char *line, t_map *m);
 // readfile_validate.c
+int			is_eol(int *i, char *line);
+int			is_normalized(t_vec *v);
 void		validate_parameters(t_map *m);
 // screen_init.c
 void		init_screen_values(t_map *m);
