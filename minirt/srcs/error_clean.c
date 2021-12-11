@@ -27,6 +27,8 @@ static void	print_error_msg(int errNo)
 {
 	if (errNo == ERR_SYS_MALLOC)
 		printerr("Error\nFailed to allocate memory.\n");
+	else if (errNo == ERR_SYS_PARAMETER)
+		printerr("Error\nCommand line parameter is incorrect.\n");
 	else if (errNo == ERR_SYS_FILENAME)
 		printerr(
 			"Error\nUnrecognied parameter. File extension should be '.rt'.\n");
