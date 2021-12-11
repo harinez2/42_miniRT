@@ -46,6 +46,8 @@ double	read_double(int *i, char *s, t_map *m)
 	{
 		(*i)++;
 		ret = ft_atoll(&s[*i], &deci_part);
+		if (ret < 0)
+			print_error_exit(ERR_RD_INCORRECTFORMAT, m);
 		*i += ret;
 	}
 	if (!is_whitespace(s[*i]) && s[*i] != '\0' && s[*i] != ',')
