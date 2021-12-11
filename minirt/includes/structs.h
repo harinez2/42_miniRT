@@ -56,6 +56,10 @@ typedef struct s_map
 {
 	void			*mlx;
 	void			*win;
+	void			*image;
+	char			*imgdata;
+	int				bits_per_pixel;
+	int				line_len;
 	int				window_x;
 	int				window_y;
 

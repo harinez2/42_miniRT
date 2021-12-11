@@ -40,6 +40,8 @@ static void	print_error_msg(int errNo)
 		printerr("Error\nMlx initialization failed.\n");
 	else if (errNo == ERR_WND_WNDINIT)
 		printerr("Error\nWindow creation failed.\n");
+	else if (errNo == ERR_WND_IMAGEINIT)
+		printerr("Error\nImage buffer creation failed.\n");
 	else
 		printerr("Error\nUnexpected error.\n");
 }

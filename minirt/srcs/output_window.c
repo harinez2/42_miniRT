@@ -1,5 +1,13 @@
 #include	"main.h"
 
+static void	pixel_put_on_buff(t_map *m, int x, int y, int color)
+{
+	char	*dst;
+
+	dst = m->imgdata + (y * m->line_len + x * (m->bits_per_pixel / 8));
+	*(unsigned int *)dst = color;
+}
+
 int	draw_map_on_window(t_map *m)
 {
 	int		x;
@@ -13,12 +21,12 @@ int	draw_map_on_window(t_map *m)
 		while (x < m->window_x)
 		{
 			color = get_color_on_screen(m, x, y);
-			mlx_pixel_put(
-				m->mlx, m->win, x, y, ft_color(color.r, color.g, color.b));
+			pixel_put_on_buff(m, x, y, ft_color(color.r, color.g, color.b));
 			x++;
 		}
 		y++;
 	}
+	mlx_put_image_to_window(m->mlx, m->win, m->image, 0, 0);
 	if (m->dsp)
 		printf("  ----------------------------------------\n");
 	return (0);
@@ -56,7 +64,14 @@ void	display_window(t_map *m)
 	if (!(m->win))
 		print_error_exit(ERR_WND_WNDINIT, m);
 	if (m->dsp)
-		printf("  Window creation OK.\n  Drawing objects ...\n");
+		printf("  Window creation OK.\n");
+	m->image = mlx_new_image(m->mlx, m->window_x, m->window_y);
+	if (!(m->image))
+		print_error_exit(ERR_WND_IMAGEINIT, m);
+	m->imgdata = mlx_get_data_addr(m->image,
+			&m->bits_per_pixel, &m->line_len, &m->endian);
+	if (m->dsp)
+		printf("  Creating image buffer OK.\n  Drawing objects ...\n");
 	draw_map_on_window(m);
 	mlx_key_hook(m->win, keypress_handler, m);
 	mlx_hook(m->win, 33, 0, (void *)close_win_hanlder, m);
