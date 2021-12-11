@@ -14,6 +14,8 @@ int	is_normalized(t_vec *v)
 		|| v->y < -1 || 1 < v->y
 		|| v->z < -1 || 1 < v->z)
 		return (0);
+	else if (v->x == 0 && v->y == 0 && v->z == 0)
+		return (0);
 	else
 		return (1);
 }
