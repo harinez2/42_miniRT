@@ -10,9 +10,9 @@ int	is_eol(int *i, char *line)
 
 int	is_normalized(t_vec *v)
 {
-	if (v->x < -1 - EPSILON || 1 + EPSILON < v->x
-		|| v->y < -1 - EPSILON || 1 + EPSILON < v->y
-		|| v->z < -1 - EPSILON || 1 + EPSILON < v->z)
+	if (v->x < -1 || 1 < v->x
+		|| v->y < -1 || 1 < v->y
+		|| v->z < -1 || 1 < v->z)
 		return (0);
 	else
 		return (1);
