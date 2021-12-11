@@ -48,6 +48,8 @@ static int	read_line(char *line, t_map *m)
 	ret = read_cmd(&i, line, m);
 	if (ret < 0)
 		return (ret);
+	else if (ret == 0 && !is_eol(&i, line))
+		return (-1);
 	if (m->dsp)
 		printf("  read: %s\n", line);
 	return (0);
