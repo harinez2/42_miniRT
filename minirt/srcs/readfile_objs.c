@@ -23,6 +23,8 @@ int	read_file_plane(int *i, char *line, t_map *m)
 	m->obj[m->obj_count] = (t_plane *)malloc(sizeof(t_plane));
 	((t_plane *)m->obj[m->obj_count])->position = read_xyz(i, line, m);
 	((t_plane *)m->obj[m->obj_count])->normal = read_xyz(i, line, m);
+	if (!is_normalized(&(((t_plane *)m->obj[m->obj_count])->normal)))
+		print_error_exit(ERR_RD_OUTOFRANGE, m);
 	((t_plane *)m->obj[m->obj_count])->rgb = read_rgb(i, line, m);
 	m->obj_count++;
 	return (CMD_PLANE);
@@ -37,6 +39,8 @@ int	read_file_square(int *i, char *line, t_map *m)
 	m->obj[m->obj_count] = (t_square *)malloc(sizeof(t_square));
 	((t_square *)m->obj[m->obj_count])->centr = read_xyz(i, line, m);
 	((t_square *)m->obj[m->obj_count])->orientation = read_xyz(i, line, m);
+	if (!is_normalized(&(((t_square *)m->obj[m->obj_count])->orientation)))
+		print_error_exit(ERR_RD_OUTOFRANGE, m);
 	((t_square *)m->obj[m->obj_count])->sidesiz = read_double(i, line, m);
 	((t_sphere *)m->obj[m->obj_count])->rgb = read_rgb(i, line, m);
 	ft_init_square(m->obj[m->obj_count]);
@@ -53,6 +57,8 @@ int	read_file_cylinder(int *i, char *line, t_map *m)
 	m->obj[m->obj_count] = (t_cylinder *)malloc(sizeof(t_cylinder));
 	((t_cylinder *)m->obj[m->obj_count])->center = read_xyz(i, line, m);
 	((t_cylinder *)m->obj[m->obj_count])->orientation = read_xyz(i, line, m);
+	if (!is_normalized(&(((t_cylinder *)m->obj[m->obj_count])->orientation)))
+		print_error_exit(ERR_RD_OUTOFRANGE, m);
 	((t_cylinder *)m->obj[m->obj_count])->diameter = read_double(i, line, m);
 	((t_cylinder *)m->obj[m->obj_count])->height = read_double(i, line, m);
 	((t_cylinder *)m->obj[m->obj_count])->rgb = read_rgb(i, line, m);

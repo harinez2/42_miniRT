@@ -10,6 +10,8 @@ int	read_file_cone(int *i, char *line, t_map *m)
 	((t_cone *)m->obj[m->obj_count])->vertex = read_xyz(i, line, m);
 	((t_cone *)m->obj[m->obj_count])->normal = read_xyz(i, line, m);
 	((t_cone *)m->obj[m->obj_count])->theta = read_double(i, line, m);
+	if (((t_cone *)m->obj[m->obj_count])->theta < 0 || 180 < ((t_cone *)m->obj[m->obj_count])->theta)
+		print_error_exit(ERR_RD_OUTOFRANGE, m);
 	((t_cone *)m->obj[m->obj_count])->rgb = read_rgb(i, line, m);
 	m->obj_count++;
 	return (CMD_CONE);
