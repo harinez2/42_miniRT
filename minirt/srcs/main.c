@@ -1,5 +1,15 @@
 #include	"main.h"
 
+static void	show_usage_exit(void)
+{
+	printf("Usage: miniRT [options] [filename]\n");
+	printf("  options:\n");
+	printf("    --help       Show help.\n");
+	printf("    --save       Save image as bmp file.\n");
+	printf("    -v           Show detail config on screen.\n");
+	exit(0);
+}
+
 static void	read_params(int argc, char **argv, t_map *m)
 {
 	int		i;
@@ -10,14 +20,7 @@ static void	read_params(int argc, char **argv, t_map *m)
 	while (++i < argc)
 	{
 		if (paramflg == 1 && ft_strncmp(argv[i], "--help", 7) == 0)
-		{
-			printf("Usage: miniRT [options] [filename]\n");
-			printf("  options:\n");
-			printf("    --help       Show help.\n");
-			printf("    --save       Save image as bmp file.\n");
-			printf("    -v           Show detail config on screen.\n");
-			exit(0);
-		}
+			show_usage_exit();
 		else if (paramflg == 1 && ft_strncmp(argv[i], "--save", 7) == 0)
 			m->bmp = 1;
 		else if (paramflg == 1 && ft_strncmp(argv[i], "-v", 3) == 0)
