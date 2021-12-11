@@ -8,7 +8,7 @@ int	read_file_resolution(int *i, char *line, t_map *m)
 		m->window_x = read_int(i, line, m);
 		m->window_y = read_int(i, line, m);
 		if (m->window_x <= 0 || INT_MAX < m->window_x
-				|| m->window_y <= 0 || INT_MAX < m->window_y)
+			|| m->window_y <= 0 || INT_MAX < m->window_y)
 			print_error_exit(ERR_RD_OUTOFRANGE, m);
 	}
 	else
