@@ -27,6 +27,8 @@ SRCS		= \
 				$(SRC_DIR)/output_window_handler.c \
 				$(SRC_DIR)/readfile.c \
 				$(SRC_DIR)/readfile_config.c \
+				$(SRC_DIR)/readfile_config_camera.c \
+				$(SRC_DIR)/readfile_config_light.c \
 				$(SRC_DIR)/readfile_num.c \
 				$(SRC_DIR)/readfile_objs.c \
 				$(SRC_DIR)/readfile_objs2d.c \
@@ -59,6 +61,10 @@ $(NAME): $(OBJS)
 .c.o: $(SRCS)
 	$(CC) $(CFLAGS) $(INCLUDE) $(CFLAGS_L) -c $< -o $@
 
+.PHONY: bonus
+bonus: CFLAGS_L += -D BONUS
+bonus: re
+
 .PHONY: clean
 clean:
 	$(RM) $(OBJS)
@@ -71,5 +77,5 @@ fclean: clean
 re: fclean all
 
 .PHONY: debug
-debug: CFLAGS += $(DBGFLG)
+debug: CFLAGS += $(DBGFLG) -D BONUS
 debug: re

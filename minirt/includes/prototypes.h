@@ -63,7 +63,9 @@ void		read_config_file(char *filename, t_map *m);
 // readfile_config.c
 int			read_file_resolution(int *i, char *line, t_map *m);
 int			read_file_ambient(int *i, char *line, t_map *m);
+// readfile_config_camera.c
 int			read_file_camera(int *i, char *line, t_map *m);
+// readfile_config_light.c
 int			read_file_light(int *i, char *line, t_map *m);
 // readfile_num.c
 int			read_int(int *i, char *s, t_map *m);
