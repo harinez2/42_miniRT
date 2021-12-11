@@ -30,10 +30,12 @@ SRCS		= \
 				$(SRC_DIR)/readfile_num.c \
 				$(SRC_DIR)/readfile_objs.c \
 				$(SRC_DIR)/readfile_objs2d.c \
+				$(SRC_DIR)/readfile_validate.c \
 				$(SRC_DIR)/screen_init.c \
 				$(SRC_DIR)/screen_raytrace.c \
 				$(SRC_DIR)/util_color.c \
 				$(SRC_DIR)/util_lib.c \
+				$(SRC_DIR)/util_lib_mem.c \
 				$(SRC_DIR)/util_print.c \
 				$(SRC_DIR)/util_render.c \
 				$(SRC_DIR)/util_vector.c \

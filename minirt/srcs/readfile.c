@@ -8,12 +8,6 @@ static void	validate_before_opening_file(t_map *m, char *filename)
 		print_error_exit(ERR_SYS_FILENAME, m);
 }
 
-static void	validate_parameters(t_map *m)
-{
-	if (m->ambItsty == -1)
-		print_error_exit(ERR_CHK_NO_A, m);
-}
-
 static int	read_cmd(int *i, char *line, t_map *m)
 {
 	int	cmd;

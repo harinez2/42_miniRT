@@ -21,6 +21,8 @@ int	read_file_ambient(int *i, char *line, t_map *m)
 	if (m->ambItsty == -1)
 	{
 		m->ambItsty = read_double(i, line, m);
+		if (m->ambItsty < 0.0 || 1.0 < m->ambItsty)
+			print_error_exit(ERR_RD_OUTOFRANGE, m);
 		m->kAmb = read_rgb(i, line, m);
 	}
 	else

@@ -26,6 +26,21 @@ int	is_whitespace(const char c)
 	return (0);
 }
 
+static int	get_plusminus_sign(char *s, int *i)
+{
+	int			neg;
+
+	neg = 1;
+	if (s[*i] == '+')
+		(*i)++;
+	else if (s[*i] == '-')
+	{
+		neg = -neg;
+		(*i)++;
+	}
+	return (neg);
+}
+
 int	ft_atoll(char *s, long long *retnum)
 {
 	long long	ret;
@@ -36,54 +51,19 @@ int	ft_atoll(char *s, long long *retnum)
 	i = 0;
 	while (is_whitespace(s[i]))
 		i++;
-	neg = 1;
-	if (s[i] == '+')
-		i++;
-	else if (s[i] == '-')
-	{
-		neg = -neg;
-		i++;
-	}
+	neg = get_plusminus_sign(s, &i);
 	startpos = i;
 	ret = 0;
 	while (s[i] >= '0' && s[i] <= '9')
+	{
 		ret = ret * 10 + s[i++] - '0';
+		if (ret < 0)
+			return (-1);
+	}
 	if (i - startpos == 0)
+		return (-1);
+	if (neg == -1 && ret == LLONG_MAX)
 		return (-1);
 	*retnum = ret * neg;
 	return (i);
-}
-
-void	*ft_memset(void *b, int c, size_t n)
-{
-	size_t			i;
-	unsigned char	*ss;
-
-	ss = (unsigned char *)b;
-	i = 0;
-	while (i < n)
-	{
-		ss[i] = (unsigned char)c;
-		i++;
-	}
-	return (b);
-}
-
-void	*ft_memcpy(void *dst, const void *src, size_t n)
-{
-	size_t			i;
-	unsigned char	*dd;
-	unsigned char	*ss;
-
-	if (dst == src)
-		return (dst);
-	dd = (unsigned char *)dst;
-	ss = (unsigned char *)src;
-	i = 0;
-	while (i < n)
-	{
-		dd[i] = ss[i];
-		i++;
-	}
-	return (dst);
 }
