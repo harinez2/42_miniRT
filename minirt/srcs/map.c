@@ -41,6 +41,8 @@ void	free_map(t_map *m)
 {
 	int		i;
 
+	if (m->image)
+		mlx_destroy_image(m->mlx, m->image);
 	i = 0;
 	while (i < m->obj_count)
 	{

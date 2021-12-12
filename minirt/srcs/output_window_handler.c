@@ -69,7 +69,6 @@ void	close_win_hanlder(t_map *m, int called_by)
 		else
 			printf("Window close button pressed.\n");
 	}
-	mlx_destroy_image(m->mlx, m->image);
 	free_map(m);
 	exit(0);
 }
