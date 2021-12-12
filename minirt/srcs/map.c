@@ -2,6 +2,10 @@
 
 void	init_map(t_map *m)
 {
+	m->mlx = NULL;
+	m->win = NULL;
+	m->image = NULL;
+	m->imgdata = NULL;
 	m->window_x = -1;
 	m->window_y = -1;
 	m->cam_cnt = 0;
