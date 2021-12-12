@@ -39,6 +39,8 @@ static double	calc_plane_diffuse_reflection(
 }
 
 // (3) calc specular reflection (kyomen hansya kou)
+#ifdef BONUS
+
 static void	calc_plane_specular_reflection(
 	t_map *m, t_color *color, int i, t_plane *tp)
 {
@@ -56,6 +58,19 @@ static void	calc_plane_specular_reflection(
 	add_color = adjust_color_level(&tp->rgb, pow(cl.vrDot, m->shininess));
 	add_specular_reflection_color(m, i, color, &add_color);
 }
+
+#else
+
+static void	calc_plane_specular_reflection(
+	t_map *m, t_color *color, int i, t_plane *tp)
+{
+	(void)m;
+	(void)color;
+	(void)i;
+	(void)tp;
+}
+
+#endif
 
 t_color	get_color_by_rt_plane(t_map *m, t_plane *tp)
 {

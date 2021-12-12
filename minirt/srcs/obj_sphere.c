@@ -35,6 +35,8 @@ static double	calc_sphere_diffuse_reflection(
 }
 
 // (3) calc specular reflection (kyomen hansya kou)
+#ifdef BONUS
+
 static void	calc_sphere_specular_reflection(
 	t_map *m, t_color *color, int i, t_sphere *ts)
 {
@@ -52,6 +54,19 @@ static void	calc_sphere_specular_reflection(
 	add_color = adjust_color_level(&ts->rgb, pow(cl.vrDot, m->shininess));
 	add_specular_reflection_color(m, i, color, &add_color);
 }
+
+#else
+
+static void	calc_sphere_specular_reflection(
+	t_map *m, t_color *color, int i, t_sphere *ts)
+{
+	(void)m;
+	(void)color;
+	(void)i;
+	(void)ts;
+}
+
+#endif
 
 //tpos	across point of eyevec and sphere surface(pi)
 t_color	get_color_by_rt_sphere(t_map *m, t_sphere *ts)

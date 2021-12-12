@@ -30,6 +30,8 @@ static double	calc_cylinder_diffuse_reflection(
 }
 
 // (3) calc specular reflection (kyomen hansya kou)
+#ifdef BONUS
+
 static void	calc_cylinder_reflection(
 	t_map *m, t_color *color, int i, t_cylinder *tc)
 {
@@ -48,6 +50,19 @@ static void	calc_cylinder_reflection(
 	add_color = adjust_color_level(&tc->rgb, pow(cl.vrDot, m->shininess));
 	add_specular_reflection_color(m, i, color, &add_color);
 }
+
+#else
+
+static void	calc_cylinder_reflection(
+	t_map *m, t_color *color, int i, t_cylinder *tc)
+{
+	(void)m;
+	(void)color;
+	(void)i;
+	(void)tc;
+}
+
+#endif
 
 // tpos			：cross point (pi) of the v_cam and the surface of the object
 // v_lightDir	: vector of incidence (l) (nyuusha vector)
