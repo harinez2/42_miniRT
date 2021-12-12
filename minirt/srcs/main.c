@@ -2,11 +2,11 @@
 
 static void	show_usage_exit(void)
 {
-	printf("Usage: miniRT [options] [filename]\n");
+	printf("Usage: miniRT [filename(.rt)] [options]\n");
+	printf("       or miniRT --help to show help.\n");
 	printf("  options:\n");
-	printf("    --help       Show help.\n");
-	printf("    --save       Save image as bmp file.\n");
-	printf("    -v           Show detail config on screen.\n");
+	printf("    --save       Save the image as a bmp file.\n");
+	printf("    -v           Show config detail on screen.\n");
 	exit(0);
 }
 
