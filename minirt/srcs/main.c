@@ -13,26 +13,22 @@ static void	show_usage_exit(void)
 static void	read_params(int argc, char **argv, t_map *m)
 {
 	int		i;
-	int		paramflg;
 
-	paramflg = 1;
-	i = 0;
+	if (argc < 2)
+		print_error_exit(ERR_SYS_PARAMETER, m);
+	if (ft_strncmp(argv[1], "--help", 7) == 0)
+		show_usage_exit();
+	i = 1;
 	while (++i < argc)
 	{
-		if (paramflg == 1 && ft_strncmp(argv[i], "--help", 7) == 0)
-			show_usage_exit();
-		else if (paramflg == 1 && ft_strncmp(argv[i], "--save", 7) == 0)
+		if (ft_strncmp(argv[i], "--save", 7) == 0)
 			m->bmp = 1;
-		else if (paramflg == 1 && ft_strncmp(argv[i], "-v", 3) == 0)
+		else if (ft_strncmp(argv[i], "-v", 3) == 0)
 			m->dsp = 1;
-		else if (paramflg < 0)
-			print_error_exit(ERR_RD_INCORRECTFORMAT, m);
 		else
-		{
-			--paramflg;
-			read_config_file(argv[i], m);
-		}
+			print_error_exit(ERR_SYS_PARAMETER, m);
 	}
+	read_config_file(argv[1], m);
 }
 
 int	main(int argc, char **argv)
