@@ -56,8 +56,8 @@ static int	draw_map_on_bmp(int fd, uint8_t *buffer, int stride, t_map *m)
 	uint8_t	*row;
 	t_color	c;
 
-	y = 0;
-	while (y < m->window_y)
+	y = m->window_y - 1;
+	while (y >= 0)
 	{
 		row = buffer;
 		x = 0;
@@ -71,7 +71,7 @@ static int	draw_map_on_bmp(int fd, uint8_t *buffer, int stride, t_map *m)
 		}
 		if (write(fd, buffer, stride) <= 0)
 			return (-1);
-		y++;
+		y--;
 	}
 	return (0);
 }
