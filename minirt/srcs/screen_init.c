@@ -18,21 +18,43 @@ static void	calc_distance_cam_scr(t_map *m)
 // unitvec x is a unit vector which the z-axis vec is zero.
 static void	calc_screen_unitvec_x(t_map *m)
 {
-	if (m->curr_cam.orien.x == 0 && m->curr_cam.orien.y >= 0)
-		m->scr.unitvec_scrx = ft_vec(1, 0, 0);
-	else if (m->curr_cam.orien.x == 0 && m->curr_cam.orien.y < 0)
-		m->scr.unitvec_scrx = ft_vec(-1, 0, 0);
-	else if (m->curr_cam.orien.y == 0 && m->curr_cam.orien.x > 0)
-		m->scr.unitvec_scrx = ft_vec(0, -1, 0);
-	else if (m->curr_cam.orien.y == 0 && m->curr_cam.orien.x < 0)
-		m->scr.unitvec_scrx = ft_vec(0, 1, 0);
+	double	scrx_x;
+	double	scrx_y;
+
+	if (m->curr_cam.orien.y < 0)
+		scrx_x = -1;
+	else if (m->curr_cam.orien.y == 0 && m->curr_cam.orien.x != 0)
+		scrx_x = 0;
 	else
-	{
-		m->scr.unitvec_scrx.x = 1;
-		m->scr.unitvec_scrx.y
-			= -1 * m->curr_cam.orien.x / m->curr_cam.orien.y;
-		m->scr.unitvec_scrx.z = 0;
-	}
+		scrx_x = 1;
+	if (m->curr_cam.orien.y == 0 && m->curr_cam.orien.x == 0)
+		scrx_y = 0;
+	else if (m->curr_cam.orien.y == 0 && m->curr_cam.orien.x < 0)
+		scrx_y = 1;
+	else if (m->curr_cam.orien.y == 0 && m->curr_cam.orien.x > 0)
+		scrx_y = -1;
+	else if (m->curr_cam.orien.x == 0)
+		scrx_y = 0;
+	else if (m->curr_cam.orien.y > 0)
+		scrx_y = -1 * m->curr_cam.orien.y / m->curr_cam.orien.x;
+	else
+		scrx_y = m->curr_cam.orien.y / m->curr_cam.orien.x;
+	// if (m->curr_cam.orien.x == 0 && m->curr_cam.orien.y >= 0)
+	// 	m->scr.unitvec_scrx = ft_vec(1, 0, 0);
+	// else if (m->curr_cam.orien.x == 0 && m->curr_cam.orien.y < 0)
+	// 	m->scr.unitvec_scrx = ft_vec(-1, 0, 0);
+	// else if (m->curr_cam.orien.y == 0 && m->curr_cam.orien.x > 0)
+	// 	m->scr.unitvec_scrx = ft_vec(0, -1, 0);
+	// else if (m->curr_cam.orien.y == 0 && m->curr_cam.orien.x < 0)
+	// 	m->scr.unitvec_scrx = ft_vec(0, 1, 0);
+	// else
+	// {
+	// 	m->scr.unitvec_scrx.x = 1;
+	// 	m->scr.unitvec_scrx.y
+	// 		= -1 * m->curr_cam.orien.x / m->curr_cam.orien.y;
+	// 	m->scr.unitvec_scrx.z = 0;
+	// }
+	m->scr.unitvec_scrx = ft_vec(scrx_x, scrx_y, 0);
 	if (m->dsp)
 		ft_vecprint_with_name("  unitvec_scrx              ",
 			&m->scr.unitvec_scrx);
