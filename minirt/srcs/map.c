@@ -22,17 +22,35 @@ void	init_map(t_map *m)
 	m->endian = get_endian();
 }
 
-void	arrange_constant_values(t_map *m)
+#ifdef BONUS
+
+static void	calc_kdif_kspe(t_map *m)
 {
-	m->kAmb.r = m->kAmb.r * m->ambItsty;
-	m->kAmb.g = m->kAmb.g * m->ambItsty;
-	m->kAmb.b = m->kAmb.b * m->ambItsty;
 	m->kDif.r = 2 * (1 - m->kAmb.r) / 3;
 	m->kDif.g = 2 * (1 - m->kAmb.g) / 3;
 	m->kDif.b = 2 * (1 - m->kAmb.b) / 3;
 	m->kSpe.r = (1 - m->kAmb.r) / 3;
 	m->kSpe.g = (1 - m->kAmb.g) / 3;
 	m->kSpe.b = (1 - m->kAmb.b) / 3;
+}
+
+#else
+
+static void	calc_kdif_kspe(t_map *m)
+{
+	m->kDif.r = 1 - m->kAmb.r;
+	m->kDif.g = 1 - m->kAmb.g;
+	m->kDif.b = 1 - m->kAmb.b;
+}
+
+#endif
+
+void	arrange_constant_values(t_map *m)
+{
+	m->kAmb.r = m->kAmb.r * m->ambItsty;
+	m->kAmb.g = m->kAmb.g * m->ambItsty;
+	m->kAmb.b = m->kAmb.b * m->ambItsty;
+	calc_kdif_kspe(m);
 	if (m->window_x == -1)
 	{
 		m->window_x = 512;
