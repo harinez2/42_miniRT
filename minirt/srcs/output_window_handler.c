@@ -41,17 +41,17 @@ int	keypress_handler(int key, t_map *m)
 	if (key == KEY_C)
 		change_current_camera(m);
 	else if (key == KEY_UP)
-		m->curr_cam.pos.y += 1;
+		m->curr_cam.pos.z += 1;
 	else if (key == KEY_DOWN)
-		m->curr_cam.pos.y -= 1;
+		m->curr_cam.pos.z -= 1;
 	else if (key == KEY_LEFT)
 		m->curr_cam.pos.x -= 1;
 	else if (key == KEY_RIGHT)
 		m->curr_cam.pos.x += 1;
 	else if (key == KEY_F)
-		m->curr_cam.pos.z -= 1;
+		m->curr_cam.pos.y -= 1;
 	else if (key == KEY_B)
-		m->curr_cam.pos.z += 1;
+		m->curr_cam.pos.y += 1;
 	else
 		return (0);
 	if (m->dsp)
