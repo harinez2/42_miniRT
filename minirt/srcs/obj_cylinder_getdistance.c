@@ -15,24 +15,26 @@ static void	calc_ABCD(
 	cv->D = cv->B * cv->B - 4 * cv->A * cv->C;
 }
 
-static void	calc_cylinder_t(
-	t_vec v_w, t_map *m, t_cylinder *tc, t_calc_crossing *cv)
+static t_calc_crossing	calc_cylinder_t(
+	t_vec v_w, t_map *m, t_cylinder *tc)
 {
+	t_calc_crossing	cv;
 	t_multdouble	md1;
 	t_multdouble	md2;
 	t_multdouble	md3;
 
-	cv->v_de = ft_vecsub(v_w, m->curr_cam.pos);
+	cv.v_de = ft_vecsub(v_w, m->curr_cam.pos);
 	md1.a = m->curr_cam.pos.x - tc->center.x;
 	md1.b = m->curr_cam.pos.y - tc->center.y;
 	md1.c = m->curr_cam.pos.z - tc->center.z;
-	md2.a = tc->orientation.y * cv->v_de.z - tc->orientation.z * cv->v_de.y;
-	md2.b = tc->orientation.z * cv->v_de.x - tc->orientation.x * cv->v_de.z;
-	md2.c = tc->orientation.x * cv->v_de.y - tc->orientation.y * cv->v_de.x;
+	md2.a = tc->orientation.y * cv.v_de.z - tc->orientation.z * cv.v_de.y;
+	md2.b = tc->orientation.z * cv.v_de.x - tc->orientation.x * cv.v_de.z;
+	md2.c = tc->orientation.x * cv.v_de.y - tc->orientation.y * cv.v_de.x;
 	md3.a = tc->orientation.y * md1.c - tc->orientation.z * md1.b;
 	md3.b = tc->orientation.z * md1.a - tc->orientation.x * md1.c;
 	md3.c = tc->orientation.x * md1.b - tc->orientation.y * md1.a;
-	calc_ABCD(cv, &md2, &md3, tc);
+	calc_ABCD(&cv, &md2, &md3, tc);
+	return (cv);
 }
 
 static double	check_cylinder_length(
@@ -58,7 +60,7 @@ double	get_distance_to_cylinder(t_vec v_w, t_map *m, t_cylinder *tc)
 	double			t1;
 	double			t2;
 
-	calc_cylinder_t(v_w, m, tc, &cv);
+	cv = calc_cylinder_t(v_w, m, tc);
 	cv.t = -1;
 	if (-EPSILON < cv.D && cv.D < EPSILON)
 		cv.t = -cv.B / (2 * cv.A);
