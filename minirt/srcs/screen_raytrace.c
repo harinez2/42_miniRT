@@ -1,26 +1,26 @@
 #include	"main.h"
 
-static double	get_distance_to_obj(t_vec v_w, int i, t_map *m)
+static double	get_distance_to_obj(t_vec v_from, t_vec v_to, int i, t_map *m)
 {
 	double	chkt;
 
 	chkt = -1;
 	if (m->obj_type[i] == CMD_SPHERE)
-		chkt = get_distance_to_sphere(v_w, m, (t_sphere *)m->obj[i]);
+		chkt = get_distance_to_sphere(v_to, m, (t_sphere *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_PLANE)
-		chkt = get_distance_to_plane(v_w, m, (t_plane *)m->obj[i]);
+		chkt = get_distance_to_plane(v_to, m, (t_plane *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_SQUARE)
-		chkt = get_distance_to_square(v_w, m, (t_square *)m->obj[i]);
+		chkt = get_distance_to_square(v_to, m, (t_square *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_CYLINDER)
-		chkt = get_distance_to_cylinder(v_w, m, (t_cylinder *)m->obj[i]);
+		chkt = get_distance_to_cylinder(v_from, v_to, m, (t_cylinder *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_TRIANGLE)
-		chkt = get_distance_to_triangle(v_w, m, (t_triangle *)m->obj[i]);
+		chkt = get_distance_to_triangle(v_to, m, (t_triangle *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_CONE)
-		chkt = get_distance_to_cone(v_w, m, (t_cone *)m->obj[i]);
+		chkt = get_distance_to_cone(v_to, m, (t_cone *)m->obj[i]);
 	return (chkt);
 }
 
-int	get_minimum_distance_to_obj(t_vec v_w, t_map *m, double *hit_t)
+int	get_minimum_distance_to_obj(t_vec v_from, t_vec v_to, t_map *m, double *hit_t)
 {
 	double		t;
 	int			hit_i;
@@ -31,7 +31,7 @@ int	get_minimum_distance_to_obj(t_vec v_w, t_map *m, double *hit_t)
 	i = 0;
 	while (i < m->obj_count)
 	{
-		t = get_distance_to_obj(v_w, i, m);
+		t = get_distance_to_obj(v_from, v_to, i, m);
 		if (t > EPSILON && (*hit_t == -1 || t < *hit_t))
 		{
 			*hit_t = t;
@@ -72,7 +72,7 @@ static t_color	get_color_with_raytracing(t_vec v_w, t_map *m)
 	double	hit_t;
 	int		hit_i;
 
-	hit_i = get_minimum_distance_to_obj(v_w, m, &hit_t);
+	hit_i = get_minimum_distance_to_obj(m->curr_cam.pos, v_w, m, &hit_t);
 	return (get_color_with_lightning(v_w, m, hit_i, hit_t));
 }
 
