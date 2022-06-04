@@ -84,7 +84,7 @@ t_color	get_color_by_rt_cone(t_map *m, t_cone *tc)
 	i = 0;
 	while (i < m->lit_cnt)
 	{
-		get_minimum_distance_to_obj(m->lit[i].pos, m, &hit_t);
+		get_minimum_distance_to_obj(m->lit[i].pos, m->camdir.v_tpos, m, &hit_t);
 		if (hit_t != -1)
 		{
 			i++;
