@@ -6,17 +6,17 @@ static double	get_distance_to_obj(t_vec v_from, t_vec v_to, int i, t_map *m)
 
 	chkt = -1;
 	if (m->obj_type[i] == CMD_SPHERE)
-		chkt = get_distance_to_sphere(v_to, m, (t_sphere *)m->obj[i]);
+		chkt = get_distance_to_sphere(v_from, v_to, m, (t_sphere *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_PLANE)
-		chkt = get_distance_to_plane(v_to, m, (t_plane *)m->obj[i]);
+		chkt = get_distance_to_plane(v_from, v_to, m, (t_plane *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_SQUARE)
-		chkt = get_distance_to_square(v_to, m, (t_square *)m->obj[i]);
+		chkt = get_distance_to_square(v_from, v_to, m, (t_square *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_CYLINDER)
 		chkt = get_distance_to_cylinder(v_from, v_to, m, (t_cylinder *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_TRIANGLE)
-		chkt = get_distance_to_triangle(v_to, m, (t_triangle *)m->obj[i]);
+		chkt = get_distance_to_triangle(v_from, v_to, m, (t_triangle *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_CONE)
-		chkt = get_distance_to_cone(v_to, m, (t_cone *)m->obj[i]);
+		chkt = get_distance_to_cone(v_from, v_to, m, (t_cone *)m->obj[i]);
 	return (chkt);
 }
 

@@ -23,18 +23,18 @@ static void	calc_triangle_crossprod(
 }
 
 //tpos	across point of eyevec and plane surface(pi)
-double	get_distance_to_triangle(t_vec v_w, t_map *m, t_triangle *tt)
+double	get_distance_to_triangle(t_vec v_from, t_vec v_to, t_map *m, t_triangle *tt)
 {
 	double		t;
 	t_vec		v_de;
 	t_vec		v_tpos;
 	t_multivec	mv;
 
-	t = get_distance_to_plane(v_w, m, &tt->plane);
+	t = get_distance_to_plane(v_from, v_to, m, &tt->plane);
 	if (t > 0)
 	{
-		v_de = ft_vecsub(v_w, m->curr_cam.pos);
-		v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(v_de, t));
+		v_de = ft_vecsub(v_to, v_from);
+		v_tpos = ft_vecadd(v_from, ft_vecmult(v_de, t));
 		calc_triangle_crossprod(&mv, v_tpos, tt);
 		if (tt->first.x == tt->second.x && tt->first.x == tt->third.x)
 		{

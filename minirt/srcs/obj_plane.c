@@ -1,6 +1,6 @@
 #include	"main.h"
 
-double	get_distance_to_plane(t_vec v_w, t_map *m, t_plane *tp)
+double	get_distance_to_plane(t_vec v_from, t_vec v_to, t_map *m, t_plane *tp)
 {
 	double	t;
 	t_vec	v_de;
@@ -8,11 +8,12 @@ double	get_distance_to_plane(t_vec v_w, t_map *m, t_plane *tp)
 	double	b;
 	double	c;
 
-	if (ft_vecinnerprod(v_w, tp->normal) != 0)
+	(void)m;
+	if (ft_vecinnerprod(v_to, tp->normal) != 0)
 	{
-		v_de = ft_vecsub(v_w, m->curr_cam.pos);
+		v_de = ft_vecsub(v_to, v_from);
 		a = ft_vecinnerprod(tp->position, tp->normal);
-		b = ft_vecinnerprod(m->curr_cam.pos, tp->normal);
+		b = ft_vecinnerprod(v_from, tp->normal);
 		c = ft_vecinnerprod(v_de, tp->normal);
 		t = (a - b) / c;
 		if (t > EPSILON)
@@ -83,7 +84,7 @@ t_color	get_color_by_rt_plane(t_map *m, t_plane *tp)
 	i = 0;
 	while (i < m->lit_cnt)
 	{
-		get_minimum_distance_to_obj(m->lit[i].pos, m, &hit_t);
+		get_minimum_distance_to_obj(m->lit[i].pos, m->camdir.v_tpos, m, &hit_t);
 		if (hit_t != -1)
 		{
 			i++;

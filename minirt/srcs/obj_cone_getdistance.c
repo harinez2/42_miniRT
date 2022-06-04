@@ -37,17 +37,17 @@ static double	check_cone_length(t_map *m, t_cone *tc, t_calc_crossing	cv)
 	return (0);
 }
 
-double	get_distance_to_cone(t_vec v_w, t_map *m, t_cone *tc)
+double	get_distance_to_cone(t_vec v_from, t_vec v_to, t_map *m, t_cone *tc)
 {
 	t_calc_crossing	cv;
 	t_multdouble	md1;
 	t_multdouble	md2;
 	double			l;
 
-	cv.v_de = ft_vecsub(v_w, m->curr_cam.pos);
-	md1.a = m->curr_cam.pos.x - tc->vertex.x;
-	md1.b = m->curr_cam.pos.y - tc->vertex.y;
-	md1.c = m->curr_cam.pos.z - tc->vertex.z;
+	cv.v_de = ft_vecsub(v_to, v_from);
+	md1.a = v_from.x - tc->vertex.x;
+	md1.b = v_from.y - tc->vertex.y;
+	md1.c = v_from.z - tc->vertex.z;
 	l = sqrt(tc->normal.x * tc->normal.x + tc->normal.y * tc->normal.y
 			+ tc->normal.z * tc->normal.z) * cos(ft_degree_to_rad(tc->theta));
 	md2.a = tc->normal.x * tc->normal.x / (l * l) - 1;

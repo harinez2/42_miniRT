@@ -1,12 +1,13 @@
 #include	"main.h"
 
-double	get_distance_to_sphere(t_vec v_w, t_map *m, t_sphere *ts)
+double	get_distance_to_sphere(t_vec v_from, t_vec v_to, t_map *m, t_sphere *ts)
 {
 	t_calc_crossing	cv;
 	t_vec			v_center_cam;
 
-	cv.v_de = ft_vecsub(v_w, m->curr_cam.pos);
-	v_center_cam = ft_vecsub(m->curr_cam.pos, ts->center);
+	(void)m;
+	cv.v_de = ft_vecsub(v_to, v_from);
+	v_center_cam = ft_vecsub(v_from, ts->center);
 	cv.A = ft_vecnormsq(cv.v_de);
 	cv.B = 2 * ft_vecinnerprod(cv.v_de, v_center_cam);
 	cv.C = ft_vecnormsq(v_center_cam) - ts->diameter * ts->diameter;
@@ -80,7 +81,7 @@ t_color	get_color_by_rt_sphere(t_map *m, t_sphere *ts)
 	i = 0;
 	while (i < m->lit_cnt)
 	{
-		get_minimum_distance_to_obj(m->lit[i].pos, m, &hit_t);
+		get_minimum_distance_to_obj(m->lit[i].pos, m->camdir.v_tpos, m, &hit_t);
 		if (hit_t != -1)
 		{
 			i++;
