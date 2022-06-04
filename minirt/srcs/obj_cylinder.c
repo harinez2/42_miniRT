@@ -6,7 +6,7 @@ static t_vec	get_normal_vector_at_tpos_cylinder(t_map *m, t_cylinder *tc)
 	t_vec	v_n;
 
 	v_p0_p = ft_vecsub(m->camdir.v_tpos, tc->center);
-	v_n = ft_vecsub(v_p0_p, tc->orientation);
+	v_n = ft_vecsub(v_p0_p, ft_vecnormalize(tc->orientation));
 	return (v_n);
 }
 
@@ -79,14 +79,12 @@ t_color	get_color_by_rt_cylinder(t_map *m, t_cylinder *tc)
 	while (i < m->lit_cnt)
 	{
 		get_minimum_distance_to_obj(m->lit[i].pos, m, &hit_t);
-		if (hit_t != -1)
+		if (hit_t < 0)
 		{
-			i++;
-			continue ;
+			naiseki = calc_cylinder_diffuse_reflection(m, &color, i, tc);
+			if (naiseki > 0)
+				calc_cylinder_reflection(m, &color, i, tc);
 		}
-		naiseki = calc_cylinder_diffuse_reflection(m, &color, i, tc);
-		if (naiseki > 0)
-			calc_cylinder_reflection(m, &color, i, tc);
 		i++;
 	}
 	return (set_rgb_inrange(color));
