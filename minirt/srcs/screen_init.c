@@ -15,7 +15,7 @@ static void	calc_distance_cam_scr(t_map *m)
 		printf("  distance_cam_scr           : %.2f\n", m->scr.distance_cam_scr);
 }
 
-static t_vec	calc_unitvec_scr(t_map *m)
+static t_vec	calc_unitvec_scrx(t_map *m)
 {
 	double	scrx_x;
 	double	scrx_y;
@@ -44,7 +44,7 @@ static t_vec	calc_unitvec_scr(t_map *m)
 // unitvec x is a unit vector which the z-axis vec is zero.
 static void	calc_screen_unitvec_x(t_map *m)
 {
-	m->scr.unitvec_scrx = calc_unitvec_scr(m);
+	m->scr.unitvec_scrx = calc_unitvec_scrx(m);
 	if (m->dsp)
 		ft_vecprint_with_name("  unitvec_scrx              ",
 			&m->scr.unitvec_scrx);
