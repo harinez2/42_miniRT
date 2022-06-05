@@ -83,7 +83,7 @@ t_color	get_color_by_rt_sphere(t_map *m, t_sphere *ts)
 	while (i < m->lit_cnt)
 	{
 		get_minimum_distance_to_obj(m->lit[i].pos, m->camdir.v_tpos, m, &hit_t);
-		if (hit_t < 0 || (1 - EPSILON < hit_t && hit_t < 1 + EPSILON))
+		if (hit_t < 0 || 1 - EPSILON < hit_t)
 		{
 			naiseki = calc_sphere_diffuse_reflection(m, &color, i, ts);
 			if (naiseki > 0)
