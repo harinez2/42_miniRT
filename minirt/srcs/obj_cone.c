@@ -38,7 +38,7 @@ static double	calc_cone_diffuse_reflection(
 // (3) calc specular reflection (kyomen hansya kou)
 #ifdef BONUS
 
-static void	calc_cone_reflection(
+static void	calc_cone_specular_reflection(
 	t_map *m, t_color *color, int i, t_cone *tc)
 {
 	t_calc_light	cl;
@@ -59,7 +59,7 @@ static void	calc_cone_reflection(
 
 #else
 
-static void	calc_cone_reflection(
+static void	calc_cone_specular_reflection(
 	t_map *m, t_color *color, int i, t_cone *tc)
 {
 	(void)m;
@@ -89,7 +89,7 @@ t_color	get_color_by_rt_cone(t_map *m, t_cone *tc)
 		{
 			naiseki = calc_cone_diffuse_reflection(m, &color, i, tc);
 			if (naiseki > 0)
-				calc_cone_reflection(m, &color, i, tc);
+				calc_cone_specular_reflection(m, &color, i, tc);
 		}
 		i++;
 	}

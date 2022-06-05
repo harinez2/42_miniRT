@@ -32,7 +32,7 @@ static double	calc_cylinder_diffuse_reflection(
 // (3) calc specular reflection (kyomen hansya kou)
 #ifdef BONUS
 
-static void	calc_cylinder_reflection(
+static void	calc_cylinder_specular_reflection(
 	t_map *m, t_color *color, int i, t_cylinder *tc)
 {
 	t_calc_light	cl;
@@ -53,7 +53,7 @@ static void	calc_cylinder_reflection(
 
 #else
 
-static void	calc_cylinder_reflection(
+static void	calc_cylinder_specular_reflection(
 	t_map *m, t_color *color, int i, t_cylinder *tc)
 {
 	(void)m;
@@ -83,7 +83,7 @@ t_color	get_color_by_rt_cylinder(t_map *m, t_cylinder *tc)
 		{
 			naiseki = calc_cylinder_diffuse_reflection(m, &color, i, tc);
 			if (naiseki > 0)
-				calc_cylinder_reflection(m, &color, i, tc);
+				calc_cylinder_specular_reflection(m, &color, i, tc);
 		}
 		i++;
 	}
