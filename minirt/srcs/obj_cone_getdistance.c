@@ -37,7 +37,8 @@ static double	check_cone_length(t_map *m, t_cone *tc, t_calc_crossing	cv)
 	return (0);
 }
 
-double	get_distance_to_cone(t_vec v_from, t_vec v_to, t_map *m, t_cone *tc)
+double	get_distance_to_cone(
+	t_vec v_from, t_vec v_to, t_map *m, t_cone *tc)
 {
 	t_calc_crossing	cv;
 	t_multdouble	md1;

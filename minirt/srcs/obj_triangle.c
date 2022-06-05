@@ -23,7 +23,8 @@ static void	calc_triangle_crossprod(
 }
 
 //tpos	across point of eyevec and plane surface(pi)
-double	get_distance_to_triangle(t_vec v_from, t_vec v_to, t_map *m, t_triangle *tt)
+double	get_distance_to_triangle(
+	t_vec v_from, t_vec v_to, t_map *m, t_triangle *tt)
 {
 	double		t;
 	t_vec		v_de;

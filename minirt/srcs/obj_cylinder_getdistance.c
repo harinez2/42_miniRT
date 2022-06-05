@@ -54,7 +54,8 @@ static double	check_cylinder_length(
 }
 
 // tpos：cross point (pi) of the v_cam and the surface of the cylinder
-double	get_distance_to_cylinder(t_vec v_from, t_vec v_to, t_map *m, t_cylinder *tc)
+double	get_distance_to_cylinder(
+	t_vec v_from, t_vec v_to, t_map *m, t_cylinder *tc)
 {
 	t_calc_crossing	cv;
 	double			t1;

@@ -12,15 +12,18 @@ static double	get_distance_to_obj(t_vec v_from, t_vec v_to, int i, t_map *m)
 	else if (m->obj_type[i] == CMD_SQUARE)
 		chkt = get_distance_to_square(v_from, v_to, m, (t_square *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_CYLINDER)
-		chkt = get_distance_to_cylinder(v_from, v_to, m, (t_cylinder *)m->obj[i]);
+		chkt = get_distance_to_cylinder(
+				v_from, v_to, m, (t_cylinder *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_TRIANGLE)
-		chkt = get_distance_to_triangle(v_from, v_to, m, (t_triangle *)m->obj[i]);
+		chkt = get_distance_to_triangle(
+				v_from, v_to, m, (t_triangle *)m->obj[i]);
 	else if (m->obj_type[i] == CMD_CONE)
 		chkt = get_distance_to_cone(v_from, v_to, m, (t_cone *)m->obj[i]);
 	return (chkt);
 }
 
-int	get_minimum_distance_to_obj(t_vec v_from, t_vec v_to, t_map *m, double *hit_t)
+int	get_minimum_distance_to_obj(
+	t_vec v_from, t_vec v_to, t_map *m, double *hit_t)
 {
 	double		t;
 	int			hit_i;

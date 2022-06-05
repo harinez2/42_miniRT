@@ -1,6 +1,7 @@
 #include	"main.h"
 
-double	get_distance_to_sphere(t_vec v_from, t_vec v_to, t_map *m, t_sphere *ts)
+double	get_distance_to_sphere(
+	t_vec v_from, t_vec v_to, t_map *m, t_sphere *ts)
 {
 	t_calc_crossing	cv;
 	t_vec			v_center_cam;

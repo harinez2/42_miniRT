@@ -1,6 +1,7 @@
 #include	"main.h"
 
-double	get_distance_to_plane(t_vec v_from, t_vec v_to, t_map *m, t_plane *tp)
+double	get_distance_to_plane(
+	t_vec v_from, t_vec v_to, t_map *m, t_plane *tp)
 {
 	double	t;
 	t_vec	v_de;
