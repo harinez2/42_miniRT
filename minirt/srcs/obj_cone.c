@@ -85,14 +85,12 @@ t_color	get_color_by_rt_cone(t_map *m, t_cone *tc)
 	while (i < m->lit_cnt)
 	{
 		get_minimum_distance_to_obj(m->lit[i].pos, m->camdir.v_tpos, m, &hit_t);
-		if (hit_t != -1)
+		if (hit_t < 0 || (1 - EPSILON < hit_t && hit_t < 1 + EPSILON))
 		{
-			i++;
-			continue ;
+			naiseki = calc_cone_diffuse_reflection(m, &color, i, tc);
+			if (naiseki > 0)
+				calc_cone_reflection(m, &color, i, tc);
 		}
-		naiseki = calc_cone_diffuse_reflection(m, &color, i, tc);
-		if (naiseki > 0)
-			calc_cone_reflection(m, &color, i, tc);
 		i++;
 	}
 	return (set_rgb_inrange(color));
