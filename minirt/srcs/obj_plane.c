@@ -81,7 +81,7 @@ t_color	get_color_by_rt_plane(t_map *m, t_plane *tp)
 	double	hit_t;
 	double	naiseki;
 
-	set_ambient_reflection_color(m, &color, &tp->rgb);
+	set_ambient_reflection_color(m, &color);
 	i = 0;
 	while (i < m->lit_cnt)
 	{

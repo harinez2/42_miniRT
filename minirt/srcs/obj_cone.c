@@ -80,7 +80,7 @@ t_color	get_color_by_rt_cone(t_map *m, t_cone *tc)
 	double	hit_t;
 	double	naiseki;
 
-	set_ambient_reflection_color(m, &color, &tc->rgb);
+	set_ambient_reflection_color(m, &color);
 	i = 0;
 	while (i < m->lit_cnt)
 	{

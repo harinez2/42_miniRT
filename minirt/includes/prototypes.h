@@ -48,8 +48,7 @@ double		get_distance_to_triangle(
 				t_vec v_from, t_vec v_to, t_map *m, t_triangle *tt);
 t_color		get_color_by_rt_triangle(t_map *m, t_triangle *tt);
 // obj_util.c
-void		set_ambient_reflection_color(
-				t_map *m, t_color *color, t_color *add_color);
+void		set_ambient_reflection_color(t_map *m, t_color *color);
 t_color		adjust_color_level(t_color *base_color, double innprod);
 void		add_diffuse_reflection_color(
 				t_map *m, int lit_i, t_color *color, t_color *add_color);

@@ -1,12 +1,8 @@
 #include	"main.h"
 
-void	set_ambient_reflection_color(
-	t_map *m, t_color *color, t_color *add_color)
+void	set_ambient_reflection_color(t_map *m, t_color *color)
 {
-	set_color(color,
-		m->kAmb.r * m->ambItsty * add_color->r,
-		m->kAmb.g * m->ambItsty * add_color->g,
-		m->kAmb.b * m->ambItsty * add_color->b);
+	*color = adjust_color_level(&m->kAmb, m->ambItsty);
 }
 
 t_color	adjust_color_level(t_color *base_color, double innprod)

@@ -78,7 +78,7 @@ t_color	get_color_by_rt_sphere(t_map *m, t_sphere *ts)
 	double	hit_t;
 	double	naiseki;
 
-	set_ambient_reflection_color(m, &color, &ts->rgb);
+	set_ambient_reflection_color(m, &color);
 	i = 0;
 	while (i < m->lit_cnt)
 	{
