@@ -14,7 +14,7 @@ double	get_distance_to_plane(
 	if (c != 0)
 	{
 		b = ft_vecinnerprod(v_from, tp->normal);
-		t = - b / c;
+		t = -b / c;
 		if (t > 0)
 			return (t);
 	}
