@@ -60,7 +60,7 @@ double	get_distance_to_cylinder(
 	t_calc_crossing	cv;
 	double			t1;
 	double			t2;
-	double			max_t;
+	double			bigger_t;
 
 	cv = calc_cylinder_t(v_from, v_to, tc);
 	tc->secondcrosst_flg = 0;
@@ -71,17 +71,15 @@ double	get_distance_to_cylinder(
 	{
 		t1 = (-cv.B - sqrt(cv.D)) / (2 * cv.A);
 		t2 = (-cv.B + sqrt(cv.D)) / (2 * cv.A);
-		max_t = fmax(t1, t2);
+		bigger_t = fmax(t1, t2);
 		t1 = check_cylinder_length(m, tc, cv, t1);
 		t2 = check_cylinder_length(m, tc, cv, t2);
 		if (t1 > 0 && t2 > 0)
 			cv.t = fmin(t1, t2);
-		else if (t1 > 0 || t2 > 0)
-		{
+		else
 			cv.t = fmax(t1, t2);
-			if (cv.t == max_t)
-				tc->secondcrosst_flg = 1;
-		}
+		if (bigger_t != -1 && cv.t == bigger_t)
+			tc->secondcrosst_flg = 1;
 	}
 	return (cv.t);
 }
