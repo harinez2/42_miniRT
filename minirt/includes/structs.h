@@ -158,6 +158,7 @@ typedef struct s_cylinder
 	double		diameter;
 	double		height;
 	t_color		rgb;
+	int			secondcrosst_flg;
 }	t_cylinder;
 
 typedef struct s_triangle

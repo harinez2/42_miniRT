@@ -3,10 +3,13 @@
 static t_vec	get_normal_vector_at_tpos_cylinder(t_map *m, t_cylinder *tc)
 {
 	t_vec	v_p0_p;
+	double	orien_len;
 	t_vec	v_n;
 
 	v_p0_p = ft_vecsub(m->camdir.v_tpos, tc->center);
-	v_n = ft_vecsub(v_p0_p, ft_vecnormalize(tc->orientation));
+	orien_len = sqrt(v_p0_p.x * v_p0_p.x + v_p0_p.y * v_p0_p.y
+			+ v_p0_p.z * v_p0_p.z - tc->diameter * tc->diameter);
+	v_n = ft_vecsub(v_p0_p, ft_vecmult(tc->orientation, orien_len));
 	return (v_n);
 }
 
@@ -21,6 +24,9 @@ static double	calc_cylinder_diffuse_reflection(
 
 	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
 	v_nornal = ft_vecnormalize(get_normal_vector_at_tpos_cylinder(m, tc));
+	get_distance_to_cylinder(m->curr_cam.pos, m->camdir.v_w, m, tc);
+	if (tc->secondcrosst_flg == 1)
+		v_nornal = ft_vecmult(v_nornal, -1);
 	innprod_lit_n = ft_vecinnerprod(v_nornal, v_lightDir);
 	if (innprod_lit_n < 0)
 		innprod_lit_n = 0;
