@@ -9,7 +9,10 @@ static t_vec	get_normal_vector_at_tpos_cylinder(t_map *m, t_cylinder *tc)
 	v_p0_p = ft_vecsub(m->camdir.v_tpos, tc->center);
 	orien_len = sqrt(v_p0_p.x * v_p0_p.x + v_p0_p.y * v_p0_p.y
 			+ v_p0_p.z * v_p0_p.z - tc->diameter * tc->diameter);
-	v_n = ft_vecsub(v_p0_p, ft_vecmult(tc->orientation, orien_len));
+	if (ft_vecinnerprod(v_p0_p, tc->orientation) >= 0)
+		v_n = ft_vecsub(v_p0_p, ft_vecmult(tc->orientation, orien_len));
+	else
+		v_n = ft_vecsub(v_p0_p, ft_vecmult(tc->orientation, -orien_len));
 	return (v_n);
 }
 
