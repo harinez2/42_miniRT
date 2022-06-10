@@ -5,19 +5,17 @@ double	get_distance_to_plane(
 {
 	double	t;
 	t_vec	v_de;
-	double	a;
 	double	b;
 	double	c;
 
 	(void)m;
-	if (ft_vecinnerprod(v_to, tp->normal) != 0)
+	v_de = ft_vecsub(v_to, v_from);
+	c = ft_vecinnerprod(v_de, tp->normal);
+	if (c != 0)
 	{
-		v_de = ft_vecsub(v_to, v_from);
-		a = ft_vecinnerprod(tp->position, tp->normal);
 		b = ft_vecinnerprod(v_from, tp->normal);
-		c = ft_vecinnerprod(v_de, tp->normal);
-		t = (a - b) / c;
-		if (t > EPSILON)
+		t = - b / c;
+		if (t > 0)
 			return (t);
 	}
 	return (-1);
