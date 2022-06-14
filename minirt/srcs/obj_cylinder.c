@@ -6,13 +6,9 @@ static t_vec	get_normal_vector_at_tpos_cylinder(t_map *m, t_cylinder *tc)
 	double	orien_len;
 	t_vec	v_n;
 
-	v_p0_p = ft_vecsub(m->camdir.v_tpos, tc->center);
-	orien_len = sqrt(v_p0_p.x * v_p0_p.x + v_p0_p.y * v_p0_p.y
-			+ v_p0_p.z * v_p0_p.z - tc->diameter * tc->diameter);
-	if (ft_vecinnerprod(v_p0_p, tc->orientation) >= 0)
-		v_n = ft_vecsub(v_p0_p, ft_vecmult(tc->orientation, orien_len));
-	else
-		v_n = ft_vecsub(v_p0_p, ft_vecmult(tc->orientation, -orien_len));
+	v_p0_p = ft_vecsub(m->camdir.v_tpos_norm, tc->center);
+	orien_len = sqrt(ft_vecnormsq(v_p0_p) - tc->diameter * tc->diameter);
+	v_n = ft_vecsub(v_p0_p, ft_vecmult(tc->orientation, orien_len));
 	return (v_n);
 }
 
@@ -25,7 +21,7 @@ static double	calc_cylinder_diffuse_reflection(
 	double	innprod_lit_n;
 	t_color	add_color;
 
-	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
+	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos_norm));
 	v_nornal = ft_vecnormalize(get_normal_vector_at_tpos_cylinder(m, tc));
 	get_distance_to_cylinder(m->curr_cam.pos, m->camdir.v_w, m, tc);
 	if (tc->secondcrosst_flg == 1)
@@ -87,8 +83,9 @@ t_color	get_color_by_rt_cylinder(t_map *m, t_cylinder *tc)
 	i = 0;
 	while (i < m->lit_cnt)
 	{
-		get_minimum_distance_to_obj(m->lit[i].pos, m->camdir.v_tpos, m, &hit_t);
-		if (hit_t < 0 || 1 - EPSILON < hit_t)
+		get_minimum_distance_to_obj(m->lit[i].pos, m->camdir.v_tpos_norm, m, &hit_t);
+
+		if (hit_t < 0 || 1 + EPSILON < hit_t)
 		{
 			naiseki = calc_cylinder_diffuse_reflection(m, &color, i, tc);
 			if (naiseki > 0)

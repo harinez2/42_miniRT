@@ -1,39 +1,20 @@
 #include	"main.h"
 
-static void	calc_ABCD(
-	t_calc_crossing *cv, t_multdouble *md2, t_multdouble *md3, t_cylinder *tc)
-{
-	double			v;
-
-	v = sqrt(tc->orientation.x * tc->orientation.x
-			+ tc->orientation.y * tc->orientation.y
-			+ tc->orientation.z * tc->orientation.z);
-	cv->A = md2->a * md2->a + md2->b * md2->b + md2->c * md2->c;
-	cv->B = 2 * (md2->a * md3->a + md2->b * md3->b + md2->c * md3->c);
-	cv->C = md3->a * md3->a + md3->b * md3->b + md3->c * md3->c
-		- v * v * tc->diameter * tc->diameter;
-	cv->D = cv->B * cv->B - 4 * cv->A * cv->C;
-}
-
 static t_calc_crossing	calc_cylinder_t(
 	t_vec v_from, t_vec v_to, t_cylinder *tc)
 {
 	t_calc_crossing	cv;
-	t_multdouble	md1;
-	t_multdouble	md2;
-	t_multdouble	md3;
+	t_vec			v_crossprod_d_n;
+	t_vec			v_crossprod_ac_n;
 
 	cv.v_de = ft_vecsub(v_to, v_from);
-	md1.a = v_from.x - tc->center.x;
-	md1.b = v_from.y - tc->center.y;
-	md1.c = v_from.z - tc->center.z;
-	md2.a = tc->orientation.y * cv.v_de.z - tc->orientation.z * cv.v_de.y;
-	md2.b = tc->orientation.z * cv.v_de.x - tc->orientation.x * cv.v_de.z;
-	md2.c = tc->orientation.x * cv.v_de.y - tc->orientation.y * cv.v_de.x;
-	md3.a = tc->orientation.y * md1.c - tc->orientation.z * md1.b;
-	md3.b = tc->orientation.z * md1.a - tc->orientation.x * md1.c;
-	md3.c = tc->orientation.x * md1.b - tc->orientation.y * md1.a;
-	calc_ABCD(&cv, &md2, &md3, tc);
+	v_crossprod_d_n = ft_veccrossprod(
+		ft_vecnormalize(cv.v_de), ft_vecnormalize(tc->orientation));
+	cv.A = ft_vecnormsq(v_crossprod_d_n);
+	v_crossprod_ac_n = ft_veccrossprod(ft_vecsub(v_from, tc->center), tc->orientation);
+	cv.B = 2 * ft_vecinnerprod(v_crossprod_d_n, v_crossprod_ac_n);
+	cv.C =ft_vecnormsq(v_crossprod_ac_n) - tc->diameter * tc->diameter;
+	cv.D = cv.B * cv.B - 4 * cv.A * cv.C;
 	return (cv);
 }
 
@@ -44,10 +25,12 @@ static double	check_cylinder_length(
 	t_vec		v_po_p;
 	double		v_po_p_len;
 
-	v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(cv.v_de, t));
+	v_tpos = ft_vecadd(m->curr_cam.pos, ft_vecmult(ft_vecnormalize(cv.v_de), t));
 	v_po_p = ft_vecsub(v_tpos, tc->center);
+	if (ft_vecinnerprod(v_po_p, tc->orientation) < 0)
+		return (-1);
 	v_po_p_len = ft_vecnorm(v_po_p);
-	if (tc->diameter * tc->diameter + tc->height * tc->height / 4
+	if (tc->diameter * tc->diameter + tc->height * tc->height
 		< v_po_p_len * v_po_p_len)
 		return (-1);
 	return (t);
@@ -64,10 +47,11 @@ double	get_distance_to_cylinder(
 
 	cv = calc_cylinder_t(v_from, v_to, tc);
 	tc->secondcrosst_flg = 0;
-	cv.t = -1;
-	if (-EPSILON < cv.D && cv.D < EPSILON)
+	if (cv.A == 0 || cv.D < 0)
+		cv.t = -1;
+	else if (cv.D < EPSILON)
 		cv.t = -cv.B / (2 * cv.A);
-	else if (cv.D > 0)
+	else
 	{
 		t1 = (-cv.B - sqrt(cv.D)) / (2 * cv.A);
 		t2 = (-cv.B + sqrt(cv.D)) / (2 * cv.A);
