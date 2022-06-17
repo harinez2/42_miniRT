@@ -9,7 +9,7 @@ double	get_distance_to_plane(
 	double	c;
 
 	(void)m;
-	v_de = ft_vecsub(v_to, v_from);
+	v_de = ft_vecnormalize(ft_vecsub(v_to, v_from));
 	c = ft_vecinnerprod(v_de, tp->normal);
 	if (c != 0)
 	{
