@@ -8,9 +8,11 @@ static t_calc_crossing	calc_cylinder_t(
 	t_vec			v_crossprod_ac_n;
 
 	cv.v_de = ft_vecnormalize(ft_vecsub(v_to, v_from));
-	v_crossprod_d_n = ft_veccrossprod(cv.v_de, ft_vecnormalize(tc->orientation));
+	v_crossprod_d_n = ft_veccrossprod(
+			cv.v_de, ft_vecnormalize(tc->orientation));
 	cv.A = ft_vecnormsq(v_crossprod_d_n);
-	v_crossprod_ac_n = ft_veccrossprod(ft_vecsub(v_from, tc->center), tc->orientation);
+	v_crossprod_ac_n
+		= ft_veccrossprod(ft_vecsub(v_from, tc->center), tc->orientation);
 	cv.B = 2 * ft_vecinnerprod(v_crossprod_d_n, v_crossprod_ac_n);
 	cv.C = ft_vecnormsq(v_crossprod_ac_n) - tc->diameter * tc->diameter;
 	cv.D = cv.B * cv.B - 4 * cv.A * cv.C;
@@ -33,6 +35,14 @@ static double	check_cylinder_length(
 		< v_po_p_len * v_po_p_len)
 		return (-1);
 	return (t);
+}
+
+static double	select_best_t(double t1, double t2)
+{
+	if (t1 > 0 && t2 > 0)
+		return (fmin(t1, t2));
+	else
+		return (fmax(t1, t2));
 }
 
 // tpos：cross point (pi) of the v_cam and the surface of the cylinder
@@ -58,10 +68,7 @@ double	get_distance_to_cylinder(
 		bigger_t = fmax(t1, t2);
 		t1 = check_cylinder_length(tc, cv, t1, v_from);
 		t2 = check_cylinder_length(tc, cv, t2, v_from);
-		if (t1 > 0 && t2 > 0)
-			cv.t = fmin(t1, t2);
-		else
-			cv.t = fmax(t1, t2);
+		cv.t = select_best_t(t1, t2);
 		if (bigger_t != -1 && cv.t == bigger_t)
 			tc->secondcrosst_flg = 1;
 	}

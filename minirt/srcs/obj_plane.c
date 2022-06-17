@@ -84,7 +84,8 @@ t_color	get_color_by_rt_plane(t_map *m, int hit_i, t_plane *tp)
 	lit_i = 0;
 	while (lit_i < m->lit_cnt)
 	{
-		btw_i = get_minimum_distance_to_obj(m->lit[lit_i].pos, m->camdir.v_tpos, m, &btw_t);
+		btw_i = get_minimum_distance_to_obj(
+				m->lit[lit_i].pos, m->camdir.v_tpos, m, &btw_t);
 		if (btw_i == hit_i)
 		{
 			naiseki = calc_plane_diffuse_reflection(m, &color, lit_i, tp);

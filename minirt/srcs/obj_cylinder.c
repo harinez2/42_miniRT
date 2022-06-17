@@ -81,22 +81,21 @@ t_color	get_color_by_rt_cylinder(t_map *m, int hit_i, t_cylinder *tc)
 	int		lit_i;
 	int		btw_i;
 	double	btw_t;
-	double	naiseki;
 	int		flg_fromlight;
 
 	set_ambient_reflection_color(m, &color);
 	lit_i = 0;
 	while (lit_i < m->lit_cnt)
 	{
-		btw_i = get_minimum_distance_to_obj(m->lit[lit_i].pos, m->camdir.v_tpos, m, &btw_t);
+		btw_i = get_minimum_distance_to_obj(
+				m->lit[lit_i].pos, m->camdir.v_tpos, m, &btw_t);
 		if (btw_i == hit_i)
 		{
 			flg_fromlight = tc->secondcrosst_flg;
 			get_distance_to_cylinder(m->curr_cam.pos, m->camdir.v_w, m, tc);
 			if (flg_fromlight == tc->secondcrosst_flg)
 			{
-				naiseki = calc_cylinder_diffuse_reflection(m, &color, lit_i, tc);
-				if (naiseki > 0)
+				if (calc_cylinder_diffuse_reflection(m, &color, lit_i, tc) > 0)
 					calc_cylinder_specular_reflection(m, &color, lit_i, tc);
 			}
 		}
