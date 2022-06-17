@@ -72,25 +72,26 @@ static void	calc_cylinder_specular_reflection(
 // tpos			：cross point (pi) of the v_cam and the surface of the object
 // v_lightDir	: vector of incidence (l) (nyuusha vector)
 // v_n			: normal vector (n) (housen vector)
-t_color	get_color_by_rt_cylinder(t_map *m, t_cylinder *tc)
+t_color	get_color_by_rt_cylinder(t_map *m, int hit_i, t_cylinder *tc)
 {
 	t_color	color;
-	int		i;
-	double	hit_t;
+	int		lit_i;
+	int		btw_i;
+	double	btw_t;
 	double	naiseki;
 
 	set_ambient_reflection_color(m, &color);
-	i = 0;
-	while (i < m->lit_cnt)
+	lit_i = 0;
+	while (lit_i < m->lit_cnt)
 	{
-		get_minimum_distance_to_obj(m->lit[i].pos, m->camdir.v_tpos, m, &hit_t);
-		if (hit_t < 0 || 1 + EPSILON < hit_t)
+		btw_i = get_minimum_distance_to_obj(m->lit[lit_i].pos, m->camdir.v_tpos, m, &btw_t);
+		if (btw_i == hit_i)
 		{
-			naiseki = calc_cylinder_diffuse_reflection(m, &color, i, tc);
+			naiseki = calc_cylinder_diffuse_reflection(m, &color, lit_i, tc);
 			if (naiseki > 0)
-				calc_cylinder_specular_reflection(m, &color, i, tc);
+				calc_cylinder_specular_reflection(m, &color, lit_i, tc);
 		}
-		i++;
+		lit_i++;
 	}
 	return (set_rgb_inrange(color));
 }

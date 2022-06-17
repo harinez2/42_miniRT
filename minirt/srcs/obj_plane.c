@@ -72,25 +72,26 @@ static void	calc_plane_specular_reflection(
 
 #endif
 
-t_color	get_color_by_rt_plane(t_map *m, t_plane *tp)
+t_color	get_color_by_rt_plane(t_map *m, int hit_i, t_plane *tp)
 {
 	t_color	color;
-	int		i;
-	double	hit_t;
+	int		lit_i;
+	int		btw_i;
+	double	btw_t;
 	double	naiseki;
 
 	set_ambient_reflection_color(m, &color);
-	i = 0;
-	while (i < m->lit_cnt)
+	lit_i = 0;
+	while (lit_i < m->lit_cnt)
 	{
-		get_minimum_distance_to_obj(m->lit[i].pos, m->camdir.v_tpos, m, &hit_t);
-		if (hit_t < 0 || 1 - EPSILON < hit_t)
+		btw_i = get_minimum_distance_to_obj(m->lit[lit_i].pos, m->camdir.v_tpos, m, &btw_t);
+		if (btw_i == hit_i)
 		{
-			naiseki = calc_plane_diffuse_reflection(m, &color, i, tp);
+			naiseki = calc_plane_diffuse_reflection(m, &color, lit_i, tp);
 			if (naiseki > 0)
-				calc_plane_specular_reflection(m, &color, i, tp);
+				calc_plane_specular_reflection(m, &color, lit_i, tp);
 		}
-		i++;
+		lit_i++;
 	}
 	return (set_rgb_inrange(color));
 }

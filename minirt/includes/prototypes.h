@@ -20,33 +20,33 @@ void		print_triangle(t_triangle *tt);
 // map_print_objs2d.c
 void		print_cone(t_cone *tc);
 // obj_cone.c
-t_color		get_color_by_rt_cone(t_map *m, t_cone *tc);
+t_color		get_color_by_rt_cone(t_map *m, int hit_i, t_cone *tc);
 // obj_cone_getdistance.c
 double		get_distance_to_cone(
 				t_vec v_from, t_vec v_to, t_map *m, t_cone *tc);
 // obj_cylinder.c
-t_color		get_color_by_rt_cylinder(t_map *m, t_cylinder *tc);
+t_color		get_color_by_rt_cylinder(t_map *m, int hit_i, t_cylinder *tc);
 // obj_cylinder_getdistance.c
 double		get_distance_to_cylinder(
 				t_vec v_from, t_vec v_to, t_map *m, t_cylinder *tc);
 // obj_plane.c
 double		get_distance_to_plane(
 				t_vec v_from, t_vec v_to, t_map *m, t_plane *tp);
-t_color		get_color_by_rt_plane(t_map *m, t_plane *tp);
+t_color		get_color_by_rt_plane(t_map *m, int hit_i, t_plane *tp);
 // obj_sphere.c
 double		get_distance_to_sphere(
 				t_vec v_from, t_vec v_to, t_map *m, t_sphere *ts);
-t_color		get_color_by_rt_sphere(t_map *m, t_sphere *ts);
+t_color		get_color_by_rt_sphere(t_map *m, int hit_i, t_sphere *ts);
 // obj_square.c
 void		ft_init_square(t_square *ts);
 double		get_distance_to_square(
 				t_vec v_from, t_vec v_to, t_map *m, t_square *ts);
-t_color		get_color_by_rt_square(t_map *m, t_square *ts);
+t_color		get_color_by_rt_square(t_map *m, int hit_i, t_square *ts);
 // obj_triangle.c
 void		ft_init_triangle(t_triangle *tt);
 double		get_distance_to_triangle(
 				t_vec v_from, t_vec v_to, t_map *m, t_triangle *tt);
-t_color		get_color_by_rt_triangle(t_map *m, t_triangle *tt);
+t_color		get_color_by_rt_triangle(t_map *m, int hit_i, t_triangle *tt);
 // obj_util.c
 void		set_ambient_reflection_color(t_map *m, t_color *color);
 t_color		adjust_color_level(t_color *base_color, double innprod);

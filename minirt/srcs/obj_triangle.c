@@ -53,7 +53,7 @@ double	get_distance_to_triangle(
 	return (t);
 }
 
-t_color	get_color_by_rt_triangle(t_map *m, t_triangle *tt)
+t_color	get_color_by_rt_triangle(t_map *m, int hit_i, t_triangle *tt)
 {
-	return (get_color_by_rt_plane(m, &tt->plane));
+	return (get_color_by_rt_plane(m, hit_i, &tt->plane));
 }

@@ -58,7 +58,7 @@ double	get_distance_to_square(
 	return (t);
 }
 
-t_color	get_color_by_rt_square(t_map *m, t_square *ts)
+t_color	get_color_by_rt_square(t_map *m, int hit_i, t_square *ts)
 {
-	return (get_color_by_rt_plane(m, &ts->tr_a.plane));
+	return (get_color_by_rt_plane(m, hit_i, &ts->tr_a.plane));
 }

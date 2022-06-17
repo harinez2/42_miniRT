@@ -45,7 +45,8 @@ int	get_minimum_distance_to_obj(
 	return (hit_i);
 }
 
-static t_color	get_color_with_lightning(t_vec v_w, t_map *m, int i, double t)
+static t_color	get_color_with_lightning(
+	t_vec v_w, t_map *m, int hit_i, double t)
 {
 	t_color			color;
 
@@ -53,20 +54,20 @@ static t_color	get_color_with_lightning(t_vec v_w, t_map *m, int i, double t)
 	m->camdir.v_de = ft_vecnormalize(ft_vecsub(v_w, m->curr_cam.pos));
 	m->camdir.v_tpos
 		= ft_vecadd(m->curr_cam.pos, ft_vecmult(m->camdir.v_de, t));
-	if (i == -1)
+	if (hit_i == -1)
 		set_color(&color, 0, 0, 0);
-	else if (m->obj_type[i] == CMD_SPHERE)
-		color = get_color_by_rt_sphere(m, (t_sphere *)m->obj[i]);
-	else if (m->obj_type[i] == CMD_PLANE)
-		color = get_color_by_rt_plane(m, (t_plane *)m->obj[i]);
-	else if (m->obj_type[i] == CMD_SQUARE)
-		color = get_color_by_rt_square(m, (t_square *)m->obj[i]);
-	else if (m->obj_type[i] == CMD_CYLINDER)
-		color = get_color_by_rt_cylinder(m, (t_cylinder *)m->obj[i]);
-	else if (m->obj_type[i] == CMD_TRIANGLE)
-		color = get_color_by_rt_triangle(m, (t_triangle *)m->obj[i]);
-	else if (m->obj_type[i] == CMD_CONE)
-		color = get_color_by_rt_cone(m, (t_cone *)m->obj[i]);
+	else if (m->obj_type[hit_i] == CMD_SPHERE)
+		color = get_color_by_rt_sphere(m, hit_i, (t_sphere *)m->obj[hit_i]);
+	else if (m->obj_type[hit_i] == CMD_PLANE)
+		color = get_color_by_rt_plane(m, hit_i, (t_plane *)m->obj[hit_i]);
+	else if (m->obj_type[hit_i] == CMD_SQUARE)
+		color = get_color_by_rt_square(m, hit_i, (t_square *)m->obj[hit_i]);
+	else if (m->obj_type[hit_i] == CMD_CYLINDER)
+		color = get_color_by_rt_cylinder(m, hit_i, (t_cylinder *)m->obj[hit_i]);
+	else if (m->obj_type[hit_i] == CMD_TRIANGLE)
+		color = get_color_by_rt_triangle(m, hit_i, (t_triangle *)m->obj[hit_i]);
+	else if (m->obj_type[hit_i] == CMD_CONE)
+		color = get_color_by_rt_cone(m, hit_i, (t_cone *)m->obj[hit_i]);
 	return (color);
 }
 
