@@ -13,6 +13,10 @@ static t_vec	get_normal_vector_at_tpos_cylinder(t_map *m, t_cylinder *tc)
 }
 
 // (2) calc diffuse reflection (kakusan hansya kou)
+// * "tc->secondcrosst_flg" should be checked after executing
+//   "get_distance_to_cylinder(m->curr_cam.pos, m->camdir.v_w, m, tc)"
+//   but currently it is executed in function get_color_by_rt_cylinder()
+//   so calling the function is removed.
 static double	calc_cylinder_diffuse_reflection(
 	t_map *m, t_color *color, int i, t_cylinder *tc)
 {
@@ -23,7 +27,6 @@ static double	calc_cylinder_diffuse_reflection(
 
 	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
 	v_nornal = ft_vecnormalize(get_normal_vector_at_tpos_cylinder(m, tc));
-	get_distance_to_cylinder(m->curr_cam.pos, m->camdir.v_w, m, tc);
 	if (tc->secondcrosst_flg == 1)
 		v_nornal = ft_vecmult(v_nornal, -1);
 	innprod_lit_n = ft_vecinnerprod(v_nornal, v_lightDir);
@@ -79,6 +82,7 @@ t_color	get_color_by_rt_cylinder(t_map *m, int hit_i, t_cylinder *tc)
 	int		btw_i;
 	double	btw_t;
 	double	naiseki;
+	int		flg_fromlight;
 
 	set_ambient_reflection_color(m, &color);
 	lit_i = 0;
@@ -87,9 +91,14 @@ t_color	get_color_by_rt_cylinder(t_map *m, int hit_i, t_cylinder *tc)
 		btw_i = get_minimum_distance_to_obj(m->lit[lit_i].pos, m->camdir.v_tpos, m, &btw_t);
 		if (btw_i == hit_i)
 		{
-			naiseki = calc_cylinder_diffuse_reflection(m, &color, lit_i, tc);
-			if (naiseki > 0)
-				calc_cylinder_specular_reflection(m, &color, lit_i, tc);
+			flg_fromlight = tc->secondcrosst_flg;
+			get_distance_to_cylinder(m->curr_cam.pos, m->camdir.v_w, m, tc);
+			if (flg_fromlight == tc->secondcrosst_flg)
+			{
+				naiseki = calc_cylinder_diffuse_reflection(m, &color, lit_i, tc);
+				if (naiseki > 0)
+					calc_cylinder_specular_reflection(m, &color, lit_i, tc);
+			}
 		}
 		lit_i++;
 	}
