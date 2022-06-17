@@ -5,16 +5,19 @@ double	get_distance_to_plane(
 {
 	double	t;
 	t_vec	v_de;
-	double	b;
-	double	c;
+	double	innprod_d_n;
+	double	innprod_pc_n;
+	double	innprod_s_n;
 
 	(void)m;
 	v_de = ft_vecnormalize(ft_vecsub(v_to, v_from));
-	c = ft_vecinnerprod(v_de, ft_vecnormalize(tp->normal));
-	if (c != 0)
+	innprod_d_n = ft_vecinnerprod(v_de, ft_vecnormalize(tp->normal));
+	if (innprod_d_n != 0)
 	{
-		b = ft_vecinnerprod(v_from, tp->normal);
-		t = -b / c;
+		innprod_pc_n
+			= ft_vecinnerprod(tp->position, ft_vecnormalize(tp->normal));
+		innprod_s_n = ft_vecinnerprod(v_from, ft_vecnormalize(tp->normal));
+		t = (innprod_pc_n - innprod_s_n) / innprod_d_n;
 		if (t > 0)
 			return (t);
 	}
