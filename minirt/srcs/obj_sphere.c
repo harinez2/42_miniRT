@@ -7,7 +7,7 @@ double	get_distance_to_sphere(
 	t_vec			v_center_cam;
 
 	(void)m;
-	cv.v_de = ft_vecsub(v_to, v_from);
+	cv.v_de = ft_vecnormalize(ft_vecsub(v_to, v_from));
 	v_center_cam = ft_vecsub(v_from, ts->center);
 	cv.A = ft_vecnormsq(cv.v_de);
 	cv.B = 2 * ft_vecinnerprod(cv.v_de, v_center_cam);

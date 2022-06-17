@@ -50,11 +50,9 @@ static t_color	get_color_with_lightning(t_vec v_w, t_map *m, int i, double t)
 	t_color			color;
 
 	m->camdir.v_w = v_w;
-	m->camdir.v_de = ft_vecsub(v_w, m->curr_cam.pos);
+	m->camdir.v_de = ft_vecnormalize(ft_vecsub(v_w, m->curr_cam.pos));
 	m->camdir.v_tpos
 		= ft_vecadd(m->curr_cam.pos, ft_vecmult(m->camdir.v_de, t));
-	m->camdir.v_tpos_norm
-		= ft_vecadd(m->curr_cam.pos, ft_vecmult(ft_vecnormalize(m->camdir.v_de), t));
 	if (i == -1)
 		set_color(&color, 0, 0, 0);
 	else if (m->obj_type[i] == CMD_SPHERE)

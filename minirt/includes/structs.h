@@ -43,7 +43,6 @@ typedef struct s_curr_cam_dir
 	t_vec	v_w;
 	t_vec	v_de;
 	t_vec	v_tpos;
-	t_vec	v_tpos_norm;
 }	t_curr_cam_dir;
 
 // Map data ***************************************************
