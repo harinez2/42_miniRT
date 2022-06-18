@@ -22,8 +22,11 @@ clean:
 	cd "$(PWD)/$(MYRT_DIR)" && make fclean
 
 fclean: clean
-	rm -rf $(CLONE_DIR)
 
 re: fclean all
+
+updatemlx:
+	rm -rf $(CLONE_DIR)
+	git clone $(GIT_URL)
 
 .PHONY: all clean fclean re
