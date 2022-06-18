@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   obj_cone_getdistance.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/18 17:39:17 by yonishi           #+#    #+#             */
+/*   Updated: 2022/06/18 17:39:19 by yonishi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include	"main.h"
 
 static void	calc_ABCD(t_calc_crossing *cv, t_multdouble *md1, t_multdouble *md2)
