@@ -48,6 +48,8 @@ static void	calc_cylinder_specular_reflection(
 
 	cl.v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
 	cl.v_n = ft_vecnormalize(get_normal_vector_at_tpos_cylinder(m, tc));
+	if (tc->secondcrosst_flg == 1)
+		cl.v_n = ft_vecmult(cl.v_n, -1);
 	cl.naiseki = ft_vecinnerprod(cl.v_n, cl.v_lightDir);
 	cl.refDir = ft_vecnormalize(
 			ft_vecsub(ft_vecmult(cl.v_n, 2 * cl.naiseki), cl.v_lightDir));
