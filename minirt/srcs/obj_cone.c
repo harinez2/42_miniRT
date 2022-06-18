@@ -3,16 +3,12 @@
 static t_vec	get_normal_vector_at_tpos_cone(t_map *m, t_cone *tc)
 {
 	t_vec	v_p0_p;
-	double	t;
+	double	orien_len;
 	t_vec	v_n;
 
 	v_p0_p = ft_vecsub(m->camdir.v_tpos, tc->vertex);
-	t = (v_p0_p.x * tc->normal.x + v_p0_p.y * tc->normal.y
-			+ v_p0_p.z * tc->normal.z)
-		/ (v_p0_p.x * v_p0_p.x + v_p0_p.y * v_p0_p.y + v_p0_p.z * v_p0_p.z);
-	v_n = ft_vecsub(
-			ft_vecmult(ft_vecsub(m->camdir.v_tpos, tc->vertex), t),
-			tc->normal);
+	orien_len = ft_vecnorm(v_p0_p) * cos(ft_degree_to_rad(tc->theta));
+	v_n = ft_vecsub(v_p0_p, ft_vecmult(ft_vecnormalize(tc->normal), orien_len));
 	return (v_n);
 }
 
