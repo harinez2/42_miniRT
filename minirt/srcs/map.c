@@ -26,9 +26,9 @@ void	init_map(t_map *m)
 
 static void	calc_kdif_kspe(t_map *m)
 {
-	m->kDif.r = 2 * (1 - m->kAmb.r) / 3;
-	m->kDif.g = 2 * (1 - m->kAmb.g) / 3;
-	m->kDif.b = 2 * (1 - m->kAmb.b) / 3;
+	m->kDif.r = 1 - m->kAmb.r;
+	m->kDif.g = 1 - m->kAmb.g;
+	m->kDif.b = 1 - m->kAmb.b;
 	m->kSpe.r = (1 - m->kAmb.r) / 3;
 	m->kSpe.g = (1 - m->kAmb.g) / 3;
 	m->kSpe.b = (1 - m->kAmb.b) / 3;
