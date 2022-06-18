@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 17:38:35 by yonishi           #+#    #+#             */
-/*   Updated: 2022/06/18 17:38:53 by yonishi          ###   ########.fr       */
+/*   Updated: 2022/06/18 17:58:38 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ static int	print_error_msg_fileread(int errNo)
 		printerr("Error\nToo much objects are specified.\n");
 	else if (errNo == ERR_CHK_NO_A)
 		printerr("Error\n'A' is not specified.\n");
+	else if (errNo == ERR_CHK_NO_C)
+		printerr("Error\n'C' is not specified.\n");
 	else
 		return (0);
 	return (1);

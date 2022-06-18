@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 17:40:09 by yonishi           #+#    #+#             */
-/*   Updated: 2022/06/18 17:40:09 by yonishi          ###   ########.fr       */
+/*   Updated: 2022/06/18 17:58:01 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ static void	validate_ACL(t_map *m)
 {
 	if (m->ambItsty == -1)
 		print_error_exit(ERR_CHK_NO_A, m);
+	if (m->cam_cnt == 0)
+		print_error_exit(ERR_CHK_NO_C, m);
 }
 
 static void	validate_objs(t_map *m)

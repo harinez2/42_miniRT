@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 17:41:11 by yonishi           #+#    #+#             */
-/*   Updated: 2022/06/18 17:41:11 by yonishi          ###   ########.fr       */
+/*   Updated: 2022/06/18 17:58:07 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ enum e_errors
 	ERR_RD_TOOMUCH_LIT_SPECIFIED,
 	ERR_RD_TOOMUCH_OBJ_SPECIFIED,
 	ERR_CHK_NO_A,
+	ERR_CHK_NO_C,
 	ERR_WND_MLXINIT,
 	ERR_WND_WNDINIT,
 	ERR_WND_IMAGEINIT
