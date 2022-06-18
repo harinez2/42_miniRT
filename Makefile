@@ -11,18 +11,18 @@ $(CLONE_DIR):
 	git clone $(GIT_URL)
 
 $(MYRT_DIR)/$(LIBNAME): $(CLONE_DIR)
-	cd "$(PWD)/$(CLONE_DIR)" && make
+	make -C "$(PWD)/$(CLONE_DIR)"
 	cp "$(PWD)/$(CLONE_DIR)/$(LIBNAME)" "$(PWD)/$(MYRT_DIR)"
 
 $(MYRT_DIR)/$(NAME): $(MYRT_DIR)/$(LIBNAME)
-	cd "$(PWD)/$(MYRT_DIR)" && make
+	make -C "$(PWD)/$(MYRT_DIR)"
 
 clean:
+	rm -f "$(PWD)/$(MYRT_DIR)/$(LIBNAME)"
+	cd "$(PWD)/$(MYRT_DIR)" && make fclean
 
 fclean: clean
 	rm -rf $(CLONE_DIR)
-	rm -f $(PWD)/$(MYRT_DIR)/$(LIBNAME)
-	cd "$(PWD)/$(MYRT_DIR)" && make fclean
 
 re: fclean all
 
