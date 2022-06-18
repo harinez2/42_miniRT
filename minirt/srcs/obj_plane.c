@@ -52,8 +52,10 @@ static void	calc_plane_specular_reflection(
 
 	cl.v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
 	cl.naiseki = ft_vecinnerprod(ft_vecnormalize(tp->normal), cl.v_lightDir);
+	if (cl.naiseki < 0)
+		cl.naiseki *= -1;
 	cl.refDir
-		= ft_vecsub(ft_vecmult(tp->normal, 2 * cl.naiseki), cl.v_lightDir);
+		= ft_vecsub(ft_vecmult(ft_vecnormalize(tp->normal), 2 * cl.naiseki), cl.v_lightDir);
 	cl.invEyeDir = ft_vecnormalize(ft_vecmult(m->camdir.v_de, -1));
 	cl.vrDot = ft_vecinnerprod(cl.invEyeDir, cl.refDir);
 	if (cl.vrDot < 0)
