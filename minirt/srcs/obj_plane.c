@@ -35,7 +35,7 @@ static double	calc_plane_diffuse_reflection(
 	v_lightDir = ft_vecnormalize(ft_vecsub(m->lit[i].pos, m->camdir.v_tpos));
 	innprod_lit_n = ft_vecinnerprod(ft_vecnormalize(tp->normal), v_lightDir);
 	if (innprod_lit_n < 0)
-		innprod_lit_n = 0;
+		innprod_lit_n *= -1;
 	add_color = adjust_color_level(&tp->rgb, innprod_lit_n);
 	add_diffuse_reflection_color(m, i, color, &add_color);
 	return (innprod_lit_n);
