@@ -48,7 +48,7 @@ int	read_file_square(int *i, char *line, t_map *m)
 	if (!is_normalized(&(((t_square *)m->obj[m->obj_count])->orientation)))
 		print_error_exit(ERR_RD_OUTOFRANGE, m);
 	((t_square *)m->obj[m->obj_count])->sidesiz = read_double(i, line, m);
-	((t_sphere *)m->obj[m->obj_count])->rgb = read_rgb(i, line, m);
+	((t_square *)m->obj[m->obj_count])->rgb = read_rgb(i, line, m);
 	ft_init_square(m->obj[m->obj_count]);
 	m->obj_count++;
 	return (CMD_SQUARE);
