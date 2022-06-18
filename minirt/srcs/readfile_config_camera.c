@@ -12,9 +12,7 @@ static void	check_camera_count(t_map *m)
 
 static void	check_camera_count(t_map *m)
 {
-	if (m->cam_cnt >= MAX_CAMERA_COUNT)
-		print_error_exit(ERR_RD_TOOMUCH_CAM_SPECIFIED, m);
-	else if (m->cam_cnt >= 1)
+	if (m->cam_cnt >= 1)
 		print_error_exit(ERR_RD_TOOMUCH_CAM_SPECIFIED, m);
 }
 
