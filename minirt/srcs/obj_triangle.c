@@ -26,29 +26,27 @@ static void	calc_triangle_crossprod(
 double	get_distance_to_triangle(
 	t_vec v_from, t_vec v_to, t_map *m, t_triangle *tt)
 {
-	double		t;
-	t_vec		v_de;
-	t_vec		v_tpos;
-	t_multivec	mv;
+	double			t;
+	t_vec			v_de;
+	t_vec			v_tpos;
+	t_multivec		mv;
+	t_multdouble	mv_innprod;
 
 	t = get_distance_to_plane(v_from, v_to, m, &tt->plane);
 	if (t > 0)
 	{
-		v_de = ft_vecsub(v_to, v_from);
+		v_de = ft_vecnormalize(ft_vecsub(v_to, v_from));
 		v_tpos = ft_vecadd(v_from, ft_vecmult(v_de, t));
 		calc_triangle_crossprod(&mv, v_tpos, tt);
-		if (tt->first.x == tt->second.x && tt->first.x == tt->third.x)
-		{
-			if (!((mv.a.x >= 0 && mv.b.x >= 0 && mv.c.x >= 0)
-					|| (mv.a.x < 0 && mv.b.x < 0 && mv.c.x < 0)))
-				t = -1;
-		}
+		mv_innprod.a = ft_vecinnerprod(mv.a, mv.b);
+		mv_innprod.b = ft_vecinnerprod(mv.b, mv.c);
+		mv_innprod.c = ft_vecinnerprod(mv.c, mv.a);
+		if (mv_innprod.a >= 0 && mv_innprod.b >= 0 && mv_innprod.c >= 0)
+			;
+		else if (mv_innprod.a < 0 && mv_innprod.b < 0 && mv_innprod.c < 0)
+			;
 		else
-		{
-			if (!((mv.a.y >= 0 && mv.b.y >= 0 && mv.c.y >= 0)
-					|| (mv.a.y < 0 && mv.b.y < 0 && mv.c.y < 0)))
-				t = -1;
-		}
+			t = -1;
 	}
 	return (t);
 }
