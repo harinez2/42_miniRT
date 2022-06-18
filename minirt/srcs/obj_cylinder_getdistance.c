@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 17:39:25 by yonishi           #+#    #+#             */
-/*   Updated: 2022/06/18 17:39:25 by yonishi          ###   ########.fr       */
+/*   Updated: 2022/06/18 19:53:40 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ static t_calc_crossing	calc_cylinder_t(
 	v_crossprod_d_n = ft_veccrossprod(
 			cv.v_de, ft_vecnormalize(tc->orientation));
 	cv.A = ft_vecnormsq(v_crossprod_d_n);
-	v_crossprod_ac_n
-		= ft_veccrossprod(ft_vecsub(v_from, tc->center), tc->orientation);
+	v_crossprod_ac_n = ft_veccrossprod(
+			ft_vecsub(v_from, tc->center), ft_vecnormalize(tc->orientation));
 	cv.B = 2 * ft_vecinnerprod(v_crossprod_d_n, v_crossprod_ac_n);
 	cv.C = ft_vecnormsq(v_crossprod_ac_n) - tc->diameter * tc->diameter;
 	cv.D = cv.B * cv.B - 4 * cv.A * cv.C;
@@ -40,7 +40,7 @@ static double	check_cylinder_length(
 
 	v_tpos = ft_vecadd(v_from, ft_vecmult(cv.v_de, t));
 	v_po_p = ft_vecsub(v_tpos, tc->center);
-	if (ft_vecinnerprod(v_po_p, tc->orientation) < 0)
+	if (ft_vecinnerprod(v_po_p, ft_vecnormalize(tc->orientation)) < 0)
 		return (-1);
 	v_po_p_len = ft_vecnorm(v_po_p);
 	if (tc->diameter * tc->diameter + tc->height * tc->height

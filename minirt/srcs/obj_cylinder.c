@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 17:39:27 by yonishi           #+#    #+#             */
-/*   Updated: 2022/06/18 17:39:28 by yonishi          ###   ########.fr       */
+/*   Updated: 2022/06/18 19:54:00 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static t_vec	get_normal_vector_at_tpos_cylinder(t_map *m, t_cylinder *tc)
 
 	v_p0_p = ft_vecsub(m->camdir.v_tpos, tc->center);
 	orien_len = sqrt(ft_vecnormsq(v_p0_p) - tc->diameter * tc->diameter);
-	v_n = ft_vecsub(v_p0_p, ft_vecmult(tc->orientation, orien_len));
+	v_n = ft_vecsub(v_p0_p,
+			ft_vecmult(ft_vecnormalize(tc->orientation), orien_len));
 	return (v_n);
 }
 
